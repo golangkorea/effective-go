@@ -13,4 +13,5 @@
 * [The blank identifier](the_blank_identifier.md)
 * [Embedding](embedding.md)
 * [Concurrency](concurrency.md)
+* Errors
 
