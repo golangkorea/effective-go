@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](introduction.md)
+* [Introduction](README.md)
 * [Formatting](formatting.md)
 * [Commentary](commentary.md)
 * [Semicolons](semicolons.md)
