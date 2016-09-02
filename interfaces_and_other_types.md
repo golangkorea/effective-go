@@ -116,15 +116,15 @@ if str, ok := value.(string); ok {
 }
 ```
 
-## Generality
+## 일반성(Generality)
 
-If a type exists only to implement an interface and will never have exported methods beyond that interface, there is no need to export the type itself. Exporting just the interface makes it clear the value has no interesting behavior beyond what is described in the interface. It also avoids the need to repeat the documentation on every instance of a common method.
+만약 어떤 타입이 인터페이스를 구현하기 위해서만 존재한다면, 즉 인터페이스외 어떤 메쏘드도 외부에 노츨시키지 않은 경우, 타입 자체를 노출 시킬 필요가 없습니다. 인터페이스의 노출만으로 주어진 값이 인테페이스에 묘사된 행위들 외 어떤 흥미로운 기능도 있지 않다는 것을 확실하게 전달 합니다. 이는 또한 공통된 메쏘드에 대한 문서화의 반복을 피할 수 있습니다.
 
-In such cases, the constructor should return an interface value rather than the implementing type. As an example, in the hash libraries both crc32.NewIEEE and adler32.New return the interface type hash.Hash32. Substituting the CRC-32 algorithm for Adler-32 in a Go program requires only changing the constructor call; the rest of the code is unaffected by the change of algorithm.
+그런 경우에, constructor는 구현 타입보다는 인터페이스 값을 리턴해야 합니다. 예를 들어, 해쉬 라이브러리인 [crc32.NewIEEE](https://godoc.org/hash/crc32#NewIEEE) 와 [adler32.New](https://godoc.org/hash/adler32#New)는 둘 다 인터페이스 타입 [hash.Hash32](https://godoc.org/hash/Hash32)를 리턴합니다. Go 프로그램에서 CRC-32 알로리즘을 Adler-32로 교체하는데 요구되는 사항은 단순히 constructor 콜을 바꿔주는 것입니다; 그 외 코드들은 알고리즘의 변화에 아무런 영향을 받지 않습니다.
 
-A similar approach allows the streaming cipher algorithms in the various crypto packages to be separated from the block ciphers they chain together. The Block interface in the crypto/cipher package specifies the behavior of a block cipher, which provides encryption of a single block of data. Then, by analogy with the bufio package, cipher packages that implement this interface can be used to construct streaming ciphers, represented by the Stream interface, without knowing the details of the block encryption.
+이와 유사한 방식을 통해서, 각종 crypto 패키지내의 스트리밍 cipher 알고리즘들을, 이들이 연결해 쓰는 block cipher들로 부터 분리시킬 수 있습니다. crypto/cipher 패키지내 [Block](https://godoc.org/crypto/cipher#Block) 인터페이스는 한 block의 데이터를 암호화하는 block cipher의 행위를 정의 합니다. 그런 다음, bufio 패키지에서 유추해 볼 수 있듯이, [Block](https://godoc.org/crypto/cipher#Block) 인터페이스를 구현하는 cipher 패키지들은, [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스로 대표되는 스트리밍 cipher들을 건설할 때, block 암호화의 자세한 내용을 알지 못하더라도, 사용될 수 있습니다.   
 
-The crypto/cipher interfaces look like this:
+crypto/cipher 인터페시스들은 다음과 같습니다:
 
 ```go
 type Block interface {
@@ -138,15 +138,15 @@ type Stream interface {
 }
 ```
 
-Here's the definition of the counter mode (CTR) stream, which turns a block cipher into a streaming cipher; notice that the block cipher's details are abstracted away:
+여기 block cipher를 스트리밍 cipher로 바꾸어 주는 카운터 모드 (CTR) 스트림의 정의가 있습니다; block cipher의 자세한 내용이 추상화되어 있는 점을 유의하십시요.
 
 ```go
-// NewCTR returns a Stream that encrypts/decrypts using the given Block in
-// counter mode. The length of iv must be the same as the Block's block size.
+// NewCTR은 카운더 모드로 주어진 Block을 이용하여 암호화하고/해독하는 스트림을 리턴합니다.
+// iv의 길이는 Block의 block 크기와 같아야 합니다.
 func NewCTR(block Block, iv []byte) Stream
 ```
 
-NewCTR applies not just to one specific encryption algorithm and data source but to any implementation of the Block interface and any Stream. Because they return interface values, replacing CTR encryption with other encryption modes is a localized change. The constructor calls must be edited, but because the surrounding code must treat the result only as a Stream, it won't notice the difference.
+NewCTR은 특정한 암호화 알고리즘과 데이터 소스에만 적용되는 것이 아니라 [Block](https://godoc.org/crypto/cipher#Block)와 [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스를 구현하는 어떤 알고리즘이나 데이터 소스에도 적용이 가능합니다. 왜냐하면 인터페시스 값들을 리턴하고, CTR 암호화를 다른 암호화 모드로 교체하는 것이 국부적인 편집이기 때문입니다. constructor 콜은 반드시 편집되어야 합니다. 하지만 둘러싸고 있는 코드는 리턴 결과를 [Stream](https://godoc.org/crypto/cipher#Stream)으로 처리해야 하기 때문에, 차이를 알지 못합니다.
 
 ## Interfaces and methods
 
