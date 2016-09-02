@@ -1,10 +1,10 @@
-# Interfaces and other types
+# 인터페이스와 다른 타입들
 
-## Interfaces
+## 인터페이스
 
-Interfaces in Go provide a way to specify the behavior of an object: if something can do this, then it can be used here. We've seen a couple of simple examples already; custom printers can be implemented by a String method while Fprintf can generate output to anything with a Write method. Interfaces with only one or two methods are common in Go code, and are usually given a name derived from the method, such as io.Writer for something that implements Write.
+Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법입니다: 만약 어떤 객체가 정해진 행위를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이죠. 이미 간단한 몇몇 예제들을 본 적인 있습니다; String 메쏘드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메쏘드를 가지고 있는 어떤 객체라도 쓸 수 있습니다. Go 코드에서는 한 두개의 메쏘드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메쏘드(동사)에서 파생됩니다: Write 메쏘드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
 
-A type can implement multiple interfaces. For instance, a collection can be sorted by the routines in package sort if it implements sort.Interface, which contains Len(), Less(i, j int) bool, and Swap(i, j int), and it could also have a custom formatter. In this contrived example Sequence satisfies both.
+타입은 복수의 인터페이스를 구현할 수 있습니다. [sort.Interface](https://godoc.org/sort#Interface)를 구현하고 있는 collection의 예를 들어 봅시다. [sort.Interface](https://godoc.org/sort#Interface)는 Len(), Less(i, j int) bool, 그리고 Swap(i, j int)를 지정하고 있고 이런 인테페이스를 구현한다면 sort 패키지내 [IsSorted](https://godoc.org/sort#IsSorted), [Sort](https://godoc.org/sort#Sort), [Stable](https://godoc.org/sort#Stable) 같은 루틴을 사용할 수 있습니다. 또한 사용자 지정의 포멧터를 구현할 수도 있습니다. 다음의 예제에서 Sequence는 이러한 두개의 인터페이스를 충족시키고 있습니다. 
 
 ```go
 type Sequence []int
