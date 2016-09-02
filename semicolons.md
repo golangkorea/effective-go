@@ -4,7 +4,7 @@ Like C, Go's formal grammar uses semicolons to terminate statements, but unlike 
 
 The rule is this. If the last token before a newline is an identifier (which includes words like int and float64), a basic literal such as a number or string constant, or one of the tokens
 
-```
+```go
 break continue fallthrough return ++ -- ) }
 ```
 
@@ -17,7 +17,7 @@ needs no semicolons. Idiomatic Go programs have semicolons only in places such a
 
 One consequence of the semicolon insertion rules is that you cannot put the opening brace of a control structure (if, for, switch, or select) on the next line. If you do, a semicolon will be inserted before the brace, which could cause unwanted effects. Write them like this
 
-```
+```go
 if i < f() {
     g()
 }
@@ -25,7 +25,7 @@ if i < f() {
 
 not like this
 
-```
+```go
 if i < f()  // wrong!
 {           // wrong!
     g()
