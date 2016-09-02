@@ -1,4 +1,4 @@
-## 타입단언(type assertion)
+## 타입 단언(type assertion)
 인터페이스 타입이면서 타입이 T인 x가 있을때 다음의 표현은 x가 nil이 아니고 x에 저장된 값이 타입 T임을 나타냅니다.
 ```
 x.(T)
