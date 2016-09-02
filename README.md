@@ -1,4 +1,6 @@
 # effective-go
+> Effective Go 한국어 번역 문서입니다.
+
 
 ## 각 챕터별 담당자 테이블
 > http://bit.ly/2bZghCd
