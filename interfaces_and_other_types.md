@@ -4,12 +4,12 @@
 
 Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법입니다: 만약 어떤 객체가 정해진 행위를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이죠. 이미 간단한 몇몇 예제들을 본 적인 있습니다; String 메쏘드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메쏘드를 가지고 있는 어떤 객체라도 쓸 수 있습니다. Go 코드에서는 한 두개의 메쏘드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메쏘드(동사)에서 파생됩니다: Write 메쏘드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
 
-타입은 복수의 인터페이스를 구현할 수 있습니다. [sort.Interface](https://godoc.org/sort#Interface)를 구현하고 있는 collection의 예를 들어 봅시다. [sort.Interface](https://godoc.org/sort#Interface)는 Len(), Less(i, j int) bool, 그리고 Swap(i, j int)를 지정하고 있고 이런 인테페이스를 구현한다면 sort 패키지내 [IsSorted](https://godoc.org/sort#IsSorted), [Sort](https://godoc.org/sort#Sort), [Stable](https://godoc.org/sort#Stable) 같은 루틴을 사용할 수 있습니다. 또한 사용자 지정의 포멧터를 구현할 수도 있습니다. 다음의 예제에서 Sequence는 이러한 두개의 인터페이스를 충족시키고 있습니다. 
+타입은 복수의 인터페이스를 구현할 수 있습니다. [sort.Interface](https://godoc.org/sort#Interface)를 구현하고 있는 collection의 예를 들어 봅시다. [sort.Interface](https://godoc.org/sort#Interface)는 Len(), Less(i, j int) bool, 그리고 Swap(i, j int)를 지정하고 있고 이런 인테페이스를 구현한다면 sort 패키지내 [IsSorted](https://godoc.org/sort#IsSorted), [Sort](https://godoc.org/sort#Sort), [Stable](https://godoc.org/sort#Stable) 같은 루틴을 사용할 수 있습니다. 또한 사용자 지정의 포멧터를 구현할 수도 있습니다. 다음의 예제에서 Sequence는 이러한 두개의 인터페이스를 충족시키고 있습니다.
 
 ```go
 type Sequence []int
 
-// Methods required by sort.Interface.
+// sort.Interface를 위한 필수적인 메쏘드들.
 func (s Sequence) Len() int {
     return len(s)
 }
@@ -20,7 +20,7 @@ func (s Sequence) Swap(i, j int) {
     s[i], s[j] = s[j], s[i]
 }
 
-// Method for printing - sorts the elements before printing.
+// 프린팅에 필요한 메쏘드 - 프린트하기 전에 요소들을 정렬함.
 func (s Sequence) String() string {
     sort.Sort(s)
     str := "["
@@ -34,9 +34,9 @@ func (s Sequence) String() string {
 }
 ```
 
-## Conversions
+## 타입 변환(Conversions)
 
-The String method of Sequence is recreating the work that Sprint already does for slices. We can share the effort if we convert the Sequence to a plain []int before calling Sprint.
+Sequence의 String 메쏘드는 Sprint가 벌써 슬라이스(slices)를 가지고 하는 일을 반복하고 있습니다. 하지만 만약에 Sprint를 실행하기 전에 Sequence를 []int로 변환하면 일을 줄일 수 있습니다.
 
 ```go
 func (s Sequence) String() string {
@@ -45,21 +45,21 @@ func (s Sequence) String() string {
 }
 ```
 
-This method is another example of the conversion technique for calling Sprintf safely from a String method. Because the two types (Sequence and []int) are the same if we ignore the type name, it's legal to convert between them. The conversion doesn't create a new value, it just temporarily acts as though the existing value has a new type. (There are other legal conversions, such as from integer to floating point, that do create a new value.)
+이 같은 방법은 String 메쏘드에서 Sprint를 안전하게 실행할 수 있는 타입 변환 기법의 또 다른 예 입니다. 이것이 가능한 이유는 Sequence와 []int 두 타입이 이름만 무시하면 동일하기 때문에 합법적으로 서로 변환할 수 있는 겁니다. 이러한 타입 변환은 새로운 값을 만들어 내지 않고 현재 값에 새로운 타입이 있는 것 처럼 임시로 행동하게 합니다. (새로운 값을 만드는 다른 합법적 변환도 있습니다. 예를 들면 integer에서 floating point로의 변환)
 
-It's an idiom in Go programs to convert the type of an expression to access a different set of methods. As an example, we could use the existing type sort.IntSlice to reduce the entire example to this:
+Go 프로그램에서 일군의 다른 메쏘드를 사용하기 위해 타입을 변환하는 것은 관용적인 표현입니다. 예를 들면, [sort.IntSlice](https://godoc.org/sort#IntSlice)를 사용해 위의 프로그램 전체를 다음과 같이 간소화 시킬 수 있습니다.
 
 ```go
 type Sequence []int
 
-// Method for printing - sorts the elements before printing
+// 프린팅에 필요한 메쏘드 - 프린트하기 전에 요소들을 정렬함.
 func (s Sequence) String() string {
     sort.IntSlice(s).Sort()
     return fmt.Sprint([]int(s))
 }
 ```
 
-Now, instead of having Sequence implement multiple interfaces (sorting and printing), we're using the ability of a data item to be converted to multiple types (Sequence, sort.IntSlice and []int), each of which does some part of the job. That's more unusual in practice but can be effective.
+이제, Sequence가 복수의(정렬과 출력) 인터페이스를 구현하는 대신, 하나의 데이터 아이템이 복수의 타입(Sequence, [sort.IntSlice](https://godoc.org/sort#IntSlice), 그리고 []int)으로 변환될 수 있는 점을 이용하고 있습니다. 각 타입은 주어진 작업의 일정 부분을 감당하게 됩니다. 실전에서 자주 쓰이진 않지만 매우 효과적일 수 있습니다.
 
 ## Interface conversions and type assertions
 
