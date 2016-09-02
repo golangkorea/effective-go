@@ -1,6 +1,6 @@
 # Interfaces and other types
 
-Interfaces
+## Interfaces
 
 Interfaces in Go provide a way to specify the behavior of an object: if something can do this, then it can be used here. We've seen a couple of simple examples already; custom printers can be implemented by a String method while Fprintf can generate output to anything with a Write method. Interfaces with only one or two methods are common in Go code, and are usually given a name derived from the method, such as io.Writer for something that implements Write.
 
@@ -34,7 +34,7 @@ func (s Sequence) String() string {
 }
 ```
 
-Conversions
+## Conversions
 
 The String method of Sequence is recreating the work that Sprint already does for slices. We can share the effort if we convert the Sequence to a plain []int before calling Sprint.
 
@@ -61,7 +61,7 @@ func (s Sequence) String() string {
 
 Now, instead of having Sequence implement multiple interfaces (sorting and printing), we're using the ability of a data item to be converted to multiple types (Sequence, sort.IntSlice and []int), each of which does some part of the job. That's more unusual in practice but can be effective.
 
-Interface conversions and type assertions
+## Interface conversions and type assertions
 
 Type switches are a form of conversion: they take an interface and, for each case in the switch, in a sense convert it to the type of that case. Here's a simplified version of how the code under fmt.Printf turns a value into a string using a type switch. If it's already a string, we want the actual string value held by the interface, while if it has a String method we want the result of calling the method.
 
@@ -116,7 +116,7 @@ if str, ok := value.(string); ok {
 }
 ```
 
-Generality
+## Generality
 
 If a type exists only to implement an interface and will never have exported methods beyond that interface, there is no need to export the type itself. Exporting just the interface makes it clear the value has no interesting behavior beyond what is described in the interface. It also avoids the need to repeat the documentation on every instance of a common method.
 
@@ -148,7 +148,7 @@ func NewCTR(block Block, iv []byte) Stream
 
 NewCTR applies not just to one specific encryption algorithm and data source but to any implementation of the Block interface and any Stream. Because they return interface values, replacing CTR encryption with other encryption modes is a localized change. The constructor calls must be edited, but because the surrounding code must treat the result only as a Stream, it won't notice the difference.
 
-Interfaces and methods
+## Interfaces and methods
 
 Since almost anything can have methods attached, almost anything can satisfy an interface. One illustrative example is in the http package, which defines the Handler interface. Any object that implements Handler can serve HTTP requests.
 
