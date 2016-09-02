@@ -4,6 +4,7 @@
 * [Introduction](introduction.md)
 * [Formatting](formatting.md)
 * [Commentary](commentary.md)
+* [Names](names.md)
 * [Semicolons](semicolons.md)
 * [Control structures](control_structures.md)
 * [Functions](functions.md)
