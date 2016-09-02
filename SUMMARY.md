@@ -2,5 +2,5 @@
 
 * [Introduction](introduction.md)
 * [Formatting](formatting.md)
-* Commentary
+* [Commentary](commentary.md)
 
