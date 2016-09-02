@@ -116,11 +116,14 @@ if str, ok := value.(string); ok {
 }
 ```
 
-## Generality
+## 일반성
 
-If a type exists only to implement an interface and will never have exported methods beyond that interface, there is no need to export the type itself. Exporting just the interface makes it clear the value has no interesting behavior beyond what is described in the interface. It also avoids the need to repeat the documentation on every instance of a common method.
+만약 어떤 타입이 인터페이스를 구현하기 위해서만 존재한다면, 즉 인터페이스외 어떤 메쏘드도 외부에 노츨시키지 않은 경우, 타입 자체를 노출 시킬 필요가 없습니다. 인터페이스의 노출만으로 주어진 값이 인테페이스에 묘사된 행위들 외 어떤 흥미로운 기능도 있지 않다는 것을 확실하게 전달 합니다. 이는 또한 공통된 메쏘드에 대한 문서화의 반복을 피할 수 있습니다.
 
-In such cases, the constructor should return an interface value rather than the implementing type. As an example, in the hash libraries both crc32.NewIEEE and adler32.New return the interface type hash.Hash32. Substituting the CRC-32 algorithm for Adler-32 in a Go program requires only changing the constructor call; the rest of the code is unaffected by the change of algorithm.
+그런 경우에, constructor는 구현 타입보다는 인터페이스 값을 리턴해야 합니다. 예를 들어, 해쉬 라이브러리인 [crc32.NewIEEE](https://godoc.org/hash/crc32#NewIEEE) 와 [adler32.New](https://godoc.org/hash/adler32#New)는 둘 다 인터페이스 타입 [hash.Hash32](https://godoc.org/hash/Hash32)를 리턴합니다. Go 프로그램에서 CRC-32 알로리즘을 Adler-32로 교체하는데 요구되는 사항은 단순히 constructor 콜을 바꿔주는 것입니다; 그 외 코드들은 알고리즘의 변화에 아무런 영향을 받지 않습니다.
+
+이와 유사한 접근을 통하면, 각종 crypto 패키지내의 스트리밍 cipher 알고리즘들을, 이들이 연결해 쓰는 block cipher들로 부터 분리시킬 수 있도록 해 줍니다. crypto/cipher 패키지내 Block 인터페이스는 한 block의 데이터를 암호화하는 block cipher의 행위를 정의 합니다. 그런 후, bufio 패키지에서 유추해 볼 수 있듯이, Block 인터페이스를 구현하는 cipher 패키지들은, Stream 인터페이스로 대표되는 스트리밍 cipher들을 건설하는데 사용될 수 있습니다.   
+
 
 A similar approach allows the streaming cipher algorithms in the various crypto packages to be separated from the block ciphers they chain together. The Block interface in the crypto/cipher package specifies the behavior of a block cipher, which provides encryption of a single block of data. Then, by analogy with the bufio package, cipher packages that implement this interface can be used to construct streaming ciphers, represented by the Stream interface, without knowing the details of the block encryption.
 
