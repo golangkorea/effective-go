@@ -2,7 +2,7 @@
 
 Although it doesn't look superficially very different from initialization in C or C++, initialization in Go is more powerful. Complex structures can be built during initialization and the ordering issues among initialized objects, even among different packages, are handled correctly.
 
-Constants
+## Constants
 
 Constants in Go are just that—constant. They are created at compile time, even when defined as locals in functions, and can only be numbers, characters (runes), strings or booleans. Because of the compile-time restriction, the expressions that define them must be constant expressions, evaluatable by the compiler. For instance, 1<<3 is a constant expression, while math.Sin(math.Pi/4) is not because the function call to math.Sin needs to happen at run time.
 
@@ -54,7 +54,7 @@ The expression YB prints as 1.00YB, while ByteSize(1e13) prints as 9.09TB.
 
 The use here of Sprintf to implement ByteSize's String method is safe (avoids recurring indefinitely) not because of a conversion but because it calls Sprintf with %f, which is not a string format: Sprintf will only call the String method when it wants a string, and %f wants a floating-point value.
 
-Variables
+## Variables
 
 Variables can be initialized just like constants but the initializer can be a general expression computed at run time.
 
@@ -66,7 +66,7 @@ var (
 )
 ```
 
-The init function
+## The init function
 
 Finally, each source file can define its own niladic init function to set up whatever state is required. (Actually each file can have multiple init functions.) And finally means finally: init is called after all the variable declarations in the package have evaluated their initializers, and those are evaluated only after all the imported packages have been initialized.
 

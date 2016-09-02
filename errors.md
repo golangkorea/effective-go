@@ -54,7 +54,7 @@ for try := 0; try < 2; try++ {
 
 The second if statement here is another type assertion. If it fails, ok will be false, and e will be nil. If it succeeds, ok will be true, which means the error was of type `*os.PathError`, and then so is e, which we can examine for more information about the error.
 
-Panic
+## Panic
 
 The usual way to report an error to a caller is to return an error as an extra return value. The canonical Read method is a well-known instance; it returns a byte count and an error. But what if the error is unrecoverable? Sometimes the program simply cannot continue.
 
@@ -88,7 +88,7 @@ func init() {
 }
 ```
 
-Recover
+## Recover
 
 When panic is called, including implicitly for run-time errors such as indexing a slice out of bounds or failing a type assertion, it immediately stops execution of the current function and begins unwinding the stack of the goroutine, running any deferred functions along the way. If that unwinding reaches the top of the goroutine's stack, the program dies. However, it is possible to use the built-in function recover to regain control of the goroutine and resume normal execution.
 

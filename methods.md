@@ -1,6 +1,6 @@
 # Methods
 
-Pointers vs. Values
+## Pointers vs. Values
 
 As we saw with ByteSize, methods can be defined for any named type (except a pointer or an interface); the receiver does not have to be a struct.
 

@@ -1,6 +1,6 @@
 # Concurrency
 
-Share by communicating
+## Share by communicating
 
 Concurrent programming is a large topic and there is space only for some Go-specific highlights here.
 
@@ -11,7 +11,7 @@ This approach can be taken too far. Reference counts may be best done by putting
 
 One way to think about this model is to consider a typical single-threaded program running on one CPU. It has no need for synchronization primitives. Now run another such instance; it too needs no synchronization. Now let those two communicate; if the communication is the synchronizer, there's still no need for other synchronization. Unix pipelines, for example, fit this model perfectly. Although Go's approach to concurrency originates in Hoare's Communicating Sequential Processes (CSP), it can also be seen as a type-safe generalization of Unix pipes.
 
-Goroutines
+## Goroutines
 
 They're called goroutines because the existing terms—threads, coroutines, processes, and so on—convey inaccurate connotations. A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It is lightweight, costing little more than the allocation of stack space. And the stacks start small, so they are cheap, and grow by allocating (and freeing) heap storage as required.
 
@@ -38,7 +38,7 @@ In Go, function literals are closures: the implementation makes sure the variabl
 
 These examples aren't too practical because the functions have no way of signaling completion. For that, we need channels.
 
-Channels
+## Channels
 
 Like maps, channels are allocated with make, and the resulting value acts as a reference to an underlying data structure. If an optional integer parameter is provided, it sets the buffer size for the channel. The default is zero, for an unbuffered or synchronous channel.
 
@@ -154,7 +154,7 @@ func Serve(clientRequests chan *Request, quit chan bool) {
 }
 ```
 
-Channels of channels
+## Channels of channels
 
 One of the most important properties of Go is that a channel is a first-class value that can be allocated and passed around like any other. A common use of this property is to implement safe, parallel demultiplexing.
 
@@ -197,7 +197,7 @@ func handle(queue chan *Request) {
 
 There's clearly a lot more to do to make it realistic, but this code is a framework for a rate-limited, parallel, non-blocking RPC system, and there's not a mutex in sight.
 
-Parallelization
+## Parallelization
 
 Another application of these ideas is to parallelize a calculation across multiple CPU cores. If the calculation can be broken into separate pieces that can execute independently, it can be parallelized, with a channel to signal when each piece completes.
 
@@ -247,7 +247,7 @@ var numCPU = runtime.GOMAXPROCS(0)
 
 Be sure not to confuse the ideas of concurrency—structuring a program as independently executing components—and parallelism—executing calculations in parallel for efficiency on multiple CPUs. Although the concurrency features of Go can make some problems easy to structure as parallel computations, Go is a concurrent language, not a parallel one, and not all parallelization problems fit Go's model. For a discussion of the distinction, see the talk cited in this blog post.
 
-A leaky buffer
+## A leaky buffer
 
 The tools of concurrent programming can even make non-concurrent ideas easier to express. Here's an example abstracted from an RPC package. The client goroutine loops receiving data from some source, perhaps a network. To avoid allocating and freeing buffers, it keeps a free list, and uses a buffered channel to represent it. If the channel is empty, a new buffer gets allocated. Once the message buffer is ready, it's sent to the server on serverChan.
 
