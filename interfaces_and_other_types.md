@@ -61,16 +61,16 @@ func (s Sequence) String() string {
 
 이제, Sequence가 복수의(정렬과 출력) 인터페이스를 구현하는 대신, 하나의 데이터 아이템이 복수의 타입(Sequence, [sort.IntSlice](https://godoc.org/sort#IntSlice), 그리고 []int)으로 변환될 수 있는 점을 이용하고 있습니다. 각 타입은 주어진 작업의 일정 부분을 감당하게 됩니다. 실전에서 자주 쓰이진 않지만 매우 효과적일 수 있습니다.
 
-## Interface conversions and type assertions
+## 인터페이스 변환과 타입 단언(type assertions)
 
-Type switches are a form of conversion: they take an interface and, for each case in the switch, in a sense convert it to the type of that case. Here's a simplified version of how the code under fmt.Printf turns a value into a string using a type switch. If it's already a string, we want the actual string value held by the interface, while if it has a String method we want the result of calling the method.
+타입 스위치는 변환의 한 형태입니다: 인터페이스를 받았을 때, switch문의 각 case에 맞게 타입 변환을 해 줍니다. 아래 예제는 [fmt.Printf](https://godoc.org/fmt#Printf)가 타입 스위치를 써서 어떻게 주어진 값을 string으로 변환시키는 지를 단순화된 버전으로 보여 주고 있습니다. 만약에 값이 이미 string인 경우는 인터페이스가 잡고 있는 실제 string 값을 원하고, 그렇지 않고 값이 String 메쏘드를 가지고 있을 경우는 메쏘드를 실행한 결과를 원합니다.
 
 ```go
 type Stringer interface {
     String() string
 }
 
-var value interface{} // Value provided by caller.
+var value interface{} // caller가 제공한 값.
 switch str := value.(type) {
 case string:
     return str
@@ -79,21 +79,21 @@ case Stringer:
 }
 ```
 
-The first case finds a concrete value; the second converts the interface into another interface. It's perfectly fine to mix types this way.
+첫번째 case는 구체적인 값을 찾은 경우이고; 두번째 case는 인터페이스를 또 다른 인터페이스로 변환한 경우입니다. 이런 식으로 여러 타입을 섞어서 써도 아무 문제가 없습니다.
 
-What if there's only one type we care about? If we know the value holds a string and we just want to extract it? A one-case type switch would do, but so would a type assertion. A type assertion takes an interface value and extracts from it a value of the specified explicit type. The syntax borrows from the clause opening a type switch, but with an explicit type rather than the type keyword:
+오로지 한 타입만에만 관심이 있는 경우는 어떨까요? 만약 주어진 값이 string을 저장하는 걸 알고 있고 그냥 그 string 값을 추출하고자 한다면? 단 하나의 case만을 갖는 타입 스위치면 해결 할 수 있지만 타입 단언 표현을 쓸 수도 있습니다. 타입 단언은 인테페이스 값을 가지고 지정된 명확한 타입의 값을 추출합니다. 문법은 타입 스위치를 열 때와 비슷하지만 type 키워드 대신 명확한 타입을 사용합니다.
 
 ```go
 value.(typeName)
 ```
 
-and the result is a new value with the static type typeName. That type must either be the concrete type held by the interface, or a second interface type that the value can be converted to. To extract the string we know is in the value, we could write:
+그리고 그 결과로 얻는 새 값은 typeName이라는 정적 타입입니다. 그 타입은 인터페이스가 잡고 있는 구체적인 타입이던지 아니면 그 값이 변환 될 수 있는 2번째 인터페이스 타입이어야 합니다. 주어진 값안에 있는 string을 추출하기 위해서, 다음과 같이 쓸 수 있습니다.
 
 ```go
 str := value.(string)
 ```
 
-But if it turns out that the value does not contain a string, the program will crash with a run-time error. To guard against that, use the "comma, ok" idiom to test, safely, whether the value is a string:
+하지만 그 값이 string을 가지고 있지 않을 경우, 프로그램은 런타임 에러를 내고 죽습니다. 이런 참사에 대비하기 위해서, "comma, ok" 관용구를 사용하여 안전하게 값이 string인지 검사하십시요:
 
 ```go
 str, ok := value.(string)
@@ -104,9 +104,9 @@ if ok {
 }
 ```
 
-If the type assertion fails, str will still exist and be of type string, but it will have the zero value, an empty string.
+만약 타입 단언이 검사에서 실패할 경우, str는 여전히 string 타입으로 존재하고, string의 영점 값인 빈 문자열을 가지게 됩니다.
 
-As an illustration of the capability, here's an if-else statement that's equivalent to the type switch that opened this section.
+가능한 예를 또 들자면, 위에서 보여준 타입 스위치와 동일한 기능을 하는 if-else문이 여기 있습니다.
 
 ```go
 if str, ok := value.(string); ok {
