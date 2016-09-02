@@ -4,5 +4,5 @@
 * [Formatting](formatting.md)
 * [Commentary](commentary.md)
 * [Semicolons](semicolons.md)
-* Control Structures
+* [Control Structures](control_structures.md)
 
