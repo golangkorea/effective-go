@@ -1,6 +1,9 @@
 # effective-go
+<<<<<<< 110d60e6f99cedbef52789c927f8ee43ff3aa832
 > Effective Go 한국어 번역 문서입니다.
 
+=======
+>>>>>>> Update README.md
 
 ## 각 챕터별 담당자 테이블
 > http://bit.ly/2bZghCd
