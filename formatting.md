@@ -34,9 +34,7 @@ Line length
 
 Parentheses
 > Go needs fewer parentheses than C and Java: control structures (if, for, switch) do not have parentheses in their syntax. Also, the operator precedence hierarchy is shorter and clearer, so
-
 ```go
 x<<8 + y<<16
 ```
-
 means what the spacing implies, unlike in the other languages.
