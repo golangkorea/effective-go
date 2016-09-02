@@ -10,5 +10,5 @@
 * [Initializations](initializations.md)
 * [Methods](methods.md)
 * [Interfaces and other types](interfaces_and_other_types.md)
-* The blank identifier
+* [The blank identifier](the_blank_identifier.md)
 
