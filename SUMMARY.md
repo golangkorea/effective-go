@@ -6,4 +6,5 @@
 * [Semicolons](semicolons.md)
 * [Control Structures](control_structures.md)
 * [Functions](functions.md)
+* Data
 
