@@ -1,5 +1,5 @@
 # Summary
 
 * [Introduction](introduction.md)
-* Formatting
+* [Formatting](formatting.md)
 
