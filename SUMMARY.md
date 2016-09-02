@@ -8,5 +8,5 @@
 * [Functions](functions.md)
 * [Data](data.md)
 * [Initializations](initializations.md)
-* Methods
+* [Methods](methods.md)
 
