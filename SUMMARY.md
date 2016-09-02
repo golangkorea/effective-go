@@ -7,4 +7,5 @@
 * [Control Structures](control_structures.md)
 * [Functions](functions.md)
 * [Data](data.md)
+* Initializations
 
