@@ -9,4 +9,5 @@
 * [Data](data.md)
 * [Initializations](initializations.md)
 * [Methods](methods.md)
+* Interfaces and other types
 
