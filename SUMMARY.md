@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
+* Introduction
 * [Formatting](formatting.md)
 * [Commentary](commentary.md)
 * [Semicolons](semicolons.md)
@@ -15,5 +16,4 @@
 * [Concurrency](concurrency.md)
 * [Errors](errors.md)
 * [A web server](a_web_server.md)
-* Introduction
 
