@@ -23,7 +23,7 @@ type Writer interface {
 
 `The io package also exports several other interfaces that specify objects that can implement several such methods. For instance, there is io.ReadWriter, an interface containing both Read and Write. We could specify io.ReadWriter by listing the two methods explicitly, but it's easier and more evocative to embed the two interfaces to form the new one, like this:`
 
-[io](https://godoc.org/io)패키지는 또 다른 다수의 인터페이스들을 노출시키고 있는데, 다수의 메서드를 구현할 수 있는 객체를 명시하는데 씁니다. 예를 들어, [io.ReadWriter](https://godoc.org/io#ReadWriter)는 Read와 Write를 모두 가지고 있다. 두 메서드를 명시적으로 나열해서 [io.ReadWriter](https://godoc.org/io#ReadWriter)를 정의 할 수도 있겠지만, 더 쉽고 기억하기 좋은 방법은 두개의 인터페이스를 끼워 넣어서 다음과 같이 하나의 인터페이스를 형성시키는 것이다.
+[io](https://godoc.org/io)패키지는 또 다른 다수의 인터페이스들을 노출시키고 있는데, 다수의 메서드를 구현할 수 있는 객체를 명시하는데 씁니다. 예를 들어, [io.ReadWriter](https://godoc.org/io#ReadWriter)는 Read와 Write를 모두 가지고 있다. 두 메서드를 명시적으로 나열해서 [io.ReadWriter](https://godoc.org/io#ReadWriter)를 정의 할 수도 있겠지만, 더 쉽고 기억하기 좋은 방법은 두개의 인터페이스를 끼워 넣어서(embedded) 다음과 같이 하나의 인터페이스를 형성시키는 것이다.
 
 ```go
 // ReadWriter is the interface that combines the Reader and Writer interfaces.
@@ -39,7 +39,7 @@ type ReadWriter interface {
 
 `The same basic idea applies to structs, but with more far-reaching implications. The bufio package has two struct types, bufio.Reader and bufio.Writer, each of which of course implements the analogous interfaces from package io. And bufio also implements a buffered reader/writer, which it does by combining a reader and a writer into one struct using embedding: it lists the types within the struct but does not give them field names.`
 
-기본적으로 똑같은 아이디어를 struct에도 적용할 수 있는데 그 영향은 훨씬 광범위하다. [bufio](https://godoc.org/bufio)패키지에는 [bufio.Reader](https://godoc.org/bufio#Reader)와 [bufio.Writer](https://godoc.org/bufio#Writer) 두 struct타입이 있는데, 
+기본적으로 똑같은 아이디어가 struct에도 적용할 수 있는데 그 영향은 훨씬 광범위하다. [bufio](https://godoc.org/bufio)패키지에는 [bufio.Reader](https://godoc.org/bufio#Reader)와 [bufio.Writer](https://godoc.org/bufio#Writer) 두 struct타입이 있는데, 물론 [io](https://godoc.org/io)패키지에 있는 유사한 인터페이스를 구현하고 있다. 그런데 [bufio](https://godoc.org/bufio)는 또 버퍼를 내재한 reader/writer를 구현하기도 하는데, 임베딩(embedding)을 이용하여 reader와 writer를 하나의 struct에 조합하는 것이다: struct안에 타입들을 나열하되 필드 이름을 주지 않는 방식이다.
 
 ```go
 // ReadWriter stores pointers to a Reader and a Writer.
@@ -50,7 +50,9 @@ type ReadWriter struct {
 }
 ```
 
-The embedded elements are pointers to structs and of course must be initialized to point to valid structs before they can be used. The ReadWriter struct could be written as
+`The embedded elements are pointers to structs and of course must be initialized to point to valid structs before they can be used. The ReadWriter struct could be written as`
+
+임베드된 요소들은 struct를 가리키는 포인터들이고, 물론 사용하기 전에 유효한 struct로 포인트를 걸어서 초기화 시켜주어야 한다. ReadWriter struct는 아래와 같이 작성될 수 있다.
 
 ```go
 type ReadWriter struct {
@@ -59,7 +61,9 @@ type ReadWriter struct {
 }
 ```
 
-but then to promote the methods of the fields and to satisfy the io interfaces, we would also need to provide forwarding methods, like this:
+`but then to promote the methods of the fields and to satisfy the io interfaces, we would also need to provide forwarding methods, like this:`
+
+
 
 ```go
 func (rw *ReadWriter) Read(p []byte) (n int, err error) {
