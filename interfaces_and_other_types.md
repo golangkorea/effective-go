@@ -7,7 +7,7 @@
 
 `Interfaces in Go provide a way to specify the behavior of an object: if something can do this, then it can be used here. We've seen a couple of simple examples already; custom printers can be implemented by a String method while Fprintf can generate output to anything with a Write method. Interfaces with only one or two methods are common in Go code, and are usually given a name derived from the method, such as io.Writer for something that implements Write.`
 
-Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법이다: 만약 어떤 객체가 정해진 행위를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이다. 이미 간단한 몇몇 예제들을 본 적이 있다; String 메쏘드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메쏘드를 가지고 있는 어떤 객체라도 쓸 수 있다. Go 코드에서는 한 두개의 메쏘드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메쏘드(동사)에서 파생된다: Write 메쏘드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
+Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법이다: 만약 어떤 객체가 정해진 행위를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이다. 이미 간단한 몇몇 예제들을 본 적이 있다; String 메서드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메서드를 가지고 있는 어떤 객체라도 쓸 수 있다. Go 코드에서는 한 두개의 메서드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메서드(동사)에서 파생된다: Write 메서드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
 
 `A type can implement multiple interfaces. For instance, a collection can be sorted by the routines in package sort if it implements sort.Interface, which contains Len(), Less(i, j int) bool, and Swap(i, j int), and it could also have a custom formatter. In this contrived example Sequence satisfies both.`
 
@@ -16,7 +16,7 @@ Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 �
 ```go
 type Sequence []int
 
-// sort.Interface를 위한 필수적인 메쏘드들.
+// sort.Interface를 위한 필수적인 메서드들.
 func (s Sequence) Len() int {
     return len(s)
 }
@@ -27,7 +27,7 @@ func (s Sequence) Swap(i, j int) {
     s[i], s[j] = s[j], s[i]
 }
 
-// 프린팅에 필요한 메쏘드 - 프린트하기 전에 요소들을 정렬함.
+// 프린팅에 필요한 메서드 - 프린트하기 전에 요소들을 정렬함.
 func (s Sequence) String() string {
     sort.Sort(s)
     str := "["
@@ -45,7 +45,7 @@ func (s Sequence) String() string {
 
 `The String method of Sequence is recreating the work that Sprint already does for slices. We can share the effort if we convert the Sequence to a plain []int before calling Sprint.`
 
-Sequence의 String 메쏘드는 Sprint가 벌써 슬라이스(slices)를 가지고 하는 일을 반복하고 있다. 하지만 Sprint를 실행하기 전에 Sequence를 []int로 변환하면 일을 줄일 수 있다.
+Sequence의 String 메서드는 Sprint가 벌써 슬라이스(slices)를 가지고 하는 일을 반복하고 있다. 하지만 Sprint를 실행하기 전에 Sequence를 []int로 변환하면 일을 줄일 수 있다.
 
 ```go
 func (s Sequence) String() string {
@@ -56,16 +56,16 @@ func (s Sequence) String() string {
 
 `This method is another example of the conversion technique for calling Sprintf safely from a String method. Because the two types (Sequence and []int) are the same if we ignore the type name, it's legal to convert between them. The conversion doesn't create a new value, it just temporarily acts as though the existing value has a new type. (There are other legal conversions, such as from integer to floating point, that do create a new value.)`
 
-이 같은 방법은 String 메쏘드에서 Sprint를 안전하게 실행할 수 있는 타입 변환 기법의 또 다른 예이다. 이것이 가능한 이유는 Sequence와 []int 두 타입이 이름만 무시하면 동일하기 때문에 합법적으로 서로 변환할 수 있는 것이다. 이러한 타입 변환은 새로운 값을 만들어 내지 않고 현재 값에 새로운 타입이 있는 것 처럼 임시로 행동하게 한다. (새로운 값을 만드는 다른 합법적 변환도 있다. 예를 들면 integer에서 floating point로의 변환)
+이 같은 방법은 String 메서드에서 Sprint를 안전하게 실행할 수 있는 타입 변환 기법의 또 다른 예이다. 이것이 가능한 이유는 Sequence와 []int 두 타입이 이름만 무시하면 동일하기 때문에 합법적으로 서로 변환할 수 있는 것이다. 이러한 타입 변환은 새로운 값을 만들어 내지 않고 현재 값에 새로운 타입이 있는 것 처럼 임시로 행동하게 한다. (새로운 값을 만드는 다른 합법적 변환도 있다. 예를 들면 integer에서 floating point로의 변환)
 
 `It's an idiom in Go programs to convert the type of an expression to access a different set of methods. As an example, we could use the existing type sort.IntSlice to reduce the entire example to this:`
 
-Go 프로그램에서 일군의 다른 메쏘드를 사용하기 위해 타입을 변환하는 것은 관용적인 표현이다. 예를 들면, [sort.IntSlice](https://godoc.org/sort#IntSlice)를 사용해 위의 프로그램 전체를 다음과 같이 간소화 시킬 수 있다.
+Go 프로그램에서 일군의 다른 메서드를 사용하기 위해 타입을 변환하는 것은 관용적인 표현이다. 예를 들면, [sort.IntSlice](https://godoc.org/sort#IntSlice)를 사용해 위의 프로그램 전체를 다음과 같이 간소화 시킬 수 있다.
 
 ```go
 type Sequence []int
 
-// 프린팅에 필요한 메쏘드 - 프린트하기 전에 요소들을 정렬함.
+// 프린팅에 필요한 메서드 - 프린트하기 전에 요소들을 정렬함.
 func (s Sequence) String() string {
     sort.IntSlice(s).Sort()
     return fmt.Sprint([]int(s))
@@ -80,7 +80,7 @@ func (s Sequence) String() string {
 
 `Type switches are a form of conversion: they take an interface and, for each case in the switch, in a sense convert it to the type of that case. Here's a simplified version of how the code under fmt.Printf turns a value into a string using a type switch. If it's already a string, we want the actual string value held by the interface, while if it has a String method we want the result of calling the method.`
 
-타입 스위치는 변환의 한 형태이다: 인터페이스를 받았을 때, switch문의 각 case에 맞게 타입 변환을 한다. 아래 예제는 [fmt.Printf](https://godoc.org/fmt#Printf)가 타입 스위치를 써서 어떻게 주어진 값을 string으로 변환시키는 지를 단순화된 버전으로 보여 주고 있다. 만약에 값이 이미 string인 경우는 인터페이스가 잡고 있는 실제 string 값을 원하고, 그렇지 않고 값이 String 메쏘드를 가지고 있을 경우는 메쏘드를 실행한 결과를 원한다.
+타입 스위치는 변환의 한 형태이다: 인터페이스를 받았을 때, switch문의 각 case에 맞게 타입 변환을 한다. 아래 예제는 [fmt.Printf](https://godoc.org/fmt#Printf)가 타입 스위치를 써서 어떻게 주어진 값을 string으로 변환시키는 지를 단순화된 버전으로 보여 주고 있다. 만약에 값이 이미 string인 경우는 인터페이스가 잡고 있는 실제 string 값을 원하고, 그렇지 않고 값이 String 메서드를 가지고 있을 경우는 메서드를 실행한 결과를 원한다.
 
 ```go
 type Stringer interface {
@@ -147,7 +147,7 @@ if str, ok := value.(string); ok {
 
 `If a type exists only to implement an interface and will never have exported methods beyond that interface, there is no need to export the type itself. Exporting just the interface makes it clear the value has no interesting behavior beyond what is described in the interface. It also avoids the need to repeat the documentation on every instance of a common method.`
 
-만약 어떤 타입이 인터페이스를 구현하기 위해서만 존재한다면, 즉 인터페이스외 어떤 메쏘드도 외부에 노츨시키지 않은 경우, 타입 자체를 노출 시킬 필요가 없다. 단지 인터페이스만을 노출하는 것은 주어진 값이 인테페이스에 묘사된 행위들 외 어떤 흥미로운 기능도 있지 않다는 것을 확실하게 전달한다. 이는 또한 공통된 메쏘드에 대한 문서화의 반복을 피할 수 있다.
+만약 어떤 타입이 인터페이스를 구현하기 위해서만 존재한다면, 즉 인터페이스외 어떤 메서드도 외부에 노츨시키지 않은 경우, 타입 자체를 노출 시킬 필요가 없다. 단지 인터페이스만을 노출하는 것은 주어진 값이 인테페이스에 묘사된 행위들 외 어떤 흥미로운 기능도 있지 않다는 것을 확실하게 전달한다. 이는 또한 공통된 메서드에 대한 문서화의 반복을 피할 수 있다.
 
 `In such cases, the constructor should return an interface value rather than the implementing type. As an example, in the hash libraries both crc32.NewIEEE and adler32.New return the interface type hash.Hash32. Substituting the CRC-32 algorithm for Adler-32 in a Go program requires only changing the constructor call; the rest of the code is unaffected by the change of algorithm.`
 
@@ -187,11 +187,11 @@ func NewCTR(block Block, iv []byte) Stream
 
 NewCTR은 특정한 암호화 알고리즘과 데이터 소스에만 적용되는 것이 아니라 [Block](https://godoc.org/crypto/cipher#Block)와 [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스를 구현하는 어떤 알고리즘이나 데이터 소스에도 적용이 가능하다. 왜냐하면 인터페시스 값들을 리턴하고, CTR 암호화를 다른 암호화 모드로 교체하는 것이 국부적인 변화이기 때문이다. constructor 콜은 반드시 편집되어야 합니다. 하지만 둘러싸고 있는 코드는 리턴 결과를 [Stream](https://godoc.org/crypto/cipher#Stream)으로 처리해야 하기 때문에, 차이를 알지 못 한다.
 
-## 인터페이스와 메쏘드
+## 인터페이스와 메서드
 
 `Since almost anything can have methods attached, almost anything can satisfy an interface. One illustrative example is in the http package, which defines the Handler interface. Any object that implements Handler can serve HTTP requests.`
 
-거의 모든 것에 메쏘드를 첨부할 수 있다는 말은 거의 모든 것이 인터페이스를 만족 시킬 수 있다는 말이기도 하다. 한 회화적인 예가 [http](https://godoc.org/net/http) 패키지내 정의되어 있는 [Handler](https://godoc.org/net/http#Handler) 인터페이스 이다. [Handler](https://godoc.org/net/http#Handler)를 구현하는 어떤 객체도 HTTP request에 서비스를 제공할 수 있다.
+거의 모든 것에 메서드를 첨부할 수 있다는 말은 거의 모든 것이 인터페이스를 만족 시킬 수 있다는 말이기도 하다. 한 회화적인 예가 [http](https://godoc.org/net/http) 패키지내 정의되어 있는 [Handler](https://godoc.org/net/http#Handler) 인터페이스 이다. [Handler](https://godoc.org/net/http#Handler)를 구현하는 어떤 객체도 HTTP request에 서비스를 제공할 수 있다.
 
 ```go
 type Handler interface {
@@ -201,7 +201,7 @@ type Handler interface {
 
 `ResponseWriter is itself an interface that provides access to the methods needed to return the response to the client. Those methods include the standard Write method, so an http.ResponseWriter can be used wherever an io.Writer can be used. Request is a struct containing a parsed representation of the request from the client.`
 
-[ResponseWriter](https://godoc.org/net/http#ResponseWriter) 역시 클라이어트에 응답을 리턴하는데 필요한 메쏘드들의 접근을 제공하는 인터페이스이다. 이 메쏘드들은 표준 Write 메쏘드를 포함하여서, [http.ResponseWriter](https://godoc.org/net/http#ResponseWriter)는 [io.Writer](https://godoc.org/io#Writer)가 사용될 수 있는 곳이면 어디든 사용할 수 있다. [Request](https://godoc.org/net/http#Request)는 클라이언트로 부터 오는 request의 분석된 내용을 담은 struct이다.
+[ResponseWriter](https://godoc.org/net/http#ResponseWriter) 역시 클라이어트에 응답을 리턴하는데 필요한 메서드들의 접근을 제공하는 인터페이스이다. 이 메서드들은 표준 Write 메서드를 포함하여서, [http.ResponseWriter](https://godoc.org/net/http#ResponseWriter)는 [io.Writer](https://godoc.org/io#Writer)가 사용될 수 있는 곳이면 어디든 사용할 수 있다. [Request](https://godoc.org/net/http#Request)는 클라이언트로 부터 오는 request의 분석된 내용을 담은 struct이다.
 
 `For brevity, let's ignore POSTs and assume HTTP requests are always GETs; that simplification does not affect the way the handlers are set up. Here's a trivial but complete implementation of a handler to count the number of times the page is visited.`
 
@@ -269,7 +269,7 @@ func ArgServer() {
 ```
 `How do we turn that into an HTTP server? We could make ArgServer a method of some type whose value we ignore, but there's a cleaner way. Since we can define a method for any type except pointers and interfaces, we can write a method for a function. The http package contains this code:`
 
-이것을 어떻게 HTTP 서버로 바꿀 수 있을까? 어떤 타입에다가 값은 무시하면서 ArgServer를 메쏘드로 만들 수 있을 것이다. 하지만 더 좋은 방법이 있다. 포인터와 인터페이스만 빼고는 어떤 타입에도 메쏘드를 정의할 수 있는 사실을 이용해서, 함수에 메쏘드를 쓸 수 있다. [http](https://godoc.org/net/http) 패키지에 다음과 같은 코드가 있다:
+이것을 어떻게 HTTP 서버로 바꿀 수 있을까? 어떤 타입에다가 값은 무시하면서 ArgServer를 메서드로 만들 수 있을 것이다. 하지만 더 좋은 방법이 있다. 포인터와 인터페이스만 빼고는 어떤 타입에도 메서드를 정의할 수 있는 사실을 이용해서, 함수에 메서드를 쓸 수 있다. [http](https://godoc.org/net/http) 패키지에 다음과 같은 코드가 있다:
 
 ```go
 // HandlerFunc는 어뎁터로써 평범한 함수를 HTTP handler로 쓸 수 있게 해 준다.
@@ -285,7 +285,7 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, req *Request) {
 
 `HandlerFunc is a type with a method, ServeHTTP, so values of that type can serve HTTP requests. Look at the implementation of the method: the receiver is a function, f, and the method calls f. That may seem odd but it's not that different from, say, the receiver being a channel and the method sending on the channel.`
 
-[HandlerFunc](https://godoc.org/net/http#HandlerFunc)는 [ServeHTTP](https://godoc.org/net/http#ServeHTTP)라는 매쏘드를 같는 타입으로, 이 타입의 값은 HTTP request에 서비스를 제공한다. 메쏘드의 구현을 한번 살펴 보라: 리시버는 함수, f이고 메쏘드가 f를 부른다. 이상해 보일 수도 있지만, 리시버가 채널이고 메쏘드가 채널에 데이터를 보내는 예와 비교해도 크게 다르지 않다.
+[HandlerFunc](https://godoc.org/net/http#HandlerFunc)는 [ServeHTTP](https://godoc.org/net/http#ServeHTTP)라는 매쏘드를 같는 타입으로, 이 타입의 값은 HTTP request에 서비스를 제공한다. 메서드의 구현을 한번 살펴 보라: 리시버는 함수, f이고 메서드가 f를 부른다. 이상해 보일 수도 있지만, 리시버가 채널이고 메서드가 채널에 데이터를 보내는 예와 비교해도 크게 다르지 않다.
 
 `To make ArgServer into an HTTP server, we first modify it to have the right signature.`
 
@@ -300,7 +300,7 @@ func ArgServer(w http.ResponseWriter, req *http.Request) {
 
 `ArgServer now has same signature as HandlerFunc, so it can be converted to that type to access its methods, just as we converted Sequence to IntSlice to access IntSlice.Sort. The code to set it up is concise:`
 
-ArgServer는 이제 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)와 signature가 동일 하다. 마치 IntSlice.Sort 메쏘드를 쓰기 위해 Sequence를 [IntSlice](https://godoc.org/sort#IntSlice)로 변환 했듯이, ServeHTTP를 쓰기 위해 ArgServer를 HandlerFunc로 변환 시킬 수 있다. 셑업을 하는 코드는 매우 간결하다.
+ArgServer는 이제 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)와 signature가 동일 하다. 마치 IntSlice.Sort 메서드를 쓰기 위해 Sequence를 [IntSlice](https://godoc.org/sort#IntSlice)로 변환 했듯이, ServeHTTP를 쓰기 위해 ArgServer를 HandlerFunc로 변환 시킬 수 있다. 셑업을 하는 코드는 매우 간결하다.
 
 ```go
 http.Handle("/args", http.HandlerFunc(ArgServer))
@@ -308,8 +308,8 @@ http.Handle("/args", http.HandlerFunc(ArgServer))
 
 `When someone visits the page /args, the handler installed at that page has value ArgServer and type HandlerFunc. The HTTP server will invoke the method ServeHTTP of that type, with ArgServer as the receiver, which will in turn call ArgServer (via the invocation f(c, req) inside HandlerFunc.ServeHTTP). The arguments will then be displayed.`
 
-누가 /args를 방문했을 때, 그 페이지에 설치된 handler는 ArgServer 값을 갖는 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)타입 이다. HTTP 서버는 그 타입의 ServeHTTP 메쏘드를 부르면서 ArgServer를 리시버로 사용하고, 결국 ArgServer를 부르게 된다: HandlerFunc.ServeHTTP안에서 f(c, req)를 부르게 된다. 그리고 나면 명령줄 인수가 나타나 보인다.
+누가 /args를 방문했을 때, 그 페이지에 설치된 handler는 ArgServer 값을 갖는 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)타입 이다. HTTP 서버는 그 타입의 ServeHTTP 메서드를 부르면서 ArgServer를 리시버로 사용하고, 결국 ArgServer를 부르게 된다: HandlerFunc.ServeHTTP안에서 f(c, req)를 부르게 된다. 그리고 나면 명령줄 인수가 나타나 보인다.
 
 `In this section we have made an HTTP server from a struct, an integer, a channel, and a function, all because interfaces are just sets of methods, which can be defined for (almost) any type.`
 
-지금까지 struct, integer, channel, 그리고 함수(function)을 가지고 HTTP 서버를 만들어 보았다. 이것이 가능한 이유는 인터페이스가 거의 모든 타입에 정의 할 수 있는 단순한 메쏘드의 집합이기 때문이다.
+지금까지 struct, integer, channel, 그리고 함수(function)을 가지고 HTTP 서버를 만들어 보았다. 이것이 가능한 이유는 인터페이스가 거의 모든 타입에 정의 할 수 있는 단순한 메서드의 집합이기 때문이다.
