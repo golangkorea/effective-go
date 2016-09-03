@@ -23,7 +23,7 @@ type Writer interface {
 
 `The io package also exports several other interfaces that specify objects that can implement several such methods. For instance, there is io.ReadWriter, an interface containing both Read and Write. We could specify io.ReadWriter by listing the two methods explicitly, but it's easier and more evocative to embed the two interfaces to form the new one, like this:`
 
-[io](https://godoc.org/io)패키지는 또 다른 다수의 인터페이스들을 노출시키고 있는데, 다수의 메서드를 구현할 수 있는 객체를 명시하는데 씁니다. 예를 들어, [io.ReadWriter](https://godoc.org/io#ReadWriter)는 Read와 Write를 모두 가지고 있다. 두 메서드를 명시적으로 나열해서 [io.ReadWriter](https://godoc.org/io#ReadWriter)를 정의 할 수도 있겠지만, 더 쉽고 기억하기 좋은 방법은 두개의 인터페이스를 끼워 넣어서(embedded) 다음과 같이 하나의 인터페이스를 형성시키는 것이다.
+[io](https://godoc.org/io)패키지는 다수의 또 다른 인터페이스들을 노출시키고 있는데, 다수의 메서드를 구현할 수 있는 객체를 명시하는데 쓴다. 예를 들어, [io.ReadWriter](https://godoc.org/io#ReadWriter)는 Read와 Write를 모두 가지고 있다. 두 메서드를 명시적으로 나열해서 [io.ReadWriter](https://godoc.org/io#ReadWriter)를 정의 할 수도 있겠지만, 더 쉽고 기억하기 좋은 방법은 두개의 인터페이스를 끼워 넣어서(embedded) 다음과 같이 하나의 인터페이스를 형성시키는 것이다.
 
 ```go
 // ReadWriter is the interface that combines the Reader and Writer interfaces.
@@ -132,4 +132,4 @@ func (job *Job) Logf(format string, args ...interface{}) {
 
 `Second, if the same name appears at the same nesting level, it is usually an error; it would be erroneous to embed log.Logger if the Job struct contained another field or method called Logger. However, if the duplicate name is never mentioned in the program outside the type definition, it is OK. This qualification provides some protection against changes made to types embedded from outside; there is no problem if a field is added that conflicts with another field in another subtype if neither field is ever used.`
 
-둘째로, 똑같은 이름이 같은 레벨로 중첩되어 나타나면, 보통은 에러가 생긴다; 만약에 Job struct이 Logger라는 이름으로 다른 필드나 메서드를 가지고 있다면 log.Logger를 임베드하는 것은 잘못된 것이다. 그렇지만, 복제된 이름이 타입 정의 밖에서 사용된 일이 없다면 괜찮다. 이러한 자격은 밖으로 부터 임베드된 타입에 생기는 변화에 대해 어느 정도 보호를 제공한다; 필드 하나가 추가되면서 또 다른 subtype의 필드와 충돌이 생기는 경우, 둘 중 어느 필드도 사용되지 않았다면 아무 문제가 없다.
+둘째로, 똑같은 이름이 같은 레벨로 중첩되어 나타나면, 보통은 에러가 생긴다; 만약에 Job struct이 Logger라는 이름으로 다른 필드나 메서드를 가지고 있다면 log.Logger를 임베드하는 것은 잘못된 것이다. 그렇지만, 복제된 이름이 타입 정의 밖에서 사용된 일이 없다면 괜찮다. 이러한 자격은 밖으로 부터 임베드된 타입에 생기는 변화에 대해서 어느 정도 보호를 제공한다; 필드 하나가 추가되면서 또 다른 subtype의 필드와 충돌이 생기는 경우, 둘 중 어느 필드도 사용되지 않았다면 아무 문제가 없다.
