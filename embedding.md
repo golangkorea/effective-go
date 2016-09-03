@@ -128,6 +128,8 @@ func (job *Job) Logf(format string, args ...interface{}) {
 
 `Embedding types introduces the problem of name conflicts but the rules to resolve them are simple. First, a field or method X hides any other item X in a more deeply nested part of the type. If log.Logger contained a field or method called Command, the Command field of Job would dominate it.`
 
-임베딩 타입들은 이름 충돌의 문제를 발생시킬 수도 있지만 해결하는 규칙들은 간단하다. 우선,
+임베딩 타입들은 이름 충돌의 문제를 발생시킬 수도 있지만 해결하는 규칙들은 간단하다. 첫번째, 필드나 메서드 X는 타입내 더 깊숙히 중첩된 부분에 있는 또 다른 X를 가려서 안 보이게 한다. 만약 log.Logger가 Command라는 필드나 메서드가 있다면, Job의 Command 필드가 더 우세하다.
 
 `Second, if the same name appears at the same nesting level, it is usually an error; it would be erroneous to embed log.Logger if the Job struct contained another field or method called Logger. However, if the duplicate name is never mentioned in the program outside the type definition, it is OK. This qualification provides some protection against changes made to types embedded from outside; there is no problem if a field is added that conflicts with another field in another subtype if neither field is ever used.`
+
+둘째로, 똑같은 이름이 같은 레벨로 중첩되어 나타나면, 보통은 에러가 생긴다; 만약에 Job struct이 Logger라는 이름으로 다른 필드나 메서드를 가지고 있다면 log.Logger를 임베드하는 것은 잘못된 것이다. 그렇지만, 복제된 이름이 타입 정의 밖에서 사용된 일이 없다면 괜찮다. 이러한 자격은 밖으로 부터 임베드된 타입에 생기는 변화에 대해 어느 정도 보호를 제공한다; 필드 하나가 추가되면서 또 다른 subtype의 필드와 충돌이 생기는 경우, 둘 중 어느 필드도 사용되지 않았다면 아무 문제가 없다.
