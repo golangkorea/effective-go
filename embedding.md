@@ -63,7 +63,7 @@ type ReadWriter struct {
 
 `but then to promote the methods of the fields and to satisfy the io interfaces, we would also need to provide forwarding methods, like this:`
 
-하지만 [io](https://godoc.org/io)를 충족시키고 reader와 writer가 가지고 있는 메서드를 사용하기 위해서는 다음과 같이 전송용 메서드(forwarding method)를 따로 제공해야 한다.
+하지만 [io](https://godoc.org/io)를 충족시키고 reader와 writer가 가지고 있는 메서드를 사용하기 위해서 전송용 메서드(forwarding method)를 따로 제공해야 한다.
 
 ```go
 func (rw *ReadWriter) Read(p []byte) (n int, err error) {
