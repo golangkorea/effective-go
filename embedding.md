@@ -63,7 +63,7 @@ type ReadWriter struct {
 
 `but then to promote the methods of the fields and to satisfy the io interfaces, we would also need to provide forwarding methods, like this:`
 
-
+하지만 [io](https://godoc.org/io)를 충족시키고 reader와 writer가 가지고 있는 메서드를 사용하기 위해서는 다음과 같이 전송용 메서드(forwarding method)를 따로 제공해야 한다.
 
 ```go
 func (rw *ReadWriter) Read(p []byte) (n int, err error) {
@@ -71,11 +71,17 @@ func (rw *ReadWriter) Read(p []byte) (n int, err error) {
 }
 ```
 
-By embedding the structs directly, we avoid this bookkeeping. The methods of embedded types come along for free, which means that bufio.ReadWriter not only has the methods of bufio.Reader and bufio.Writer, it also satisfies all three interfaces: io.Reader, io.Writer, and io.ReadWriter.
+`By embedding the structs directly, we avoid this bookkeeping. The methods of embedded types come along for free, which means that bufio.ReadWriter not only has the methods of bufio.Reader and bufio.Writer, it also satisfies all three interfaces: io.Reader, io.Writer, and io.ReadWriter.`
 
-There's an important way in which embedding differs from subclassing. When we embed a type, the methods of that type become methods of the outer type, but when they are invoked the receiver of the method is the inner type, not the outer one. In our example, when the Read method of a bufio.ReadWriter is invoked, it has exactly the same effect as the forwarding method written out above; the receiver is the reader field of the ReadWriter, not the ReadWriter itself.
+이런 귀찮은 일들을 피하기 위해서는 struct를 직접 임베딩하면 된다. 임베드된 타입의 메서드는 자동으로 따라 오며, 그 의미는 [bufio.ReadWriter](https://godoc.org/bufio#ReadWriter)는 [bufio.Reader](https://godoc.org/bufio#Reader)와 [bufio.Writer](https://godoc.org/bufio#Writer)의 메서드를 모두 가지게 된다는 말이다. 동시에 다음의 세 인터페이스를 충족시키기도 한다: [io.Reader](https://godoc.org/io#Reader), [io.Writer](https://godoc.org/io#Writer), 그리고 [io.ReadWriter](https://godoc.org/io#ReadWriter).
 
-Embedding can also be a simple convenience. This example shows an embedded field alongside a regular, named field.
+`There's an important way in which embedding differs from subclassing. When we embed a type, the methods of that type become methods of the outer type, but when they are invoked the receiver of the method is the inner type, not the outer one. In our example, when the Read method of a bufio.ReadWriter is invoked, it has exactly the same effect as the forwarding method written out above; the receiver is the reader field of the ReadWriter, not the ReadWriter itself.`
+
+이제 임베딩이 subclassing과 다른 중요한 방식을 살펴보자. 타입을 임베드하게 되면 그 타입의 메서드들이 외부 타입의 메서드가 된다. 하지만 호출된 메서드의 리시버는 내부 타입이지 외부 타입이 아니다. 예제에서, [bufio.ReadWriter](https://godoc.org/bufio.ReadWriter)의 Read 메서드가 호출되었을 때, 전달용 메서드를 사용한 것과 같은 똑같은 효과가 있다; 리시버는 ReadWriter의 reader 필드이지, ReadWriter 자체가 아닌 것이다.
+
+`Embedding can also be a simple convenience. This example shows an embedded field alongside a regular, named field.`
+
+임베딩은 또한 단순한 편리함일 수 있다. 이 예제는 임베드된 필드를 이름이 있는 보통 필드와 함께 보여준다.
 
 ```go
 type Job struct {
@@ -86,11 +92,15 @@ type Job struct {
 
 The Job type now has the Log, Logf and other methods of `*log.Logger`. We could have given the Logger a field name, of course, but it's not necessary to do so. And now, once initialized, we can log to the Job:
 
+Job 타입은 이제 `*log.Logger`에 속한 Log, Logf 그리고 다른 메서드들을 가지게 된다. [Logger](https://godoc.org/log#Logger)에 이름을 줄 수도 있었겠지만, 그럴 필요가 전혀 없다. 그리고 이제, 일단 초기화가 되면, Job에 직접 log를 사용할 수 있다.
+
 ```go
 job.Log("starting now...")
 ```
 
-The Logger is a regular field of the Job struct, so we can initialize it in the usual way inside the constructor for Job, like this,
+`The Logger is a regular field of the Job struct, so we can initialize it in the usual way inside the constructor for Job, like this,`
+
+Logger는 Job struct의 보통 필드이기 때문에 constructor 안에서 항상 하는 것 처럼 다음과 같이 초기화 할 수 있다.
 
 ```go
 func NewJob(command string, logger *log.Logger) *Job {
@@ -98,13 +108,17 @@ func NewJob(command string, logger *log.Logger) *Job {
 }
 ```
 
-or with a composite literal,
+`or with a composite literal,`
+
+혹은 composite literal을 써서
 
 ```go
 job := &Job{command, log.New(os.Stderr, "Job: ", log.Ldate)}
 ```
 
 If we need to refer to an embedded field directly, the type name of the field, ignoring the package qualifier, serves as a field name, as it did in the Read method of our ReaderWriter struct. Here, if we needed to access the `*log.Logger` of a Job variable job, we would write job.Logger, which would be useful if we wanted to refine the methods of Logger.
+
+
 
 ```go
 func (job *Job) Logf(format string, args ...interface{}) {
