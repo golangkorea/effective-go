@@ -1,6 +1,6 @@
 # 포맷팅 (Formatting)
 * 원문 : [Formatting](https://golang.org/doc/effective_go.html#formatting)
-* 번역자 : MinJae Kwon (mingrammer)
+* 번역자 : MinJae Kwon (@mingrammer)
 
 `Formatting issues are the most contentious but the least consequential. People can adapt to different formatting styles but it's better if they don't have to, and less time is devoted to the topic if everyone adheres to the same style. The problem is how to approach this Utopia without a long prescriptive style guide.`
 
