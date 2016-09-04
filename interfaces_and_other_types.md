@@ -60,7 +60,7 @@ func (s Sequence) String() string {
 
 `It's an idiom in Go programs to convert the type of an expression to access a different set of methods. As an example, we could use the existing type sort.IntSlice to reduce the entire example to this:`
 
-Go 프로그램에서 일군의 다른 메서드를 사용하기 위해 타입을 변환하는 것은 관용적인 표현이다. 예를 들면, [sort.IntSlice](https://godoc.org/sort#IntSlice)를 사용해 위의 프로그램 전체를 다음과 같이 간소화 시킬 수 있다.
+Go 프로그램에서 일군의 다른 메서드를 사용하기 위해 타입을 변환하는 것은 Go 언어다운 표현이다. 예를 들면, [sort.IntSlice](https://godoc.org/sort#IntSlice)를 사용해 위의 프로그램 전체를 다음과 같이 간소화 시킬 수 있다.
 
 ```go
 type Sequence []int

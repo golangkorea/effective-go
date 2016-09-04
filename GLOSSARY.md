@@ -7,5 +7,7 @@ x.(T)
 
 ## 메서드 (Method)
 
-## 제로화 (The Zero Value)
+## 제로값 (The Zero Value)
 변수가 메모리에 할당되고 그 타입의 제로값이 저장되는 것: [The Zero Value](https://golang.org/ref/spec#The_zero_value)
+
+## 내장 함수(built-in function)

@@ -7,13 +7,15 @@
 
 Go has two allocation primitives, the built-in functions new and make. They do different things and apply to different types, which can be confusing, but the rules are simple. Let's talk about new first. It's a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it. That is, new(T) allocates zeroed storage for a new item of type T and returns its address, a value of type `*T`. In Go terminology, it returns a pointer to a newly allocated zero value of type T.
 
-Go에는 메모리를 할당하는 두가지 기본 요소가 있는데, 탑재(built-in) 함수인 new와 make이다. 서로 다른 일을 하고 다른 타입들에 적용되기 때문에 혼란스러울 수 있지만, 규칙은 간단하다. new부터 살펴보자. 탑재 함수로 메모리를 할당하지만 다른 언어에 존재하는 같은 이름과는 다르게 메모리를 초기화하지 않고, 단지 제로화(zero) 한다. 다시 말하면, new(T)는 타입 T의 새로운 객체에 제로화된 저장공간(zeroed storage)을 할당하고 그 객체의 주소인, `*T`값을 리턴한다. Go의 용어로 얘기하자면, 새로 할당된, 제로화된 타입 T를 가리키는 포인터를 리턴하는 것이다.
+Go에는 메모리를 할당하는 두가지 기본 요소가 있는데, 내장(built-in) 함수인 new와 make이다. 서로 다른 일을 하고 다른 타입들에 적용되기 때문에 혼란스러울 수 있지만, 규칙은 간단하다. new부터 살펴보자. 내장 함수로 메모리를 할당하지만 다른 언어에 존재하는 같은 이름과는 다르게 메모리를 초기화하지 않고, 단지 값을 제로화(zero) 한다. 다시 말하면, new(T)는 타입 T의 새로운 객체에 제로값으로 초기화된 저장공간(zeroed storage)을 할당하고 그 객체의 주소인, `*T`값을 리턴한다. Go의 용어로 얘기하자면, 새로 할당되고 제로값으로 초기화된 타입 T를 가리키는 포인터를 리턴하는 것이다.
 
 Since the memory returned by `new` is zeroed, it's helpful to arrange when designing your data structures that the zero value of each type can be used without further initialization. This means a user of the data structure can create one with new and get right to work. For example, the documentation for `bytes.Buffer` states that "the zero value for Buffer is an empty buffer ready to use." Similarly, `sync.Mutex` does not have an explicit constructor or Init method. Instead, the zero value for a `sync.Mutex` is defined to be an unlocked mutex.
 
+`new`를 통해 리턴된 메모리는 제로값으로 초기화 되기 때문에, 데이터 구조를 설계할 때 굳이 초기화 없이도 사용된 타입의 제로값을 그대로 쓸 수 있도록 조정하면 도움이 된다. 무슨 말이냐 하면 데이터 구조의 사용자가 new로 새 구조를 만들고 바로 일에 사용할 수 있다는 것이다. 예를 들어, [bytes.Buffer](https://godoc.org/bytes#Buffer)의 문서는 "Buffer의 제로값은 바로 사용할 수 있는 텅빈 버퍼이다"라고 말하고 있다. 유사하게, [sync.Mutex](https://godoc.org/sync#Mutex)도 명시된 constructor도 Init 메서드도 가지고 있지 않다. 대신, [sync.Mutex](https://godoc.org/sync#Mutex)의 제로값이 잠기지 않은 mutex로 정의되어 있다.
 
+`The zero-value-is-useful property works transitively. Consider this type declaration.`
 
-The zero-value-is-useful property works transitively. Consider this type declaration.
+제로값의 유용함은 전이적인(transitive) 특성으로 작용한다. 다음의 타입 선언을 검토해 보자.
 
 ```go
 type SyncedBuffer struct {
@@ -24,14 +26,18 @@ type SyncedBuffer struct {
 
 Values of type `SyncedBuffer` are also ready to use immediately upon allocation or just declaration. In the next snippet, both p and v will work correctly without further arrangement.
 
+`SyncedBuffer` 타입의 값들은 메모리 할당이나 단순히 선언만 으로도 당장 사용할 준비가 된다. 아래 코드 단편에서는, p와 v가 뒤이은 조정이 없어도 모두 정확히 작동한다.
+
 ```go
 p := new(SyncedBuffer)  // type *SyncedBuffer
 var v SyncedBuffer      // type  SyncedBuffer
 ```
 
-## Constructors and composite literals
+## 생성자와 합성체 리터럴(Constructors and composite literals)
 
-Sometimes the zero value isn't good enough and an initializing constructor is necessary, as in this example derived from package os.
+`Sometimes the zero value isn't good enough and an initializing constructor is necessary, as in this example derived from package os.`
+
+때로 제로값만으로는 충분치 않고 생성자(constructor)로 초기화해야 할 필요가 생기는데, 아래 예제는 [os](https://godoc.org/os)패키지에서 가지고 온 것이다.
 
 ```go
 func NewFile(fd int, name string) *File {
@@ -47,7 +53,9 @@ func NewFile(fd int, name string) *File {
 }
 ```
 
-There's a lot of boiler plate in there. We can simplify it using a composite literal, which is an expression that creates a new instance each time it is evaluated.
+`There's a lot of boiler plate in there. We can simplify it using a composite literal, which is an expression that creates a new instance each time it is evaluated.`
+
+
 
 ```go
 func NewFile(fd int, name string) *File {
