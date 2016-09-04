@@ -70,4 +70,4 @@ x<<8 + y<<16
 
 `means what the spacing implies, unlike in the other languages.`
 
-스페이스 간격은 다른 언어들과는 달리, 암묵적으로 어떤 의미를 가진다. 
+다른 언어와는 다르게 스페이스의 사용이 함축하는 바가 크다.
