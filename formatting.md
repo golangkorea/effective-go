@@ -4,7 +4,7 @@
 
 `Formatting issues are the most contentious but the least consequential. People can adapt to different formatting styles but it's better if they don't have to, and less time is devoted to the topic if everyone adheres to the same style. The problem is how to approach this Utopia without a long prescriptive style guide.`
 
-포맷팅 (Formatting) 이슈는 가장 논쟁거리이긴 하지만 필수적이다. 사람들은 각자 다른 포맷팅 스타일을 적용할 수도 있지만, 모든 사람들이 같은 스타일을 고수하여 더 이상 그럴 필요가 없어지고, 포맷팅 주제에 덜 신경을 쓰게된다면 더 좋을 것이다. 이 문제는 긴 규정의 스타일 가이드가 없는 유토피아 접근 방법이다.
+포맷팅 (Formatting) 이슈는 가장 논쟁거리이긴 하지만 필수적이다. 사람들은 각자 다른 포맷팅 스타일을 적용할 수도 있지만, 모든 사람들이 같은 스타일을 고수하여 더 이상 그럴 필요가 없어지고, 포맷팅 주제에 덜 신경을 쓰게된다면 더 좋을 것이다. 문제는 길고 규정적인 스타일 가이드 없이 어떻게 이 유토피아에 접근할 수 있는 가이다.
 
 `With Go we take an unusual approach and let the machine take care of most formatting issues. The gofmt program (also available as go fmt, which operates at the package level rather than source file level) reads a Go program and emits the source in a standard style of indentation and vertical alignment, retaining and if necessary reformatting comments. If you want to know how to handle some new layout situation, run gofmt; if the answer doesn't seem right, rearrange your program (or file a bug about gofmt), don't work around it.`
 
