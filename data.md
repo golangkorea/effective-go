@@ -1,10 +1,17 @@
-# Data
+# 데이터
 
-## Allocation with `new`
+* 원문: [Data](https://golang.org/doc/effective_go.html#data)
+* 번역자: Jhonghee Park
 
-Go has two allocation primitives, the built-in functions new and make. They do different things and apply to different types, which can be confusing, but the rules are simple. Let's talk about new first. It's a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it. That is, new(T) allocates zeroed storage for a new item of type T and returns its address, a value of type *T. In Go terminology, it returns a pointer to a newly allocated zero value of type T.
+## `new`를 사용하는 메모리 할당
+
+Go has two allocation primitives, the built-in functions new and make. They do different things and apply to different types, which can be confusing, but the rules are simple. Let's talk about new first. It's a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it. That is, new(T) allocates zeroed storage for a new item of type T and returns its address, a value of type `*T`. In Go terminology, it returns a pointer to a newly allocated zero value of type T.
+
+Go에는 메모리를 할당하는 두가지 기본 요소가 있는데, 탑재(built-in) 함수인 new와 make이다. 서로 다른 일을 하고 다른 타입들에 적용되기 때문에 혼란스러울 수 있지만, 규칙은 간단하다. new부터 살펴보자. 탑재 함수로 메모리를 할당하지만 다른 언어에 존재하는 같은 이름과는 다르게 메모리를 초기화하지 않고, 단지 제로화(zero) 한다. 다시 말하면, new(T)는 타입 T의 새로운 객체에 제로화된 저장공간(zeroed storage)을 할당하고 그 객체의 주소인, `*T`값을 리턴한다. Go의 용어로 얘기하자면, 새로 할당된, 제로화된 타입 T를 가리키는 포인터를 리턴하는 것이다.
 
 Since the memory returned by `new` is zeroed, it's helpful to arrange when designing your data structures that the zero value of each type can be used without further initialization. This means a user of the data structure can create one with new and get right to work. For example, the documentation for `bytes.Buffer` states that "the zero value for Buffer is an empty buffer ready to use." Similarly, `sync.Mutex` does not have an explicit constructor or Init method. Instead, the zero value for a `sync.Mutex` is defined to be an unlocked mutex.
+
+
 
 The zero-value-is-useful property works transitively. Consider this type declaration.
 
@@ -76,7 +83,7 @@ m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 
 ## Allocation with make
 
-Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not *T). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. A slice, for example, is a three-item descriptor containing a pointer to the data (inside an array), the length, and the capacity, and until those items are initialized, the slice is `nil`. For slices, maps, and channels, make initializes the internal data structure and prepares the value for use. For instance,
+Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not `*T`). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. A slice, for example, is a three-item descriptor containing a pointer to the data (inside an array), the length, and the capacity, and until those items are initialized, the slice is `nil`. For slices, maps, and channels, make initializes the internal data structure and prepares the value for use. For instance,
 
 ```go
 make([]int, 10, 100)
@@ -280,7 +287,7 @@ func offset(tz string) int {
 }
 ```
 
-To test for presence in the map without worrying about the actual value, you can use the [blank identifier](https://golang.org/doc/effective_go.html#blank) (_) in place of the usual variable for the value.
+To test for presence in the map without worrying about the actual value, you can use the [blank identifier](https://golang.org/doc/effective_go.html#blank) (`_`) in place of the usual variable for the value.
 
 ```go
 _, present := timeZone[tz]
