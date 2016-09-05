@@ -33,7 +33,7 @@ p := new(SyncedBuffer)  // type *SyncedBuffer
 var v SyncedBuffer      // type  SyncedBuffer
 ```
 
-## 생성자와 합성체 리터럴(Constructors and composite literals)
+## 생성자와 합성체 직역(Constructors and composite literals)
 
 `Sometimes the zero value isn't good enough and an initializing constructor is necessary, as in this example derived from package os.`
 
@@ -55,7 +55,7 @@ func NewFile(fd int, name string) *File {
 
 `There's a lot of boiler plate in there. We can simplify it using a composite literal, which is an expression that creates a new instance each time it is evaluated.`
 
-
+이 예제에는 불필요하게 반복된(boiler plate) 코드들이 많다.
 
 ```go
 func NewFile(fd int, name string) *File {
