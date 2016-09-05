@@ -109,7 +109,11 @@ make([]int, 10, 100)
 
 allocates an array of 100 ints and then creates a slice structure with length 10 and a capacity of 100 pointing at the first 10 elements of the array. (When making a slice, the capacity can be omitted; see the section on slices for more information.) In contrast, `new([]int)` returns a pointer to a newly allocated, zeroed slice structure, that is, a pointer to a `nil` slice value.
 
+메모리에 크기가 100인 int 배열을 할당하고 그 배열의 처음 10개를 가리키는, 크기 10와 용량이 100인 slice 데이터 구조를 생성한다. (slice를 만들때 용량은 생략해도 된다. 자세한 내용은 slice 섹션을 보기 바란다.) 그에 반해, `new([]int)`는 새로 할당되고, 제로값으로 채워진 slice 구조를 가리키는 포인터를 리턴하는데, 이 때 slice 값은 `nil`이다.
+
 These examples illustrate the difference between new and make.
+
+다음 예제들이 new와 make의 차이점을 잘 그리고 있다.
 
 ```go
 var p *[]int = new([]int)       // allocates slice structure; *p == nil; rarely useful
@@ -123,7 +127,9 @@ var p *[]int = new([]int)
 v := make([]int, 100)
 ```
 
-Remember that make applies only to maps, slices and channels and does not return a pointer. To obtain an explicit pointer allocate with new or take the address of a variable explicitly.
+`Remember that make applies only to maps, slices and channels and does not return a pointer. To obtain an explicit pointer allocate with new or take the address of a variable explicitly.`
+
+make는 maps, slices 그리고 channels에만 적용되며 포인터를 리턴하지 않음을 기억하라. 포인터를 얻고 싶으면 new를 사용해서 메모리를 할당하거나 변수의 주소를 명시적으로 취하라.
 
 ## Arrays
 
