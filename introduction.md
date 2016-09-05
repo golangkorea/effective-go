@@ -6,7 +6,7 @@ Go는 새로운 언어이다. 비록 기존 언어의 아이디어들을 차용�
 
 This document gives tips for writing clear, idiomatic Go code. It augments the [language specification](https://golang.org/ref/spec), the [Tour of Go](https://tour.golang.org), and How to [Write Go Code](https://golang.org/doc/code.html), all of which you should read first.
 
-이 문서는 명확하고 Go 언어다운 Go코드를 작성하는 팁을 제공하며 [언어 명세](https://golang.org/ref/spec), [Go 살펴보기](https://tour.golang.org), 그리고 [Go 코드 작성하는 방법](https://golang.org/doc/code.html) 여러분들이 먼저 읽어야 모든 지식을 향상시킬 것이다.
+이 문서는 명확하고 Go 언어다운 Go코드를 작성하는 팁을 제공하며 [언어 명세](https://golang.org/ref/spec), [Go 살펴보기](https://tour.golang.org), 그리고 [Go 코드 작성하는 방법](https://golang.org/doc/code.html) 여러분이 먼저 읽어야 모든 지식을 향상시킬 것이다.
 
 ## Examples
 
