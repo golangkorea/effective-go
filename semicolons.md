@@ -14,7 +14,7 @@ break continue fallthrough return ++ -- ) }
 
 the lexer always inserts a semicolon after the token. This could be summarized as, “if the newline comes after a token that could end a statement, insert a semicolon”.
 
-구문분석기(lexer)는 항상 토큰 다음에 세미콜론을 추가한다.
+구문분석기(lexer)는 항상 토큰 다음에 세미콜론을 추가한다. 이것은 "만약 새로운 라인이 토큰뒤에 온다면, 구문이 끝났고, 세미콜론을 추가해라." 와 같이 요약될 수 있다.
 
 A semicolon can also be omitted immediately before a closing brace, so a statement such as
 
