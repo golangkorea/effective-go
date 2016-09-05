@@ -6,7 +6,7 @@ C언어 처럼, Go의 정식문법은 구문을 종료하기 위하여 세미콜
 
 The rule is this. If the last token before a newline is an identifier (which includes words like int and float64), a basic literal such as a number or string constant, or one of the tokens
 
-규칙은 다음과 같다. 만약 신규라인 이전의 마지막 토큰이 식별자(int와 float64같은 단어들을 포함한 숫자나 문자상수 혹은 토큰중의 하나같은)이면,
+규칙은 다음과 같다. 만약 새로운 라인앞의 마지막 토큰이 식별자(int와 float64같은 단어들을 포함한) 숫자나 문자상수 혹은 토큰들중의 하나같은 기본문자라면,
 
 ```go
 break continue fallthrough return ++ -- ) }
@@ -14,7 +14,7 @@ break continue fallthrough return ++ -- ) }
 
 the lexer always inserts a semicolon after the token. This could be summarized as, “if the newline comes after a token that could end a statement, insert a semicolon”.
 
-구문분석기(lexer)는 항상 토큰뒤에 세미콜론을 추가한다.
+구문분석기(lexer)는 항상 토큰 다음에 세미콜론을 추가한다.
 
 A semicolon can also be omitted immediately before a closing brace, so a statement such as
 
