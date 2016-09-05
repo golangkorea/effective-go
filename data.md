@@ -89,7 +89,7 @@ As a limiting case, if a composite literal contains no fields at all, it creates
 
 Composite literals can also be created for arrays, slices, and maps, with the field labels being indices or map keys as appropriate. In these examples, the initializations work regardless of the values of `Enone, Eio`, and `Einval`, as long as they are distinct.
 
-또 합성 리터럴은 arrays, slices, 와 maps를 생성하는데 사용될 수도 있는데, 필드 레이블로 인덱스와 맵의 키를 적절히 사용해야 한다. 아래 예제의 경우, `Enone`, `Eio` 그리고 `Einval`가 어떤 값 이든, 서로 다르기만 하면 초기화가 작동한다.
+또 합성 리터럴은 arrays, slices, 와 maps를 생성하는데 사용될 수도 있는데, 필드 레이블로 인덱스와 맵의 키를 적절히 사용해야 한다. 아래 예제의 경우, `Enone`, `Eio` 그리고 `Einval`의 값에 상관없이, 서로 다르기만 하면 초기화가 작동한다.
 
 ```go
 a := [...]string   {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
