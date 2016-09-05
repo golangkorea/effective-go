@@ -1,5 +1,8 @@
 # 함수(Functions)
 
+* 원문: [Functions](https://golang.org/doc/effective_go.html#functions)
+* 번역자: kyungkoo
+
 ## 다중 반환 값(Multiple return values)
 
 One of Go's unusual features is that functions and methods can return multiple values. This form can be used to improve on a couple of clumsy idioms in C programs: in-band error returns such as -1 for EOF and modifying an argument passed by address.
@@ -47,7 +50,7 @@ You could use it to scan the numbers in an input slice b like this:
 
 The return or result "parameters" of a Go function can be given names and used as regular variables, just like the incoming parameters. When named, they are initialized to the zero values for their types when the function begins; if the function executes a return statement with no arguments, the current values of the result parameters are used as the returned values.
 
-Go 함수에서 반환 "인자"나 결과 "인자" 는 
+Go 함수에서 반환 "인자"나 결과 "인자" 는
 
 The names are not mandatory but they can make code shorter and clearer: they're documentation. If we name the results of `nextInt` it becomes obvious which returned `int` is which.
 
