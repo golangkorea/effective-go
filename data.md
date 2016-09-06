@@ -97,9 +97,11 @@ s := []string      {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 ```
 
-## Allocation with make
+## make를 사용하는 메모리 할당(Allocation with make)
 
 Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not `*T`). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. A slice, for example, is a three-item descriptor containing a pointer to the data (inside an array), the length, and the capacity, and until those items are initialized, the slice is `nil`. For slices, maps, and channels, make initializes the internal data structure and prepares the value for use. For instance,
+
+다시 메로리 할당으로 돌아가자. 내장 함수인 make(T, args)는 new(T)와 다른 목적으로 제공된다. slices, maps, 그리고 channels에만 사용하고 (`*T`가 아닌) 타입 T의 (제로값이 아닌) 초기화된 값을 리턴한다. 이러한 차이가 있는 이유는 이 세 타입이 내부적으로 반드시 사용 전 초기화 되어야 하는 데이터 구조를 가리키고 있기 때문이다. 예를 들어, slice는 세가지 항목의 기술항으로 (array내) 데이터를 가리키는 포인터, 크기, 그리고 용량를 가지며, 이 항목들이 초기화되기 전 까지, slice는 `nil`이다. slices, maps, 그리고 channels은 내부 데이터 구조를 초기화하고 사용할 값들을 준비한다. 예를 들면,
 
 ```go
 make([]int, 10, 100)
@@ -107,7 +109,11 @@ make([]int, 10, 100)
 
 allocates an array of 100 ints and then creates a slice structure with length 10 and a capacity of 100 pointing at the first 10 elements of the array. (When making a slice, the capacity can be omitted; see the section on slices for more information.) In contrast, `new([]int)` returns a pointer to a newly allocated, zeroed slice structure, that is, a pointer to a `nil` slice value.
 
+메모리에 크기가 100인 int 배열을 할당하고 그 배열의 처음 10개를 가리키는, 크기 10와 용량이 100인 slice 데이터 구조를 생성한다. (slice를 만들때 용량은 생략해도 된다. 자세한 내용은 slice 섹션을 보기 바란다.) 그에 반해, `new([]int)`는 새로 할당되고, 제로값으로 채워진 slice 구조를 가리키는 포인터를 리턴하는데, 이 때 slice 값은 `nil`이다.
+
 These examples illustrate the difference between new and make.
+
+다음 예제들이 new와 make의 차이점을 잘 그리고 있다.
 
 ```go
 var p *[]int = new([]int)       // allocates slice structure; *p == nil; rarely useful
@@ -121,19 +127,31 @@ var p *[]int = new([]int)
 v := make([]int, 100)
 ```
 
-Remember that make applies only to maps, slices and channels and does not return a pointer. To obtain an explicit pointer allocate with new or take the address of a variable explicitly.
+`Remember that make applies only to maps, slices and channels and does not return a pointer. To obtain an explicit pointer allocate with new or take the address of a variable explicitly.`
 
-## Arrays
+make는 maps, slices 그리고 channels에만 적용되며 포인터를 리턴하지 않음을 기억하라. 포인터를 얻고 싶으면 new를 사용해서 메모리를 할당하거나 변수의 주소를 명시적으로 취하라.
 
-Arrays are useful when planning the detailed layout of memory and sometimes can help avoid allocation, but primarily they are a building block for slices, the subject of the next section. To lay the foundation for that topic, here are a few words about arrays.
+## 배열(Arrays)
+
+`Arrays are useful when planning the detailed layout of memory and sometimes can help avoid allocation, but primarily they are a building block for slices, the subject of the next section. To lay the foundation for that topic, here are a few words about arrays.`
+
+배열은 메모리의 상세한 레이아웃을 계획하는데 유용하며 때로는 메모리 할당을 피하는데 도움이 된다. 하자만 주로 다음 섹션의 주제인, slice의 재료로 쓰인다. slice를 얘기하기 전에 배열에 대해 몇자 적음으로 해서 기초를 닦아 보자.
 
 There are major differences between the ways arrays work in Go and C. In Go,
+
+Go와 C에서는 배열의 작동원리에 큰 차이가 있다. Go에서는,
 
 * Arrays are values. Assigning one array to another copies all the elements.
 * In particular, if you pass an array to a function, it will receive a copy of the array, not a pointer to it.
 * The size of an array is part of its type. The types [10]int and [20]int are distinct.
 
+* 배열은 값이다. 한 배열을 다른 배열에 배정(assign)할 때 모든 요소가 복사된다.
+* 특히, 함수에 배열을 패스할 때, 함수는 포인터가 아닌 복사된 배열을 받는다.
+* 배열의 크기는 타입의 한 부분이다. 타입 [10]int과 [20]int는 서로 다르다.
+
 The value property can be useful but also expensive; if you want C-like behavior and efficiency, you can pass a pointer to the array.
+
+배열에 값(value)을 사용하는 것이 유용할 수도 있지만 또한 비용이 큰 연산이 될 수도 있다; 만약 C와 같은 실행이나 효율성을 원한다면, 아래와 같이 배열 포인터를 보낼 수도 있다.
 
 ```go
 func Sum(a *[3]float64) (sum float64) {
@@ -147,13 +165,19 @@ array := [...]float64{7.0, 8.5, 9.1}
 x := Sum(&array)  // Note the explicit address-of operator
 ```
 
-But even this style isn't idiomatic Go. Use slices instead.
+`But even this style isn't idiomatic Go. Use slices instead.`
+
+하지만 이런 스타일조차 Go언어 답지는 않다. 대신 slice를 사용하라.
 
 ## Slices
 
 Slices wrap arrays to give a more general, powerful, and convenient interface to sequences of data. Except for items with explicit dimension such as transformation matrices, most array programming in Go is done with slices rather than simple arrays.
 
+Slice는 배열을 포장하므로써 데이터 시퀀스에 더 일반적이고, 강력하며, 편리한 인터페이스를 제공한다. 변환 메스릭스와 같이 뚜렷한 차원(dimension)을 갖고 있는 항목들을 제외하고는, Go에서 거의 모든 배열 프로그래밍은 단순한 배열보다는 slice를 사용한다.
+
 Slices hold references to an underlying array, and if you assign one slice to another, both refer to the same array. If a function takes a slice argument, changes it makes to the elements of the slice will be visible to the caller, analogous to passing a pointer to the underlying array. A Read function can therefore accept a slice argument rather than a pointer and a count; the length within the slice sets an upper limit of how much data to read. Here is the signature of the Read method of the `File` type in package os:
+
+Slice는 내부의 배열을 가리키는 레퍼런스를 쥐고 있어, 만약에 다른 slice에 배정(assign)되어도, 둘 다 같은 배열을 가리킨다. 함수가 slice를 받아 그 요소에 변화를 주면 호출자도 볼 수 있는데, 이것은 내부의 배열를 가리키는 포인터를 함수에 보내는 것과 유사하다. 그러므로 Read 함수는 포인터와 카운터 대신, slice를 받아 들일 수 있다; slice내 length는 데이터를 읽을 수 있는 최대 한계치에 정해져 있다. 아래에 [File](https://godoc.org/os#File)타입의 Read 메서드의 시그너쳐가 있다.
 
 ```go
 func (f *File) Read(buf []byte) (n int, err error)
@@ -161,11 +185,15 @@ func (f *File) Read(buf []byte) (n int, err error)
 
 The method returns the number of bytes read and an error value, if any. To read into the first 32 bytes of a larger buffer buf, slice (here used as a verb) the buffer.
 
+메서드는 읽은 바이트의 수와 생길 수도 있는 에러 값을 리턴한다. 아래 예제에서는, 더 큰 버퍼 buf의 첫 32 바이트를 읽어 들이기 위해 그 버퍼를 슬라이스했다(여기에서는 slice를 동사로 썼다).
+
 ```go
     n, err := f.Read(buf[0:32])
 ```
 
 Such slicing is common and efficient. In fact, leaving efficiency aside for the moment, the following snippet would also read the first 32 bytes of the buffer.
+
+그런 슬라이싱은 흔히 사용되고 효율적이다. 효율성은 잠시 뒤로한 체 얘기를 하자면, 아래 예제도 역시 버퍼의 첫 32 바이트를 읽는다.
 
 ```go
     var n int
@@ -181,6 +209,8 @@ Such slicing is common and efficient. In fact, leaving efficiency aside for the 
 ```
 
 The length of a slice may be changed as long as it still fits within the limits of the underlying array; just assign it to a slice of itself. The capacity of a slice, accessible by the built-in function `cap`, reports the maximum length the slice may assume. Here is a function to append data to a slice. If the data exceeds the capacity, the slice is reallocated. The resulting slice is returned. The function uses the fact that `len` and `cap` are legal when applied to the `nil` slice, and return 0.
+
+slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 배정하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 리턴된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 리턴하는 사실을 이용하고 있다.
 
 ```go
 func Append(slice, data []byte) []byte {
@@ -202,7 +232,11 @@ func Append(slice, data []byte) []byte {
 
 We must return the slice afterwards because, although Append can modify the elements of `slice`, the slice itself (the run-time data structure holding the pointer, length, and capacity) is passed by value.
 
+slice는 꼭 처리후 리턴되어야 한다. Append가 `slice`의 요소들을 변경할 수 있지만, slice 자체(포인터, 크기, 용량을 갖고 있는 런타임 데이터 구조)는 값으로 패스되었기 때문이다.
+
 The idea of appending to a slice is so useful it's captured by the append built-in function. To understand that function's design, though, we need a little more information, so we'll return to it later.
+
+Slice에 부착한다는 생각은 매우 유용하기 때문에 내장함수 append로 만들어져 있다. 이 함수의 설계를 이해하려면, 우선 좀 더 정보가 필요하다. 그래서 나중에 다시 얘기하기로 하겠다.
 
 ## Two-dimensional slices
 
