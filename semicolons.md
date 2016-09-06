@@ -24,9 +24,11 @@ A semicolon can also be omitted immediately before a closing brace, so a stateme
 
 needs no semicolons. Idiomatic Go programs have semicolons only in places such as for loop clauses, to separate the initializer, condition, and continuation elements. They are also necessary to separate multiple statements on a line, should you write code that way.
 
-관용적으로 Go 프로그램은 오직 for loop, 초기화 분리, 조건문, 그리고 반복요소에서만 세미콜론을 사용할 수 있다. 또한 세미콜론은 한 라인에서 여러문장을 구분하기 위해 필요하고, 이런 방법으로 코드를 작성해야한다.
+Go 프로그램에서는 세미콜론을 for loop 구문에서 변수 초기화와 조건, 그리고 진행 변수를 구분할때에만 사용 한다. 또한 세미콜론은 한 라인에서 여러문장을 구분하기 위해 필요하고, 이런 방법으로 코드를 작성해야한다.
 
 One consequence of the semicolon insertion rules is that you cannot put the opening brace of a control structure (if, for, switch, or select) on the next line. If you do, a semicolon will be inserted before the brace, which could cause unwanted effects. Write them like this
+
+세미콜론 입력규칙의 중요한 한가지는 제어문(if, for, switch, 혹은 select)의 여는 중괄호({)를 다음 라인에 사용하지 말아야 한다는 것이다. 만약 그렇게 사용하게 되면, 세미콜론은 중괄호({) 앞에 추가될것이고, 예상하지 못한 영향을 발생기킬 것이다. 다음과 같이 작성하라.
 
 ```go
 if i < f() {
@@ -35,6 +37,8 @@ if i < f() {
 ```
 
 not like this
+
+다음과 같이 사용하지 마라.
 
 ```go
 if i < f()  // wrong!
