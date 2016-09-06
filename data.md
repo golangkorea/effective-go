@@ -267,8 +267,10 @@ Sometimes it's necessary to allocate a 2D slice, a situation that can arise when
 
 ```go
 // Allocate the top-level slice.
-picture := make([][]uint8, YSize) // One row per unit of y.
+// 최상위 레벨의 slice를 할당하라.
+picture := make([][]uint8, YSize) // One row per unit of y. 유닛 y마다 한 줄씩
 // Loop over the rows, allocating the slice for each row.
+//
 for i := range picture {
 	picture[i] = make([]uint8, XSize)
 }
@@ -293,7 +295,11 @@ for i := range picture {
 
 Maps are a convenient and powerful built-in data structure that associate values of one type (the key) with values of another type (the element or value) The key can be of any type for which the equality operator is defined, such as integers, floating point and complex numbers, strings, pointers, interfaces (as long as the dynamic type supports equality), structs and arrays. Slices cannot be used as map keys, because equality is not defined on them. Like slices, maps hold references to an underlying data structure. If you pass a map to a function that changes the contents of the map, the changes will be visible in the caller.
 
+Map은 편리하고 강력한 내장 데이타 구조로 한 타입의 값들(the key)을 다른 타입의 값들에 연결해준다. Key는 equality연산이 정의되어 있는 어떤 타입이라도 사용 가능하며, integers, floating point, 복소수(complex numbers), strings, 포인터(pointers), 인터페이스(equality를 지원하는 동적 타입에 한해서), structs 그리고 배열(arrays)이 그러한 예이다. Slice는 map의 key로 사용될 수 없는데, 그 이유는 equality가 정의되어 있지 않기 때문이다. Slice와 마찬가지로 map 역시 내부 데이터 구조를 가진다. 함수에 map을 입력하고 map의 내용물을 변경하면, 그 변화는 호출자에게도 보인다.
+
 Maps can be constructed using the usual composite literal syntax with colon-separated key-value pairs, so it's easy to build them during initialization.
+
+Map 또한 콜론으로 분리된 key-value 짝을 이용한 합성 리터럴로 생성될 수 있으며, 초기화중에 쉽게 만들 수 있다.
 
 ```go
 var timeZone = map[string]int{
@@ -307,11 +313,15 @@ var timeZone = map[string]int{
 
 Assigning and fetching map values looks syntactically just like doing the same for arrays and slices except that the index doesn't need to be an integer.
 
+Map에 값을 배정하거나 추출하는 문법은, 인덱스가 integer일 필요가 없다는 것외에는 배열과 slice과 거의 동일하다.
+
 ```go
 offset := timeZone["EST"]
 ```
 
 An attempt to fetch a map value with a key that is not present in the map will return the zero value for the type of the entries in the map. For instance, if the map contains integers, looking up a non-existent key will return 0. A set can be implemented as a map with value type bool. Set the map entry to `true` to put the value in the set, and then test it by simple indexing.
+
+
 
 ```go
 attended := map[string]bool{
