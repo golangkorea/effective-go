@@ -131,17 +131,27 @@ v := make([]int, 100)
 
 make는 maps, slices 그리고 channels에만 적용되며 포인터를 리턴하지 않음을 기억하라. 포인터를 얻고 싶으면 new를 사용해서 메모리를 할당하거나 변수의 주소를 명시적으로 취하라.
 
-## Arrays
+## 배열(Arrays)
 
-Arrays are useful when planning the detailed layout of memory and sometimes can help avoid allocation, but primarily they are a building block for slices, the subject of the next section. To lay the foundation for that topic, here are a few words about arrays.
+`Arrays are useful when planning the detailed layout of memory and sometimes can help avoid allocation, but primarily they are a building block for slices, the subject of the next section. To lay the foundation for that topic, here are a few words about arrays.`
+
+배열은 메모리의 상세한 레이아웃을 계획하는데 유용하며 때로는 메모리 할당을 피하는데 도움이 된다. 하자만 주로 다음 섹션의 주제인, slice의 재료로 쓰인다. slice를 얘기하기 전에 배열에 대해 몇자 적음으로 해서 기초를 닦아 보자.
 
 There are major differences between the ways arrays work in Go and C. In Go,
+
+Go와 C에서는 배열의 작동원리에 큰 차이가 있다. Go에서는,
 
 * Arrays are values. Assigning one array to another copies all the elements.
 * In particular, if you pass an array to a function, it will receive a copy of the array, not a pointer to it.
 * The size of an array is part of its type. The types [10]int and [20]int are distinct.
 
+* 배열은 값이다. 한 배열을 다른 배열에 배정(assign)할 때 모든 요소가 복사된다.
+* 특히, 함수에 배열을 패스할 때, 함수는 포인터가 아닌 복사된 배열을 받는다.
+* 배열의 크기는 타입의 한 부분이다. 타입 [10]int과 [20]int는 서로 다르다.
+
 The value property can be useful but also expensive; if you want C-like behavior and efficiency, you can pass a pointer to the array.
+
+배열에 값(value)을 사용하는 것이 유용할 수도 있지만 또한 값비싼 연산이 될 수도 있다; 만약 C와 같은 실행이나 효율성을 원한다면, 아래와 같이 배열 포인터를 보낼 수도 있다.
 
 ```go
 func Sum(a *[3]float64) (sum float64) {
@@ -155,7 +165,9 @@ array := [...]float64{7.0, 8.5, 9.1}
 x := Sum(&array)  // Note the explicit address-of operator
 ```
 
-But even this style isn't idiomatic Go. Use slices instead.
+`But even this style isn't idiomatic Go. Use slices instead.`
+
+하지만 이런 스타일조차 Go언어 답지는 않다. 대신 slice를 사용하라.
 
 ## Slices
 
