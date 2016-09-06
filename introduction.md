@@ -9,11 +9,10 @@ Go는 새로운 언어이다. 비록 기존 언어의 아이디어들을 차용�
 
 This document gives tips for writing clear, idiomatic Go code. It augments the [language specification](https://golang.org/ref/spec), the [Tour of Go](https://tour.golang.org), and How to [Write Go Code](https://golang.org/doc/code.html), all of which you should read first.
 
-이 문서는 명확하고 Go 언어다운 Go코드를 작성하는 팁을 제공하며 [언어 명세](https://golang.org/ref/spec), [Go 살펴보기](https://tour.golang.org), 그리고 [Go 코드 작성하는 방법](https://golang.org/doc/code.html) 여러분이 먼저 읽어야 모든 지식을 향상시킬 것이다.
+이 문서는 명확하고 Go 언어다운 Go코드를 작성하는 팁을 제공하며 [언어 명세](https://golang.org/ref/spec), [Go 살펴보기](https://tour.golang.org), 그리고 [Go 코드 작성하는 방법](https://golang.org/doc/code.html) 여러분이 먼저 읽어야 할 모든 지식을 증대시킬 것이다.
 
 ## Examples
 
 The [Go package sources](https://golang.org/src/) are intended to serve not only as the core library but also as examples of how to use the language. Moreover, many of the packages contain working, self-contained executable examples you can run directly from the [golang.org](https://golang.org/) web site, such as [this one](https://golang.org/pkg/strings/#example_Map) (if necessary, click on the word "Example" to open it up). If you have a question about how to approach a problem or how something might be implemented, the documentation, code and examples in the library can provide answers, ideas and background.
 
-[Go 패키지 소스](https://golang.org/src/)는 코어 라이브러리로써 뿐만 아니라 언어를 사용하는 예제로써도 제공될 수 있도록 만들어졌다. 더 나아가, [example Map](https://golang.org/pkg/strings/#exmaple_Map)처럼 많은 패키지들이 동작하는, 즉 독립적으로 실행가능한 예제들을 포함하고
-있으며 [golang.org](https://golang.org/) 웹사이트에서 돌려볼 수 있다(필요하다면, "예제"라는 단어를 클릭해서 열어보라). 문제에 어떻게 접근해야하는지 혹은 어떻게 구현되어 있는지 궁금하다면 라이브러리의 문서, 코드 그리고 예제들이 해결책이나 아이디어, 그리고 배경지식을 알려줄 것이다.
+[Go 패키지 소스](https://golang.org/src/)는 코어 라이브러리로써 뿐만 아니라 언어를 사용하는 예제로써도 제공될 수 있도록 만들어졌다. 더 나아가, [example Map](https://golang.org/pkg/strings/#exmaple_Map)처럼 많은 패키지들이 동작하는, 즉 독립적으로 실행가능한 예제들을 포함하고 있으며 [golang.org](https://golang.org/) 웹사이트에서 돌려볼 수 있다(필요하다면, "예제"라는 단어를 클릭해서 열어보라). 문제에 어떻게 접근해야하는지 혹은 어떻게 구현되어 있는지 궁금하다면 라이브러리의 문서, 코드 그리고 예제들이 해결책이나 아이디어, 그리고 배경지식을 알려줄 것이다.
