@@ -1,5 +1,8 @@
 # 세미콜론(Semicolons)
 
+* 원문: [Semicolons](https://golang.org/doc/effective_go.html#semicolons)
+* 번역자: Jeongbu Yoon (@coma333ryu)
+
 Like C, Go's formal grammar uses semicolons to terminate statements, but unlike in C, those semicolons do not appear in the source. Instead the lexer uses a simple rule to insert semicolons automatically as it scans, so the input text is mostly free of them.
 
 C언어 처럼, Go의 정식문법은 구문을 종료하기 위하여 세미콜론을 사용한다. 하지만 C언어와는 달리, 세미콜론은 소스상에 나타나지 않는다. 대신 구문분석기(lexer)는 스캔하는것처럼 자동으로 세미콜론을 추가하기 위해 단순한 규칙을 사용한다. 그래서 소스작성시 대부분 세미콜론을 사용하지 않는다.
