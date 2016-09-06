@@ -7,7 +7,7 @@
 
 Go has two allocation primitives, the built-in functions new and make. They do different things and apply to different types, which can be confusing, but the rules are simple. Let's talk about new first. It's a built-in function that allocates memory, but unlike its namesakes in some other languages it does not initialize the memory, it only zeros it. That is, new(T) allocates zeroed storage for a new item of type T and returns its address, a value of type `*T`. In Go terminology, it returns a pointer to a newly allocated zero value of type T.
 
-Go에는 메모리를 할당하는 두가지 기본 요소가 있는데, 내장(built-in) 함수인 new와 make이다. 서로 다른 일을 하고 다른 타입들에 적용되기 때문에 혼란스러울 수 있지만, 규칙은 간단하다. new부터 살펴보자. 내장 함수로 메모리를 할당하지만 다른 언어에 존재하는 같은 이름과는 다르게 메모리를 초기화하지 않고, 단지 값을 제로화(zero) 한다. 다시 말하면, new(T)는 타입 T의 새로운 객체에 제로값으로 초기화된 저장공간(zeroed storage)을 할당하고 그 객체의 주소인, `*T`값을 리턴한다. Go의 용어로 얘기하자면, 새로 할당되고 제로값으로 초기화된 타입 T를 가리키는 포인터를 리턴하는 것이다.
+Go에는 메모리를 할당하는 두가지 기본 요소가 있는데, 내장(built-in) 함수인 new와 make이다. 서로 다른 일을 하고 다른 타입들에 적용되기 때문에 혼란스러울 수 있지만, 규칙은 간단하다. new부터 살펴보자. 내장 함수로 메모리를 할당하지만 다른 언어에 존재하는 같은 이름의 기능과는 다르게 메모리를 초기화하지 않고, 단지 값을 제로화(zero) 한다. 다시 말하면, new(T)는 타입 T의 새로운 객체에 제로값으로 초기화된 저장공간(zeroed storage)을 할당하고 그 객체의 주소인, `*T`값을 리턴한다. Go의 용어로 얘기하자면, 새로 할당되고 제로값으로 초기화된 타입 T를 가리키는 포인터를 리턴하는 것이다.
 
 Since the memory returned by `new` is zeroed, it's helpful to arrange when designing your data structures that the zero value of each type can be used without further initialization. This means a user of the data structure can create one with new and get right to work. For example, the documentation for `bytes.Buffer` states that "the zero value for Buffer is an empty buffer ready to use." Similarly, `sync.Mutex` does not have an explicit constructor or Init method. Instead, the zero value for a `sync.Mutex` is defined to be an unlocked mutex.
 
@@ -238,9 +238,11 @@ The idea of appending to a slice is so useful it's captured by the append built-
 
 Slice에 부착한다는 생각은 매우 유용하기 때문에 내장함수 append로 만들어져 있다. 이 함수의 설계를 이해하려면, 우선 좀 더 정보가 필요하다. 그래서 나중에 다시 얘기하기로 하겠다.
 
-## Two-dimensional slices
+## 이차원 slices(Two-dimensional slices)
 
 Go's arrays and slices are one-dimensional. To create the equivalent of a 2D array or slice, it is necessary to define an array-of-arrays or slice-of-slices, like this:
+
+Go의 배열과 slice는 일차원적이다. 이차원의 배열이나 slice와 동일한 것을 만들려면, 배열의 배열 혹은 slice의 slice을 다음과 같이 정의해야 한다.
 
 ```go
 type Transform [3][3]float64  // A 3x3 array, really an array of arrays.
@@ -248,6 +250,8 @@ type LinesOfText [][]byte     // A slice of byte slices.
 ```
 
 Because slices are variable-length, it is possible to have each inner slice be a different length. That can be a common situation, as in our LinesOfText example: each line has an independent length.
+
+Slice는 크기가 변할 수 있기 때문에, 내부의 slice들은 크기가 각자 다를 수 있다. 다음의 LinesOfText 예와 같이 흔히 일어 날 수 있는 일이다: 각 줄은 독립적으로 다른 크기를 가지고 있다.
 
 ```go
 text := LinesOfText{
@@ -259,6 +263,8 @@ text := LinesOfText{
 
 Sometimes it's necessary to allocate a 2D slice, a situation that can arise when processing scan lines of pixels, for instance. There are two ways to achieve this. One is to allocate each slice independently; the other is to allocate a single array and point the individual slices into it. Which to use depends on your application. If the slices might grow or shrink, they should be allocated independently to avoid overwriting the next line; if not, it can be more efficient to construct the object with a single allocation. For reference, here are sketches of the two methods. First, a line at a time:
 
+때로 이차원의 slice를 메모리에 할당할 필요가 생기는데, 예를 들면 픽셀로 된 줄들은 스캔하는 상황이다. 두 가지 방식으로 해결할 수 있는데, 첫번째는 각 slice를 독립적으로 할당하는 것이고; 두번째는 slice 하나를 할당해서 각 slice를 자른 다음 가리키는 것이다. 어느 것을 쓸지는 애플리케이션에 달렸다. 만약 slice가 자라거나 줄어들 수 있다면, 독립적으로 할당해서 다음 줄을 덮어쓰는 일을 방지해야 하고; 그렇지 않다면, 객체를 생성하기 위한 메모리 할당을 한번에 하는 것이 더 효율적일 수 있다. 참고로, 여기 두 방식의 스케치가 잇다. 우선, 한번에 한줄씩:
+
 ```go
 // Allocate the top-level slice.
 picture := make([][]uint8, YSize) // One row per unit of y.
@@ -269,6 +275,8 @@ for i := range picture {
 ```
 
 And now as one allocation, sliced into lines:
+
+그리고 이제 한번의 메모리 할당으로, 잘라서 줄을 만드는 경우:
 
 ```go
 // Allocate the top-level slice, the same as before.
