@@ -1,5 +1,8 @@
 # Introduction
 
+* 원문: [Introduction](https://golang.org/doc/effective_go.html#introduction)
+* 번역자: Philbert Yoon (@ziwon)
+
 Go is a new language. Although it borrows ideas from existing languages, it has unusual properties that make effective Go programs different in character from programs written in its relatives. A straightforward translation of a C++ or Java program into Go is unlikely to produce a satisfactory result—Java programs are written in Java, not Go. On the other hand, thinking about the problem from a Go perspective could produce a successful but quite different program. In other words, to write Go well, it's important to understand its properties and idioms. It's also important to know the established conventions for programming in Go, such as naming, formatting, program construction, and so on, so that programs you write will be easy for other Go programmers to understand.
 
 Go는 새로운 언어이다. 비록 기존 언어의 아이디어들을 차용했지만, 독특한 속성을 지니고 있으며 이는 같은 계보로 쓰여진 프로그램들과는 성격이 다른 것으로 Go 프로그램을 효과적으로 만들어 준다. C++ 또는 Java 프로그램을 바로 Go로 변환하면 만족스러운 결과를 만들어내기는 어려울 것이다. 왜냐하면 Java 프로그램은 Go가 아닌 Java로 쓰여졌기 때문이다. 반면에, Go 관점에서 문제를 생각하면 완전히 다른 프로그램이 아닌 만족스러운 결과를 만들 수 있을 것이다. 다시 말해, Go를 잘 작성하기 위해서는 Go의 속성들과 Go 언어다운 코드들을 이해하는 것이 중요하다. 또한 다른 Go 프로그래머가 여러분이 작성한 Go 프로그래밍을 쉽게 이해할 수 있도록 네이밍, 포맷팅, 프로그램 구조 등과 같은 Go 프로그래밍을 위한 정해진 컨벤션들을 아는 것도 중요하다.
