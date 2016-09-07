@@ -76,7 +76,7 @@ func (s Sequence) String() string {
 
 이제, Sequence가 복수의(정렬과 출력) 인터페이스를 구현하는 대신, 하나의 데이터 아이템이 복수의 타입(Sequence, [sort.IntSlice](https://godoc.org/sort#IntSlice), 그리고 []int)으로 변환될 수 있는 점을 이용하고 있다. 각 타입은 주어진 작업의 일정 부분을 감당하게 된다. 실전에서 자주 쓰이진 않지만 매우 효과적일 수 있다.
 
-## 인터페이스 변환과 타입 단언(type assertions)
+## 인터페이스 변환과 타입 단언
 
 `Type switches are a form of conversion: they take an interface and, for each case in the switch, in a sense convert it to the type of that case. Here's a simplified version of how the code under fmt.Printf turns a value into a string using a type switch. If it's already a string, we want the actual string value held by the interface, while if it has a String method we want the result of calling the method.`
 
@@ -143,7 +143,7 @@ if str, ok := value.(string); ok {
 }
 ```
 
-## 일반성(Generality)
+## 일반성
 
 `If a type exists only to implement an interface and will never have exported methods beyond that interface, there is no need to export the type itself. Exporting just the interface makes it clear the value has no interesting behavior beyond what is described in the interface. It also avoids the need to repeat the documentation on every instance of a common method.`
 
