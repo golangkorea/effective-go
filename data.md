@@ -383,7 +383,7 @@ Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍�
 
 You don't need to provide a format string. For each of Printf, `Fprintf` and `Sprintf` there is another pair of functions, for instance `Print` and `Println`. These functions do not take a format string but instead generate a default format for each argument. The `Println` versions also insert a blank between arguments and append a newline to the output while the `Print` versions add blanks only if the operand on neither side is a string. In this example each line produces the same output.
 
-반드시 포맷 문자열을 제공할 필요는 없다. `Printf`, `Fprintf` 그리고 `Sprintf`에 대해 짝을 이루는 함수들이 있는데, 예를 들면 `Print`와 `Println`이다. 이 함수들은 포맷 문자열을 취하지 않는 대신 입력된 인수에 대해 이미 정해진 포맷을 발생시킨다. `Println` 버전들은 인수들 사이에 공백을 삽입하고 출력에 줄바꿈을 추가한다. 그런 반면 `Print` 버전들은 인수 양쪽이 다 문자역이 난 경우에만 공백을 삽입한다. 아래 예제에서는 각 줄이 같은 출력을 만든다.
+반드시 포맷 문자열을 제공할 필요는 없다. `Printf`, `Fprintf` 그리고 `Sprintf`에 대해 짝을 이루는 함수들이 있는데, 예를 들면 `Print`와 `Println`이다. 이 함수들은 포맷 문자열을 취하지 않는 대신 입력된 인수에 대해 이미 정해진 포맷을 발생시킨다. `Println` 버전들은 인수들 사이에 공백을 삽입하고 출력에 줄바꿈을 추가한다. 그런 반면 `Print` 버전들은 인수 양쪽이 다 문자역이 난 경우에만 공백을 삽입한다. 아래 예제에서 각 줄이 같은 출력을 만든다.
 
 ```go
 fmt.Printf("Hello %d\n", 23)
@@ -393,6 +393,8 @@ fmt.Println(fmt.Sprint("Hello ", 23))
 ```
 
 The formatted print functions fmt.Fprint and friends take as a first argument any object that implements the `io.Writer` interface; the variables `os.Stdout` and `os.Stderr` are familiar instances.
+
+포맷된 출력 함수인 [fmt.Fprint](https://godoc.org/fmt#Fprint)
 
 Here things start to diverge from C. First, the numeric formats such as %d do not take flags for signedness or size; instead, the printing routines use the type of the argument to decide these properties.
 
