@@ -145,7 +145,7 @@ Go와 C에서는 배열의 작동원리에 큰 차이가 있다. Go에서는,
 * In particular, if you pass an array to a function, it will receive a copy of the array, not a pointer to it.
 * The size of an array is part of its type. The types [10]int and [20]int are distinct.
 
-* 배열은 값이다. 한 배열을 다른 배열에 배정(assign)할 때 모든 요소가 복사된다.
+* 배열은 값이다. 한 배열을 다른 배열에 할당(assign)할 때 모든 요소가 복사된다.
 * 특히, 함수에 배열을 패스할 때, 함수는 포인터가 아닌 복사된 배열을 받는다.
 * 배열의 크기는 타입의 한 부분이다. 타입 [10]int과 [20]int는 서로 다르다.
 
@@ -177,7 +177,7 @@ Slice는 배열을 포장하므로써 데이터 시퀀스에 더 일반적이고
 
 Slices hold references to an underlying array, and if you assign one slice to another, both refer to the same array. If a function takes a slice argument, changes it makes to the elements of the slice will be visible to the caller, analogous to passing a pointer to the underlying array. A Read function can therefore accept a slice argument rather than a pointer and a count; the length within the slice sets an upper limit of how much data to read. Here is the signature of the Read method of the `File` type in package os:
 
-Slice는 내부의 배열을 가리키는 레퍼런스를 쥐고 있어, 만약에 다른 slice에 배정(assign)되어도, 둘 다 같은 배열을 가리킨다. 함수가 slice를 받아 그 요소에 변화를 주면 호출자도 볼 수 있는데, 이것은 내부의 배열를 가리키는 포인터를 함수에 보내는 것과 유사하다. 그러므로 Read 함수는 포인터와 카운터 대신, slice를 받아 들일 수 있다; slice내 length는 데이터를 읽을 수 있는 최대 한계치에 정해져 있다. 아래에 [File](https://godoc.org/os#File)타입의 Read 메서드의 시그너쳐가 있다.
+Slice는 내부의 배열을 가리키는 레퍼런스를 쥐고 있어, 만약에 다른 slice에 할당(assign)되어도, 둘 다 같은 배열을 가리킨다. 함수가 slice를 받아 그 요소에 변화를 주면 호출자도 볼 수 있는데, 이것은 내부의 배열를 가리키는 포인터를 함수에 보내는 것과 유사하다. 그러므로 Read 함수는 포인터와 카운터 대신, slice를 받아 들일 수 있다; slice내 length는 데이터를 읽을 수 있는 최대 한계치에 정해져 있다. 아래에 [File](https://godoc.org/os#File)타입의 Read 메서드의 시그너쳐가 있다.
 
 ```go
 func (f *File) Read(buf []byte) (n int, err error)
@@ -210,7 +210,7 @@ Such slicing is common and efficient. In fact, leaving efficiency aside for the 
 
 The length of a slice may be changed as long as it still fits within the limits of the underlying array; just assign it to a slice of itself. The capacity of a slice, accessible by the built-in function `cap`, reports the maximum length the slice may assume. Here is a function to append data to a slice. If the data exceeds the capacity, the slice is reallocated. The resulting slice is returned. The function uses the fact that `len` and `cap` are legal when applied to the `nil` slice, and return 0.
 
-slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 배정하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 리턴된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 리턴하는 사실을 이용하고 있다.
+slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 할당하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 리턴된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 리턴하는 사실을 이용하고 있다.
 
 ```go
 func Append(slice, data []byte) []byte {
@@ -313,7 +313,7 @@ var timeZone = map[string]int{
 
 Assigning and fetching map values looks syntactically just like doing the same for arrays and slices except that the index doesn't need to be an integer.
 
-Map에 값을 배정하거나 추출하는 문법은, 인덱스가 integer일 필요가 없다는 것외에는 배열과 slice과 거의 동일하다.
+Map에 값을 할당하거나 추출하는 문법은, 인덱스가 integer일 필요가 없다는 것외에는 배열과 slice과 거의 동일하다.
 
 ```go
 offset := timeZone["EST"]
@@ -337,6 +337,8 @@ if attended[person] { // will be false if person is not in the map
 
 Sometimes you need to distinguish a missing entry from a zero value. Is there an entry for "UTC" or is that the empty string because it's not in the map at all? You can discriminate with a form of multiple assignment.
 
+때로는 부재값과 제로값을 구분할 필요도 있다. "UTC"에 대한 엔트리가 있는지 혹은 map내 정말 없어 빈 문자열인 건지? 복수 할당의 형태로 차이를 나타낼 수 있다.
+
 ```go
 var seconds int
 var ok bool
@@ -344,6 +346,8 @@ seconds, ok = timeZone[tz]
 ```
 
 For obvious reasons this is called the “comma ok” idiom. In this example, if tz is present, seconds will be set appropriately and ok will be true; if not, seconds will be set to zero and ok will be false. Here's a function that puts it together with a nice error report:
+
+뚜렷한 이유로 이것을 "comma ok" 관용구라고 부른다. 이 예제에서, 만약 tz가 있다면, seconds는 적절히 세팅될 것이고 ok는 true가 된다; 반면 없다면, seconds는 제로값이 되고 ok는 false가 된다. 여기 보기 좋은 에러 보고와 동반하는 함수의 예가 있다.
 
 ```go
 func offset(tz string) int {
@@ -357,11 +361,15 @@ func offset(tz string) int {
 
 To test for presence in the map without worrying about the actual value, you can use the [blank identifier](https://golang.org/doc/effective_go.html#blank) (`_`) in place of the usual variable for the value.
 
+실제 값에 상관없이 map내 존재 여부를 검사하려면, [공백 식별자](https://golang.org/doc/effective_go.html#blank) (`_`)를 값에 대한 변수가 있어야 할 자리에 놓으면 된다.
+
 ```go
 _, present := timeZone[tz]
 ```
 
 To delete a map entry, use the delete built-in function, whose arguments are the map and the key to be deleted. It's safe to do this even if the key is already absent from the map.
+
+Map의 엔트리를 소거하기 위해서는, 내장 함수 delete을 쓰는데, map과 소거할 key를 인수로 쓴다. map에 key가 이미 부재하는 경우에도 안전하게 사용할 수 있다.
 
 ```go
 delete(timeZone, "PDT")  // Now on Standard Time
