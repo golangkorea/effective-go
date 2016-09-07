@@ -15,6 +15,7 @@
   * [인터페이스](interfaces_and_other_types.md#인터페이스)
   * [타입 변환](interfaces_and_other_types.md#타입-변환)
   * [인터페이스 변환과 타입 단언]()
+  * [일반성]()
   * 
 * [The blank identifier](the_blank_identifier.md)
 * [Embedding](embedding.md)
