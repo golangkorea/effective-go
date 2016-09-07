@@ -321,7 +321,7 @@ offset := timeZone["EST"]
 
 An attempt to fetch a map value with a key that is not present in the map will return the zero value for the type of the entries in the map. For instance, if the map contains integers, looking up a non-existent key will return 0. A set can be implemented as a map with value type bool. Set the map entry to `true` to put the value in the set, and then test it by simple indexing.
 
-
+Map에 없는 key를 가지고 값을 추출하려는 시도는 값의 타입에 해당하는 제로값을 리턴할 것이다. 예를 들어, 만약 map이 integer를 가지고 있으면, 존재하지 않는 key에 대한 조회는 0을 리턴한다. bool 타입의 값을 가진 map으로 set을 구현할 수 있다. map의 엔트리를 `true`로 저장함으로써 set안에 값을 집어 넣을 수 있고, 간단히 인덱싱을 통해 검사해 볼 수 있다.
 
 ```go
 attended := map[string]bool{
