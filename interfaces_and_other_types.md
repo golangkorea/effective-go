@@ -41,7 +41,7 @@ func (s Sequence) String() string {
 }
 ```
 
-## 타입 변환(Conversions)
+## 타입 변환
 
 `The String method of Sequence is recreating the work that Sprint already does for slices. We can share the effort if we convert the Sequence to a plain []int before calling Sprint.`
 
