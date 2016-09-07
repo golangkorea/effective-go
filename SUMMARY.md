@@ -12,6 +12,7 @@
 * [Initializations](initializations.md)
 * [Methods](methods.md)
 * [Interfaces and other types](interfaces_and_other_types.md)
+  * [인터페이스](interfaces_and_other_types.md#인터페이스)
 * [The blank identifier](the_blank_identifier.md)
 * [Embedding](embedding.md)
 * [Concurrency](concurrency.md)
