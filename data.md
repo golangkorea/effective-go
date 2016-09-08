@@ -33,7 +33,7 @@ p := new(SyncedBuffer)  // type *SyncedBuffer
 var v SyncedBuffer      // type  SyncedBuffer
 ```
 
-## 생성자와 합성 리터럴(Constructors and composite literals)
+## 생성자와 합성 리터럴
 
 `Sometimes the zero value isn't good enough and an initializing constructor is necessary, as in this example derived from package os.`
 
@@ -97,7 +97,7 @@ s := []string      {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 ```
 
-## make를 사용하는 메모리 할당(Allocation with make)
+## make를 사용하는 메모리 할당
 
 Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not `*T`). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. A slice, for example, is a three-item descriptor containing a pointer to the data (inside an array), the length, and the capacity, and until those items are initialized, the slice is `nil`. For slices, maps, and channels, make initializes the internal data structure and prepares the value for use. For instance,
 
@@ -131,7 +131,7 @@ v := make([]int, 100)
 
 make는 maps, slices 그리고 channels에만 적용되며 포인터를 리턴하지 않음을 기억하라. 포인터를 얻고 싶으면 new를 사용해서 메모리를 할당하거나 변수의 주소를 명시적으로 취하라.
 
-## 배열(Arrays)
+## 배열
 
 `Arrays are useful when planning the detailed layout of memory and sometimes can help avoid allocation, but primarily they are a building block for slices, the subject of the next section. To lay the foundation for that topic, here are a few words about arrays.`
 
@@ -238,7 +238,7 @@ The idea of appending to a slice is so useful it's captured by the append built-
 
 Slice에 부착한다는 생각은 매우 유용하기 때문에 내장함수 append로 만들어져 있다. 이 함수의 설계를 이해하려면, 우선 좀 더 정보가 필요하다. 그래서 나중에 다시 얘기하기로 하겠다.
 
-## 이차원 slices(Two-dimensional slices)
+## 이차원 slices
 
 Go's arrays and slices are one-dimensional. To create the equivalent of a 2D array or slice, it is necessary to define an array-of-arrays or slice-of-slices, like this:
 
@@ -375,7 +375,7 @@ Map의 엔트리를 제거하기 위해서는, 내장 함수 delete을 쓰는데
 delete(timeZone, "PDT")  // Now on Standard Time
 ```
 
-## Printing
+## 출력
 
 Formatted printing in Go uses a style similar to C's `printf` family but is richer and more general. The functions live in the fmt package and have capitalized names: `fmt.Printf`, `fmt.Fprintf`, `fmt.Sprintf` and so on. The string functions (`Sprintf` etc.) return a string rather than filling in a provided buffer.
 
