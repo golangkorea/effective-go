@@ -7,7 +7,7 @@
 
 `Interfaces in Go provide a way to specify the behavior of an object: if something can do this, then it can be used here. We've seen a couple of simple examples already; custom printers can be implemented by a String method while Fprintf can generate output to anything with a Write method. Interfaces with only one or two methods are common in Go code, and are usually given a name derived from the method, such as io.Writer for something that implements Write.`
 
-Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법이다: 만약 어떤 객체가 정해진 행위를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이다. 이미 간단한 몇몇 예제들을 본 적이 있다; String 메서드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메서드를 가지고 있는 어떤 객체라도 쓸 수 있다. Go 코드에서는 한 두개의 메서드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메서드(동사)에서 파생된다: Write 메서드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
+Go언어의 인터페이스는 객체의 행위(behavior)를 지정해 주는 하나의 방법이다: 만약 어떤 객체가 정해진 행동를 할 수 있다면 호환되는 타입으로 쓸 수 있다는 뜻이다. 이미 간단한 몇몇 예제들을 본 적이 있다; String 메서드를 구현하면 개체의 사용자 정의 출력이 가능하고, Fprintf의 출력으로 Write 메서드를 가지고 있는 어떤 객체라도 쓸 수 있다. Go 코드에서는 한 두개의 메서드를 지정해 주는 인터페이스가 보편적이며, 인터페이스의 이름(명사)은 보통 메서드(동사)에서 파생된다: Write 메서드를 구현하면 io.Writer가 인터페이스의 이름이 되는 경우.
 
 `A type can implement multiple interfaces. For instance, a collection can be sorted by the routines in package sort if it implements sort.Interface, which contains Len(), Less(i, j int) bool, and Swap(i, j int), and it could also have a custom formatter. In this contrived example Sequence satisfies both.`
 
