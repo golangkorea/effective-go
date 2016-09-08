@@ -394,9 +394,11 @@ fmt.Println(fmt.Sprint("Hello ", 23))
 
 The formatted print functions fmt.Fprint and friends take as a first argument any object that implements the `io.Writer` interface; the variables `os.Stdout` and `os.Stderr` are familiar instances.
 
-포맷된 출력 함수인 [fmt.Fprint](https://godoc.org/fmt#Fprint)
+포맷된 출력 함수인 [fmt.Fprint](https://godoc.org/fmt#Fprint)와 유사 함수들은 첫번째 인수로 `io.Writer` 인터페이스를 구현한 객체를 취한다; 변수 `os.Stdout`과 `os.Stderr`가 친숙한 인스턴스들이다.
 
 Here things start to diverge from C. First, the numeric formats such as %d do not take flags for signedness or size; instead, the printing routines use the type of the argument to decide these properties.
+
+여기서 부터 C로 부터 갈라져 나오기 시작한다. 첫째로, %d같은 숫자 형식들은 부호기호의 여부나 크기를 나타내는 플래그를 취하지 않는다; 그 대신, 출력 루틴이 인수의 타입을 이용해서 이러한 특징들을 결정한다.
 
 ```go
 var x uint64 = 1<<64 - 1
@@ -405,11 +407,15 @@ fmt.Printf("%d %x; %d %x\n", x, x, int64(x), int64(x))
 
 prints
 
+위의 예제는 다음과 같은 출력을 한다.
+
 ```go
 18446744073709551615 ffffffffffffffff; -1 -1
 ```
 
 If you just want the default conversion, such as decimal for integers, you can use the catchall format %v (for “value”); the result is exactly what `Print` and `Println` would produce. Moreover, that format can print any value, even arrays, slices, structs, and maps. Here is a print statement for the time zone map defined in the previous section.
+
+정수(integer)에 대한 소수같은 기본적인 변환을 원할 경우는, 다목적 용도 포맷인 %v(value라는 의미로)를 사용할 수 있다; 결과는 `Print`와 `Println`의 출력과 동일하다. 더우기, 그 포맷은 어떤 값이라도 출력할 수 있으며, 심지어 배열, slice, 그리고 map도 출력한다. 아래에는 이전 섹션에서 정의된 시간대 map을 위한 print문이 있다.
 
 ```go
 fmt.Printf("%v\n", timeZone)  // or just fmt.Println(timeZone)
@@ -417,11 +423,15 @@ fmt.Printf("%v\n", timeZone)  // or just fmt.Println(timeZone)
 
 which gives output
 
+아래와 같이 출력을 제공한다.
+
 ```go
 map[CST:-21600 PST:-28800 EST:-18000 UTC:0 MST:-25200]
 ```
 
 For maps the keys may be output in any order, of course. When printing a struct, the modified format %+v annotates the fields of the structure with their names, and for any value the alternate format %#v prints the value in full Go syntax.
+
+물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정된 포맷, %+v를 통해 구조체의 필드에 이름으로 주석을 달며
 
 ```go
 type T struct {
