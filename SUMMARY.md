@@ -18,7 +18,7 @@
   * [일반성](interfaces_and_other_types.md#일반성)
   * [인터페이스와 메서드](interfaces_and_other_types.md#인터페이스와-메서드)
 * [The blank identifier](the_blank_identifier.md)
-* [Embedding](embedding.md)
+* [임베딩](embedding.md)
 * [Concurrency](concurrency.md)
 * [Errors](errors.md)
 * [A web server](a_web_server.md)
