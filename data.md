@@ -431,7 +431,7 @@ map[CST:-21600 PST:-28800 EST:-18000 UTC:0 MST:-25200]
 
 For maps the keys may be output in any order, of course. When printing a struct, the modified format %+v annotates the fields of the structure with their names, and for any value the alternate format %#v prints the value in full Go syntax.
 
-물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정된 포맷, %+v를 통해 구조체의 필드에 이름으로 주석을 달며
+물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정 포맷인 %+v를 통해 구조체의 필드에 주석으로 이름을 달며, 대안 포맷인 %#v를 사용하면 어떤 값이든 와전한 Go 문법을 출력한다.
 
 ```go
 type T struct {
@@ -448,6 +448,8 @@ fmt.Printf("%#v\n", timeZone)
 
 prints
 
+위의 예제는 다음과 같이 출력된다.
+
 ```go
 &{7 -2.35 abc   def}
 &{a:7 b:-2.35 c:abc     def}
@@ -457,7 +459,11 @@ map[string] int{"CST":-21600, "PST":-28800, "EST":-18000, "UTC":0, "MST":-25200}
 
 (Note the ampersands.) That quoted string format is also available through %q when applied to a value of type string or []byte. The alternate format %#q will use backquotes instead if possible. (The %q format also applies to integers and runes, producing a single-quoted rune constant.) Also, %x works on strings, byte arrays and byte slices as well as on integers, generating a long hexadecimal string, and with a space in the format (% x) it puts spaces between the bytes.
 
+(엠퍼센트에 주목하라.) 인용 문자열 포맷은 %q를 이용해 string 타입이나 []byte 타입 값에 적용했을때 얻어진다. 대안 포맷인 %#q는 가능한 경우 backquote을 사용한다. (%q 포맷은 또 integer와 rune에 적용되어, single-quoted rune 상수를 만든다.) %x는 문자열, byte 배열, 그리고 byte slice와 integer에 작용하여 긴 16진수 문자열을 생성하는데, (% x) 포맷처럼 스페이스를 중간에 넣으면 (출력하는) byte사이에 공백을 넣어 준다.
+
 Another handy format is %T, which prints the type of a value.
+
+또 다른 유용한 포맷은 %T로 값의 타입을 출력한다.
 
 ```go
 fmt.Printf("%T\n", timeZone)
@@ -465,11 +471,15 @@ fmt.Printf("%T\n", timeZone)
 
 prints
 
+위의 예제는 다음과 같이 출력된다.
+
 ```go
 map[string] int
 ```
 
-If you want to control the default format for a custom type, all that's required is to define a method with the signature String() `string` on the type. For our simple type T, that might look like this.
+If you want to control the default format for a custom type, all that's required is to define a method with the signature String() string on the type. For our simple type T, that might look like this.
+
+커스텀 타입의 기본 포맷을 조종하기 위해 요구되는 모든 조치는 단지 `String() string`의 시그너처를 갖는 메서드를 정의해 주면 된다. (위에 정의된) 단순한 타입 T는 아래와 같은 포맷을 가질 수 있다.
 
 ```go
 func (t *T) String() string {
@@ -480,13 +490,19 @@ fmt.Printf("%v\n", t)
 
 to print in the format
 
+다음과 같은 포맷으로 출력된다.
+
 ```go
 7/-2.35/"abc\tdef"
 ```
 
 (If you need to print values of type T as well as pointers to T, the receiver for `String` must be of value type; this example used a pointer because that's more efficient and idiomatic for struct types. See the section below on [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values) for more information.)
 
+(만약 타입 T와 동시에 포인터 타입 T도 함께 출력할 필요가 있으면, `String`의 리시버는 값 타입이러야 한다; 위에 예제에서 struct 타입에 포인터를 사용한 이유는 더 효율적이고 Go 언어다운 선택이기 때문이다. 더 상세한 정보는 다음의 링크를 참고하라: [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values) )
+
 Our String method is able to call Sprintf because the print routines are fully reentrant and can be wrapped this way. There is one important detail to understand about this approach, however: don't construct a String method by calling Sprintf in a way that will recur into your String method indefinitely. This can happen if the Sprintf call attempts to print the receiver directly as a string, which in turn will invoke the method again. It's a common and easy mistake to make, as this example shows.
+
+String 메서드가 Sprintf를 호출할 수 있는 이유는 print 루틴들의 재진입(reentrant)이 충분히 가능하고 예제와 같이 감싸도 되기 때문이다. 하지만 이 방식에 대해 한가지 이해하고 넘어가야 하는 매우 중요한 디테일이 있는데: String 매서드를 만들면서 Sprintf를 호출할 때 다시 String 매서드로 영구히 재귀하는 방식은 안 된다는 것이다. Sprintf가 리시터를 string처럼 직접 출력하는 경우에 이런 일이 발생할 수 있는데, 그렇게 되면 다시 같은 메서드를 호출하게 되고 말 것이다. 흔하고 쉽게 하는 실수로, 다음의 예제에서 살펴보자.
 
 ```go
 type MyString string
@@ -498,6 +514,8 @@ func (m MyString) String() string {
 
 It's also easy to fix: convert the argument to the basic string type, which does not have the method.
 
+이러한 실수는 또 쉽게 고칠 수도 있다: 인수를 기본적인 문자열 타입으로 변환하면, 같은 메서드가 없기 때문이다.
+
 ```go
 type MyString string
 func (m MyString) String() string {
@@ -507,13 +525,19 @@ func (m MyString) String() string {
 
 In the [initialization section](https://golang.org/doc/effective_go.html#initialization) we'll see another technique that avoids this recursion.
 
+[initialization section](https://golang.org/doc/effective_go.html#initialization) 섹션에 가면 이 같은 재귀호출을 피할 수 있는 다른 테크닉을 보게 될 것이다.
+
 Another printing technique is to pass a print routine's arguments directly to another such routine. The signature of `Printf` uses the type `...interface{}` for its final argument to specify that an arbitrary number of parameters (of arbitrary type) can appear after the format.
+
+또 다른 출력 기법으로는 출력 루틴의 인수들을 직접 또 다른 유사한 루틴으로 대입하는 것이다. `Printf`의 시그너처는 마지막 인수로 임의적인 숫자의 파라미터가 포맷 다음에 나타날 수 있음을 명시하기 위해 타입 `...interface{}`를 사용한다.
 
 ```go
 func Printf(format string, v ...interface{}) (n int, err error) {
 ```
 
 Within the function `Printf`, v acts like a variable of type `[]interface{}` but if it is passed to another variadic function, it acts like a regular list of arguments. Here is the implementation of the function `log.Println` we used above. It passes its arguments directly to `fmt.Sprintln` for the actual formatting.
+
+`Printf` 함수내에, v는 `[]interface{}` 타입의 변수 처럼 행동하지만 만약에 다른 가변 함수(variadic function)에 대입되면, 보통의 인수리스트로 동작한다. 위에서 사용한 `log.Println`의 구현이 아래에 있다. 실질적 출력을 위해 `fmt.Sprintln` 함수에 직접 인수들을 대입하고 있다.
 
 ```go
 // Println prints to the standard logger in the manner of fmt.Println.
@@ -524,9 +548,15 @@ func Println(v ...interface{}) {
 
 We write ... after v in the nested call to `Sprintln` to tell the compiler to treat v as a list of arguments; otherwise it would just pass v as a single slice argument.
 
+`Sprintln`을 부르는 중첩된 호출안에 v 다음에 오는 ...는 컴파일러에게 v를 인수 리스트로 취급하라고 말하는 것이고; 그렇지 않은 경우는 v를 하나의 slice 인수로 대입한다.
+
 There's even more to printing than we've covered here. See the `godoc` documentation for package fmt for the details.
 
+여기에서 살펴 본 출력에 관한 내용보다 훨씬 많은 정보들이 있다. `godoc`에 있는 [fmt](https://godoc.org/fmt) 패키지를 통해 상세하게 알아보라.
+
 By the way, a ... parameter can be of a specific type, for instance `...int` for a min function that chooses the least of a list of integers:
+
+그나저나, ... 파라미터는 특정한 타입을 가질 수도 있는데, 예로 integer 리스트에서 최소값을 선택하는 함수인 min에 대한 `...int`를 살려보라.
 
 ```go
 func Min(a ...int) int {
