@@ -2,5 +2,9 @@
     "plugins": [
         "disqus"
     ],
-    "pluginsConfig": {}
+    "pluginsConfig": {
+      "disqus": {
+        "shortName": "effective-go-in-korean"
+      }
+    }
 }
