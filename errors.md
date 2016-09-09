@@ -4,7 +4,7 @@
 
 `Library routines must often return some sort of error indication to the caller. As mentioned earlier, Go's multivalue return makes it easy to return a detailed error description alongside the normal return value. It is good style to use this feature to provide detailed error information. For example, as we'll see, os.Open doesn't just return a nil pointer on failure, it also returns an error value that describes what went wrong.`
 
-라이브러리 루틴은 반드시 에러를 발생시킨 부분을 가리키며 에러들을 리턴해야한다. 이전에 언급되었듯이, Go의 다중값 리턴은 일반적인 리턴값에 비해 상세한 에러 내용을 제공하기 쉽게 만들어준다. 상세한 에러 내용을 제공하기 위해 이러한 특징을 활용하는 것은 좋은 방식이다. 예를 들면, 앞으로 보게될 `os.Open`은 실패할 경우 단순히 `nil`만을 리턴하지 않으며, 무엇이 잘못되었는지에 대한 에러 내용까지 리턴을 한다. 
+라이브러리 루틴들은 호출자에게 어떤 조짐의 에러라 해도 자주 리턴해 주어야만 한다. 이전에 언급되었듯이, Go의 다중값 리턴은 일반적인 리턴값에 비해 상세한 에러 내용을 제공하기 쉽게 만들어준다. 상세한 에러 내용을 제공하기 위해 이러한 특징을 활용하는 것은 좋은 방식이다. 예를 들면, 앞으로 보게될 `os.Open`은 실패할 경우 단순히 `nil`만을 리턴하지 않으며, 무엇이 잘못되었는지에 대한 에러 내용까지 리턴을 한다. 
 
 `By convention, errors have type error, a simple built-in interface.`
 
@@ -18,7 +18,7 @@ type error interface {
 
 `A library writer is free to implement this interface with a richer model under the covers, making it possible not only to see the error but also to provide some context. As mentioned, alongside the usual *os.File return value, os.Open also returns an error value. If the file is opened successfully, the error will be nil, but when there is a problem, it will hold an os.PathError:`
 
-라이브러리 개발자는 에러를 보여줄뿐만 아니라 컨텍스트까지 제공해야하는 복잡한 모델을 가진 이러한 인터페이스 구현하는데에 있어 자유롭다. 언급된 바와 같이, 보통 `os.Open`는 `*os.File` 값을 리턴하는 동시에 에러값도 리턴한다. 만약 파일이 성공적으로 오픈되면, 에러는 `nil`이 될 것이고, 오픈 도중 문제가 발생할경우 `os.PathError`의 값을 가지게 될 것이다.
+라이브러리 개발자는 보이지는 않지만 좀 더 풍부한 모델을 사용해 위의 인터페이스를 자유롭게 구현하면서, 에러를 보여줄 뿐만 아니라 어떤 맥락을 함께 제공하는 것도 가능하다. 언급된 바와 같이, 보통 `os.Open`는 `*os.File` 값을 리턴하는 동시에 에러값도 리턴한다. 만약 파일이 성공적으로 오픈되면, 에러는 `nil`이 될 것이고, 오픈 도중 문제가 발생할경우 `os.PathError`의 값을 가지게 될 것이다.
 
 ```go
 // PathError는 에러와 연산, 문제를 발생시킨 파일 경로를 가지고 있다.
@@ -51,7 +51,7 @@ open /etc/passwx: no such file or directory
 
 `Callers that care about the precise error details can use a type switch or a type assertion to look for specific errors and extract details. For PathErrors this might include examining the internal Err field for recoverable failures.`
 
-정확한 상세 에러내용에 관심이 있는 사람은 자세한 그리고 추가적인 정보를 얻기 위해 타입 스위칭이나 타입 단언을 사용할 수 있다.  `PathErrors`의 경우 오류를 복구하기 위해 내부 `Err`필드를 조사할 수 있다.
+정확한 상세 에러내용에 관심이 있는 호출자는 자세한 그리고 추가적인 정보를 얻기 위해 타입 스위칭이나 타입 단언을 사용할 수 있다.  `PathErrors`의 경우 오류를 복구하기 위해 내부 `Err`필드를 조사할 수 있다.
 
 ```go
 for try := 0; try < 2; try++ {
@@ -75,11 +75,11 @@ for try := 0; try < 2; try++ {
 
 `The usual way to report an error to a caller is to return an error as an extra return value. The canonical Read method is a well-known instance; it returns a byte count and an error. But what if the error is unrecoverable? Sometimes the program simply cannot continue.`
 
-호출자에게 에러를 알려주는 일반적인 방법은 에러를 부가적인 값으로서 리턴하는 것이다. 규범적인 `Read` 메서드는 잘 알려진 인스턴스이다. 이는 바이트 수와 에러를 리턴한다. 그러나 복구할 수 없는 에러라면 어쩔 것인가? 때때로 프로그램은 더이상 진행이 안될 것이다.
+호출자에게 에러를 알려주는 일반적인 방법은 에러를 부가적인 값으로서 리턴하는 것이다. 규범적인 `Read` 메서드는 잘 알려진 예로, 이는 바이트 수와 에러를 리턴한다. 그러나 복구할 수 없는 에러라면 어쩔 것인가? 때때로 프로그램은 더이상 진행이 안될 것이다.
 
 `For this purpose, there is a built-in function panic that in effect creates a run-time error that will stop the program (but see the next section). The function takes a single argument of arbitrary type—often a string—to be printed as the program dies. It's also a way to indicate that something impossible has happened, such as exiting an infinite loop.`
 
-이런 목적을 위해 Go에는 런타임 에러를 일으켜 프로그램을 중단시키는 `panic`이라는 내장함수가 있다 (그러나 다음 장을 보라). 이 함수는 프로그램이 종료되었을 때 출력될 임의의 타입 하나를 인자로 받는다 (대개 `string`이다). 이는 또한 무한 루프가 발생하는것과 같이 불가능한 일이 일어나고 있는 무언가를 알리는 방법이기도 하다.
+이런 목적을 위해 Go에는 런타임 에러를 일으켜 프로그램을 중단시키는 `panic`이라는 내장함수가 있다 (그러나 다음 섹션을 보라). 이 함수는 프로그램이 종료되었을 때 출력될 임의의 타입 하나를 인자로 받는다 (대개 `string`이다). 이는 또한 어떤 불가능한 일이 벌어졌음을 알리는 방법이기도 한데, 무한 루프에서 탈출하는 것이 예가 될 수 있다.
 
 ```go
 // A toy implementation of cube root using Newton's method.
@@ -115,7 +115,7 @@ func init() {
 
 `When panic is called, including implicitly for run-time errors such as indexing a slice out of bounds or failing a type assertion, it immediately stops execution of the current function and begins unwinding the stack of the goroutine, running any deferred functions along the way. If that unwinding reaches the top of the goroutine's stack, the program dies. However, it is possible to use the built-in function recover to regain control of the goroutine and resume normal execution.`
 
-슬라이스의 범위를 넘어선 인덱싱이나 타입 단언 실패등의 런타임 에러를 포함한 패닉이 발생하였을 때, 이는 즉시 현재 함수의 실행을 중단시키며 모든 지연된 함수들과 고루틴 스택을 풀기 시작한다. 만약 풀기 작업이 고루틴 스택의 최정상에 도달했을 때, 프로그램은 종료된다. 그러나 내장함수인 `recover`를 사용하면 고루틴의 통제권을 다시 얻을 수 있으며, 명령어 실행을 정상적으로 진행할 수 있게 된다.
+슬라이스의 범위를 넘어선 인덱싱이나 타입 단언 실패등의 런타임 에러를 포함한 패닉이 발생하였을 때, 이는 즉시 현재 함수의 실행을 중단시키며 모든 지연된(deferred) 함수들과 고루틴 스택을 풀기 시작한다. 만약 풀기 작업이 고루틴 스택의 최정상에 도달했을 때, 프로그램은 종료된다. 그러나 내장함수인 `recover`를 사용하면 고루틴의 통제권을 다시 얻을 수 있으며, 명령어 실행을 정상적으로 진행할 수 있게 된다.
 
 `A call to recover stops the unwinding and returns the argument passed to panic. Because the only code that runs while unwinding is inside deferred functions, recover is only useful inside deferred functions.`
 
@@ -123,7 +123,7 @@ func init() {
 
 `One application of recover is to shut down a failing goroutine inside a server without killing the other executing goroutines.`
 
-`recover`의 한 응용으로는 서버 내의 실패한 고루틴을 다른 실행중인 고루틴들을 종료시키지 않고 종료시키는 것이다.
+`recover`의 한 응용 사례중 하나는 서버내의 실행중인 다른 고루틴들은 죽이지 않고, 오직 실패한 고루틴만을 종료시키는 것이다.
 
 ```go
 func server(workChan <-chan *Work) {
@@ -183,7 +183,7 @@ func Compile(str string) (regexp *Regexp, err error) {
 
 `If doParse panics, the recovery block will set the return value to nil—deferred functions can modify named return values. It will then check, in the assignment to err, that the problem was a parse error by asserting that it has the local type Error. If it does not, the type assertion will fail, causing a run-time error that continues the stack unwinding as though nothing had interrupted it. This check means that if something unexpected happens, such as an index out of bounds, the code will fail even though we are using panic and recover to handle parse errors.`
 
-만약 `doParse`가 패닉을 발생시키면, 복구 블록은 리턴 값을 nil로 설정할 것이다. 지연된 함수는 이름있는 리턴 값을 변형할 수 있다. `err`에 값을 할당하는 과정에서  에러를 자체 에러 타입으로 단언함으로써 그 문제가 파싱 에러인지 아닌지를 검사를 할 것이다. 만약 그렇지 않다면, 타입 단언은 실패를 하게 될 것이고, 아무 인터럽트가 나지 않았음에도 불구하고 스택 풀기작업을 진행하며 런타임 에러를 일으킬 것이다. 이 검사는 인덱스가 범위를 벗어나는 등의 의도치않은 일이 생길 때 파싱 에러를 처리하기위해 `panic`과 `recover`를 사용했음에도 불구하고 코드가 실패함을 의미한다. 
+만약 `doParse`가 패닉을 발생시키면, 복구 블록은 리턴 값을 nil로 설정할 것이다. 지연된 함수는 이름있는 리턴 값들을 변경할 수 있다. `err`에 값을 할당하는 과정에서  에러를 자체 에러 타입으로 단언함으로써 그 문제가 파싱 에러인지 아닌지를 검사를 할 것이다. 만약 파싱 에러가 아니라면, 타입 단언은 실패할 것이고, 마치 아무런 중단이 없었던 것처럼 스택 풀기작업을 진행하며 런타임 에러를 일으킬 것이다. 이 검사는 인덱스가 범위를 벗어나는 등의 의도치않은 일이 생길 때 파싱 에러를 처리하기위해 `panic`과 `recover`를 사용했음에도 불구하고 코드가 실패함을 의미한다. 
 
 `With error handling in place, the error method (because it's a method bound to a type, it's fine, even natural, for it to have the same name as the builtin error type) makes it easy to report parse errors without worrying about unwinding the parse stack by hand:`
 
@@ -201,4 +201,4 @@ if pos == 0 {
 
 `By the way, this re-panic idiom changes the panic value if an actual error occurs. However, both the original and new failures will be presented in the crash report, so the root cause of the problem will still be visible. Thus this simple re-panic approach is usually sufficient—it's a crash after all—but if you want to display only the original value, you can write a little more code to filter unexpected problems and re-panic with the original error. That's left as an exercise for the reader.`
 
-부연적으로, `re-panic` 구문은 실제 에러가 발생했을 때 패닉 값을 변경한다. 그러나 원래의 실패와 새로운 실패가 오류 리포트에서 보여질 것이고, 그래서 루트는 여전히 문제 발생을 보여지게 할 것이다. 따라서 이러한 간단한 `re-panic`접근법은 보통 모든게 다 끝난 후 오류가 발생할 경우에 충분하며, 그러나 오직 원래의 값을 보여주고 싶을 땐, 의도치않은 문제를 필터링하는 코드를 작성할 수 있으며 원래의 에러를 가지고 `re-panic`을 할 수 있다. 이는 독자들에게 숙제로 남기겠다. 
+부연적으로, `re-panic` 관용구는 실제로 에러가 발생했을 때 패닉 값을 변경한다. 하지만, 원래 값과 새로운 실패들이 모두 오류 보고에서 보여질 것이기 때문에 문제의 근본 원인도 여전히 보여질 것이다. 따라서 (프로그램이 크래쉬 했다는 점을 감안하면) 이러한 간단한 `re-panic` 접근이 충분하다고 볼 수 있지만, 오직 원래의 값만 보여주고 싶을 땐, 의도치않은 문제를 필터링하는 코드를 작성할 수 있으며 원래의 에러를 가지고 `re-panic`을 할 수 있다. 이는 독자들에게 숙제로 남기겠다. 
