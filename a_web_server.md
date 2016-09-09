@@ -4,7 +4,7 @@
 
 `Let's finish with a complete Go program, a web server. This one is actually a kind of web re-server. Google provides a service at http://chart.apis.google.com that does automatic formatting of data into charts and graphs. It's hard to use interactively, though, because you need to put the data into the URL as a query. The program here provides a nicer interface to one form of data: given a short piece of text, it calls on the chart server to produce a QR code, a matrix of boxes that encode the text. That image can be grabbed with your cell phone's camera and interpreted as, for instance, a URL, saving you typing the URL into the phone's tiny keyboard.`
 
-완전한 Go 프로그램인 웹 서버로 마무리를 짓자. 이것은 실제로 웹 서버의 한 종류이다. 구글은 데이터를 자동으로 차트와 그래프로 만들어주는 [http://chart.apis.google.com](http://chart.apis.google.com)이라는 서비스를 제공한다. 이것은 URL에 데이터를 싣어서 쿼리로 만들 필요가 있기 때문에, 쉬워보임에도 불구하고, 인터랙티브하게 사용하기가 어렵다. 여기서 주어진 프로그램은 데이터 폼 (이 예제에선 짧은 텍스트가 하나 주어졌다.)에 대해 텍스트를 인코딩한 행렬 형태의 QR코드를 생성하는 차트 서버를 호출하는 훌륭한 인터페이스를 제공한다. 
+완전한 Go 프로그램인 웹 서버로 마무리를 짓자. 이것은 실제로 웹 서버의 한 종류이다. 구글은 데이터를 자동으로 차트와 그래프로 만들어주는 [http://chart.apis.google.com](http://chart.apis.google.com)이라는 서비스를 제공한다. 이것은 URL에 데이터를 실어서 쿼리로 만들 필요가 있기 때문에, 쉬워보임에도 불구하고, 인터랙티브하게 사용하기가 어렵다. 여기서 주어진 프로그램은 데이터 폼 (이 예제에선 짧은 텍스트가 하나 주어졌다.)에 대해 텍스트를 인코딩한 행렬 형태의 QR코드를 생성하는 차트 서버를 호출하는 훌륭한 인터페이스를 제공한다. 
 
 `Here's the complete program. An explanation follows.`
 
@@ -61,7 +61,7 @@ value="Show QR" name=qr>
 
 `The pieces up to main should be easy to follow. The one flag sets a default HTTP port for our server. The template variable templ is where the fun happens. It builds an HTML template that will be executed by the server to display the page; more about that in a moment.`
 
-메인 위 까지는 이해하기가 쉬울 것이다. 한 플래그는 서버의 기본 HTTP 포트를 세팅한다. 템플릿 변수인 `templ`는 흥미로운 변수이다. 이는 서버가 페이지를 보여주려고 할 때 HTML 템플릿을 제작한다. 자센한건 잠시 후에 살펴보자.
+메인 위 까지는 이해하기가 쉬울 것이다. 한 플래그는 서버의 기본 HTTP 포트를 세팅한다. 템플릿 변수인 `templ`를 사용하면서 재미가 생기기 시작한다. 이는 서버가 페이지를 보여주려고 할 때 HTML 템플릿을 제작한다. 자센한건 잠시 후에 살펴보자.
 
 `The main function parses the flags and, using the mechanism we talked about above, binds the function QR to the root path for the server. Then http.ListenAndServe is called to start the server; it blocks while the server runs.`
 
@@ -73,7 +73,7 @@ value="Show QR" name=qr>
 
 `The template package html/template is powerful; this program just touches on its capabilities. In essence, it rewrites a piece of HTML text on the fly by substituting elements derived from data items passed to templ.Execute, in this case the form value. Within the template text (templateStr), double-brace-delimited pieces denote template actions. The piece from {{if .}} to {{end}} executes only if the value of the current data item, called . (dot), is non-empty. That is, when the string is empty, this piece of the template is suppressed.`
 
-템플릿 패키지 `html/template`는 강력하다. 이 프로그램은 단지 이 패키지의 능력을 사용만 할 것이다. 사실, 이는 `templ.Execute`를 통해 전달된 데이터로부터 얻어지는 요소들을 대체함으로써 즉시 HTML 텍스트의 일부를 재작성한다. 이 예시에선 폼 데이터 값이 되겠다. 템플릿 텍스트 (`templateStr`)에서 이중 중괄호 부분은 템플릿 행동을 나타낸다. `{{if .}}`부터 `{{end}}`까지는 현재 데이터에 값이 있는 경우에만 실행된다. `. (dot)`은 데이터가 비어있지 않음을 의미한다. 만약 문자열이 비어있을 땐, 템플릿의 해당부분은 무시될 것이다.
+템플릿 패키지 `html/template`는 강력하다. 이 프로그램은 단지 이 패키지의 능력을 사용만 할 것이다. 사실, 이는 `templ.Execute`를 통해 전달된 데이터로부터 얻어지는 요소들을 대체함으로써 즉시 HTML 텍스트의 일부를 재작성한다. 이 예시에선 폼 데이터 값이 되겠다. 템플릿 텍스트 (`templateStr`)에서 이중 중괄호 부분은 템플릿 행동을 나타낸다. `{{if .}}`부터 `{{end}}`까지는 `. (dot)`라고 불리는 현재 데이터의 값이 빈 문자열이 아닐때에만 실행된다. 만약 문자열이 비어있을 땐, 템플릿의 해당부분은 무시될 것이다.
 
 `The two snippets {{.}} say to show the data presented to the template—the query string—on the web page. The HTML template package automatically provides appropriate escaping so the text is safe to display.`
 
