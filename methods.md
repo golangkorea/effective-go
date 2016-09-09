@@ -56,11 +56,11 @@ fmt.Fprintf(&b, "This hour has %d days\n", 7)
 
 `We pass the address of a ByteSlice because only *ByteSlice satisfies io.Writer. The rule about pointers vs. values for receivers is that value methods can be invoked on pointers and values, but pointer methods can only be invoked on pointers.`
 
-`*ByteSlice`는 `io.Writer`를 따르기 때문에 단순히 `ByteSlice`의 주소값만 넘겼다. 리시버를 위한 포인터 vs. 값에 대한 규칙은 값을 사용하는 메서드는 포인터와 값 위에서 모두 사용할 수 있으며, 포인터 메서드의 경우 포인터 위에서만 사용이 가능하다는 것이다.
+`ByteSlice`의 주소만 넘긴 이유는, 오직 포인터 타입인 `*ByteSlice`만이 `io.Writer` 인터페이스를 만족시키기 때문이다. 리시버를 위한 포인터 vs. 값에 대한 규칙은 값을 사용하는 메서드는 포인터와 값 위에서 모두 사용할 수 있으며, 포인터 메서드의 경우 포인터 위에서만 사용이 가능하다는 것이다.
 
 `This rule arises because pointer methods can modify the receiver; invoking them on a value would cause the method to receive a copy of the value, so any modifications would be discarded. The language therefore disallows this mistake. There is a handy exception, though. When the value is addressable, the language takes care of the common case of invoking a pointer method on a value by inserting the address operator automatically. In our example, the variable b is addressable, so we can call its Write method with just b.Write. The compiler will rewrite that to (&b).Write for us.`
 
-이러한 규칙은 포인터 메서드는 리시버를 변형시킬 수 있는데 메서드를 값 위에서 호출하게 되면 값의 복사본을 받기 때문에 원래값을 변형할 수 없기 때문에 생겨났다. Go언어는 이러한 실수(값 위에서 포인터 메서드를 실행하는 일)를 허용하지 않는다. 하지만 다루기 쉬운 예외가 있다. 값의 주소로 접근이 가능할 때, Go언어는 포인터 메서드를 값 위에서 실행할 경우 자동으로 주소 연산을 넣어준다. 위의 예시에서, 변수 `b`는 주소로 접근이 가능하기 때문에 단순히 `b.Write`만으로 `Write`메서드를 호출할 수 있다. 컴파일러는 이를 `(&b).Write`로 재작성할 것이다.  
+이러한 규칙은 포인터 메서드는 리시버를 변형시킬 수 있는데 메서드를 값 위에서 호출하게 되면 값의 복사본을 받기 때문에 원래값을 변형할 수 없기 때문에 생겨났다. Go언어는 이러한 실수(값 위에서 포인터 메서드를 실행하는 일)를 허용하지 않는다. 하지만 편리한 예외도 있다. 주소를 얻을 수 있는 값의 경우에, Go언어는 포인터 메서드를 값 위에서 실행할 경우 자동으로 주소 연산을 넣어준다. 위의 예시에서, 변수 `b`는 주소로 접근이 가능하기 때문에 단순히 `b.Write`만으로 `Write`메서드를 호출할 수 있다. 컴파일러는 이를 `(&b).Write`로 재작성할 것이다.  
 
 `By the way, the idea of using Write on a slice of bytes is central to the implementation of bytes.Buffer.`
 
