@@ -24,7 +24,7 @@ if _, err := os.Stat(path); os.IsNotExist(err) {
 
 `Occasionally you'll see code that discards the error value in order to ignore the error; this is terrible practice. Always check error returns; they're provided for a reason.`
 
-가끔 에러를 무시하기 위해 에러값을 버리는 코드를 볼 수도 있다. 이건 끔찍한 관례이다. 에러 반환을 항상 확인하라. 에러는 원인을 제공해준다.
+가끔 에러를 무시하기 위해 에러값을 버리는 코드를 볼 수도 있다. 이건 매우 나쁜 관행이다. 에러 반환을 항상 확인하라. 에러가 발생하는 데는 이유가 있다.
 
 ```go
 // Bad! This code will crash if path does not exist.
@@ -42,7 +42,7 @@ if fi.IsDir() {
 
 `This half-written program has two unused imports (fmt and io) and an unused variable (fd), so it will not compile, but it would be nice to see if the code so far is correct.`
 
-아래의 반만 완성된 프로그램은 두 개의 미사용 임포트(`fmt`, `io`)와 미사용 변수(`fd`)를 가지고 있다. 따라서 이는 컴파일되지 않을 것이다. 하지만 지금까지는 코드가 정확하기에 보기 좋을 것이다.
+아래의 반만 완성된 프로그램은 두 개의 미사용 임포트(`fmt`, `io`)와 미사용 변수(`fd`)를 가지고 있다. 따라서 이는 컴파일되지 않을 것이다. 하지만 지금까지 코드가 정확하게 만들어졌는지를 알 수 있다면 좋을 것이다.
 
 ```go
 package main
@@ -98,7 +98,7 @@ func main() {
 
 `An unused import like fmt or io in the previous example should eventually be used or removed: blank assignments identify code as a work in progress. But sometimes it is useful to import a package only for its side effects, without any explicit use. For example, during its init function, the net/http/pprof package registers HTTP handlers that provide debugging information. It has an exported API, but most clients need only the handler registration and access the data through a web page. To import the package only for its side effects, rename the package to the blank identifier:`
 
-이전 예시에서 `fmt`나 `io`와 같은 미사용 임포트는 결국 사용되야 하거나 그렇지 않을 경우엔 없애야한다. (공백 할당은 진행중인 작업으로서 코드를 식별한다) 그러나 가끔은 명시적으로 사용하지는 않으면서, 단지 부작용만을 위해 임포트를 하는건 유용하다. 예를 들면,`net/http/pprof`패키지는 패키지의 초기화 함수를 실행하는 동안 디버깅 정보를 제공하는 HTTP 핸들러를 등록한다. 이는 노출된 API를 가지고 있지만 대다수의 클라어언트는 오직 핸들러 등록만이 필요하고 정보에는 웹페이지를 통해 접근한다. 부작용만을 위해 이 패키지를 임포트하기 위해선 이 패키지 이름을 공백 식별자로 바꾸면 된다.
+이전 예시에서 `fmt`나 `io`와 같은 미사용 임포트는 결국 사용되야 하거나 그렇지 않을 경우엔 없애야한다. (공백 할당은 아직 작업이 진행중인 코드로 인식해야 한다.) 그러나 때로는 직접 사용하지는 않으면서, 부작용을 이용하기 위해 패키지를 임포트하기도 하는데, 이는 유용한 사례이다. 예를 들면,`net/http/pprof`패키지는 패키지의 초기화 함수를 실행하는 동안 디버깅 정보를 제공하는 HTTP 핸들러를 등록한다. 이는 노출된 API를 가지고 있지만 대다수의 클라어언트는 오직 핸들러 등록만이 필요하고 정보에는 웹페이지를 통해 접근한다. 부작용만을 위해 이 패키지를 임포트하기 위해선 이 패키지 이름을 공백 식별자로 바꾸면 된다.
 
 ```go
 import _ "net/http/pprof"
@@ -134,7 +134,7 @@ if _, ok := val.(json.Marshaler); ok {
 
 `One place this situation arises is when it is necessary to guarantee within the package implementing the type that it actually satisfies the interface. If a type—for example, json.RawMessage—needs a custom JSON representation, it should implement json.Marshaler, but there are no static conversions that would cause the compiler to verify this automatically. If the type inadvertently fails to satisfy the interface, the JSON encoder will still work, but will not use the custom implementation. To guarantee that the implementation is correct, a global declaration using the blank identifier can be used in the package:`
 
-이러한 상황이 나타나는 경우는 패키지가 실제로 인터페이스를 만족하는 타입을 구현하고 있는지를 보장할 필요가 있을 때이다. 만약 어떤 타입이 커스터마이징된 JSON 표기법이 필요하다면(예를 들면, `json.RawMessage`), 이는 `json.Marshaler`를 구현해야 한다. 그러나 컴파일러가 이를 자동으로 확인하도록 하는 정적 변환은 없다. 만약 부주의하게 타입이 그 인터페이스를 만족하는데에 실패를 하게되면 JSON 인코더는 여전히 실행되나 커스터마이징된 구현체를 사용할 수 없게된다. 
+이러한 상황이 나타나는 경우는 패키지가 실제로 인터페이스를 만족하는 타입을 구현하고 있는지를 보장할 필요가 있을 때이다. 만약 어떤 타입이 커스터마이징된 JSON 표기법이 필요하다면(예를 들면, `json.RawMessage`), 이는 `json.Marshaler`를 구현해야 한다. 그러나 컴파일러가 이를 자동으로 확인하도록 하는 정적 변환은 없다. 만약 부주의하게 타입이 그 인터페이스를 만족하는데에 실패를 하게되면 JSON 인코더는 여전히 실행되나 커스터마이징된 구현체를 사용할 수 없게된다. 인터페이스의 구현을 보증하기 위해서는, 패키지 안에서 공백 식별자를 이용하는 전역 선언문을 사용할 수 있다.
 
 ```go
 var _ json.Marshaler = (*RawMessage)(nil)
@@ -142,7 +142,7 @@ var _ json.Marshaler = (*RawMessage)(nil)
 
 `In this declaration, the assignment involving a conversion of a *RawMessage to a Marshaler requires that *RawMessage implements Marshaler, and that property will be checked at compile time. Should the json.Marshaler interface change, this package will no longer compile and we will be on notice that it needs to be updated.`
 
-위의 선언에서 `*RawMessage`를 `Marshaler`로의 변환을 포함하고 있는 할당은 `*RawMessage`가 `Marshaler`를 구현해야함을 필요로 하며, 프로퍼티는 컴파일 도중에 검사될 것이다. `json.Marshaler`인터페이스를 변경해야만, 이 패키지가 더 이상 컴파일 되지 않을거고, 우리는 이를 업데이트 해야함을 알 수 있을 것이다.
+위의 선언에서 `*RawMessage`를 `Marshaler`로의 변환시키는 할당을 통해 `*RawMessage`가 `Marshaler`를 구현할 것을 요구하고 있으며, 이러한 특성은 컴파일시 검사될 것이다. 만약 `json.Marshaler`인터페이스에 변화가 생기면, 이 패키지는 더 이상 컴파일 되지 않을것이고, 패키지가 업데이트 되어야 함을 알게해준다.
 
 `The appearance of the blank identifier in this construct indicates that the declaration exists only for the type checking, not to create a variable. Don't do this for every type that satisfies an interface, though. By convention, such declarations are only used when there are no static conversions already present in the code, which is a rare event.`
 
