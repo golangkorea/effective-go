@@ -1,10 +1,11 @@
 {
     "plugins": [
-        "disqus"
+        "disqus",
+        "algolia"
     ],
     "pluginsConfig": {
-      "disqus": {
-        "shortName": "effective-go-in-korean"
-      }
+        "disqus": {
+            "shortName": "effective-go-in-korean"
+        }
     }
 }
