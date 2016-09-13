@@ -39,7 +39,6 @@ func nextInt(b []byte, i int) (int, int) {
 You could use it to scan the numbers in an input slice b like this:
 
 
-
 ```go
     for i := 0; i < len(b); {
         x, i = nextInt(b, i)
@@ -114,6 +113,8 @@ for i := 0; i < 5; i++ {
 
 Deferred functions are executed in LIFO order, so this code will cause 4 3 2 1 0 to be printed when the function returns. A more plausible example is a simple way to trace function execution through the program. We could write a couple of simple tracing routines like this:
 
+지연된 함수는 LIFO 순서에 의해 실행되므로, 위 코드에서는 함수가 반환되면 4 3 2 1 0 을 출력할 것이다. 좀 더 그럴듯 한 예제로 프로그램을 통해 함수 실행을 추적하기 위한 간단한 방법이 있다. 여기서는 아래와 같이 간단한 추적 루틴을 몇가지 작생 했다.
+
 ```go
 func trace(s string)   { fmt.Println("entering:", s) }
 func untrace(s string) { fmt.Println("leaving:", s) }
@@ -126,7 +127,9 @@ func a() {
 }
 ```
 
-We can do better by exploiting the fact that arguments to deferred functions are evaluated when the `defer` executes. The tracing routine can set up the argument to the untracing routine. This example:
+  We can do better by exploiting the fact that arguments to deferred functions are evaluated when the `defer` executes. The tracing routine can set up the argument to the untracing routine. This example:
+
+`defer` 가 실행 될 때 지연된 함수의 매개변수가 평가된다는 사실을 이용하면 더 잘 할 수 있다. 추적 루틴은 아래와 같이 추적을 끝내는 루틴의 매개변수로 설정할 수 있다.
 
 ```go
 func trace(s string) string {
@@ -166,3 +169,7 @@ leaving: b
 ```
 
 For programmers accustomed to block-level resource management from other languages, defer may seem peculiar, but its most interesting and powerful applications come precisely from the fact that it's not block-based but function-based. In the section on `panic` and `recover` we'll see another example of its possibilities.
+
+다른 언어로 부터 블록 레벨 자원 관리에 익숙한 프로그래머에게 `defer` 는 좀 이상해 보일지도 모르지만,
+이는 블록 기반이 아니라 함수 기반이다.
+`panic` 과 `recover` 세션에서는 이러한 가능성에 대한 또 다른 예제를 살펴 볼 것이다.
