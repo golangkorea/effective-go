@@ -82,7 +82,7 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
 
 Go's `defer` statement schedules a function call (the deferred function) to be run immediately before the function executing the `defer` returns. It's an unusual but effective way to deal with situations such as resources that must be released regardless of which path a function takes to return. The canonical examples are unlocking a mutex or closing a file.
 
-Go 의 `defer` 문은 함수 호출(연기된 함수)을 즉시 실행하도록 함수  관리한다.
+Go 의 `defer` 문은 `defer` 를 실행하는 함수가 반환되기 전에 즉각 함수 호출(연기된 함수)을 실행하도록 예약한다. 이는 일반적인 방법은 아니긴 하지만 함수가 반환하기 위해 갖는 경로에 관계 없이 자원을 해지 해야만 하는 것과 같은 상황을 처리해야 하는 경우에는 효과적인 방법이다. 가장 대표적인 예제로는 뮤텍스(mutex)의 잠금을 풀거나 파일을 닫는 것이 있다.
 
 ```go
 // Contents returns the file's contents as a string.
@@ -111,7 +111,11 @@ func Contents(filename string) (string, error) {
 
 Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function.
 
+`Close`와 같은 함수의 호출을 지연시키면 두 가지 장점을 얻게 된다. 첫 번째로 새로운 반환 경로를 추가하기 위해 나중에 함수를 수정할 경우 하기 쉬운 실수인 파일을 닫는 것을 결코 잊지 않도록 보장 해준다. 두 번째로 `open` 근처에 `close` 가 위치하면 함수 맨 끝에 위치하는 것 보다 훨씬 명확한 코드가 되는것을 의미한다.
+
 The arguments to the deferred function (which include the receiver if the function is a method) are evaluated when the defer executes, not when the call executes. Besides avoiding worries about variables changing values as the function executes, this means that a single deferred call site can defer multiple function executions. Here's a silly example.
+
+지연된 함수의 매개변수 () 는 호출을 실행할 때가 아닌 `defer` 가 실행될 때 평가된다. 또한 함수가 실행될 때 변수 값이 변하는 것에 대해 걱정할 필요가 없는데, 이는 단일 지연 호출 위치는 
 
 ```go
 for i := 0; i < 5; i++ {
