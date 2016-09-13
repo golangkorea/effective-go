@@ -6,6 +6,12 @@
     "pluginsConfig": {
         "disqus": {
             "shortName": "effective-go-in-korean"
+        },
+        "algolia": {
+            "index": "gitbooks_effectivego",
+            "applicationID": "CV8C6EB2GO",
+            "publicKey": "f80d8fce3f3d8735f8316b4fc21fea9e",
+            "freeAccount": "true"
         }
     }
 }
