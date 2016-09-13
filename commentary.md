@@ -1,8 +1,15 @@
-# Commentary
+# 주석(Commentary)
+
+* 원문: [Commentary](https://golang.org/doc/effective_go.html#commentary)
+* 번역자: Jeongbu Yoon (@coma333ryu)
 
 Go provides C-style /* */ block comments and C++-style // line comments. Line comments are the norm; block comments appear mostly as package comments, but are useful within an expression or to disable large swaths of code.
 
+Go언어는 C언어 스타일의 "/* */" 블럭주석과 C++스타일의 "//" 한줄(line) 주석을 제공한다. 한줄주석은 일반적이며 블럭주석은 대부분의 패키지(package)주석에 나타나지만, 표현식안이나 많은 코드를 주석처리하는데 유용하다.
+
 The program—and web server—godoc processes Go source files to extract documentation about the contents of the package. Comments that appear before top-level declarations, with no intervening newlines, are extracted along with the declaration to serve as explanatory text for the item. The nature and style of these comments determines the quality of the documentation godoc produces.
+
+웹 서버로 구동되는 프로그램 godoc([The program—and web server—godoc](https://godoc.org/golang.org/x/tools/cmd/godoc))은 패키지의 내용에 대한 문서를 추출하도록 Go 소스 파일을 처리한다. 최상위 선언문이전에 줄바꿈없이 나타나는 주석은 현재 소스에 대한 설명을 제공하기 위하여 최상위 선언문과 함께 발췌된다. 이러한 주석의 스타일과 유형은 godoc이 만들어내는 문서의 질을 결정하게 된다.
 
 Every package should have a package comment, a block comment preceding the package clause. For multi-file packages, the package comment only needs to be present in one file, and any one will do. The package comment should introduce the package and provide information relevant to the package as a whole. It will appear first on the godoc page and should set up the detailed documentation that follows.
 
