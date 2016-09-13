@@ -37,7 +37,6 @@
   * [The init function](initializations.md#the-init-function)
 * [Methods](methods.md)
   * [포인터 vs. 값](methods.md#포인터-vs-값)
-  * 
 * [인터페이스와 다른 타입들](interfaces_and_other_types.md)
   * [인터페이스](interfaces_and_other_types.md#인터페이스)
   * [타입 변환](interfaces_and_other_types.md#타입-변환)
@@ -45,6 +44,9 @@
   * [일반성](interfaces_and_other_types.md#일반성)
   * [인터페이스와 메서드](interfaces_and_other_types.md#인터페이스와-메서드)
 * [The blank identifier](the_blank_identifier.md)
+  * [다중 할당에서의 공백 식별자](the_blank_identifier.md#다중-할당에서의-공백-식별자)
+  * [미사용 임포트와 변수](the_blank_identifier.md#미사용-임포트와-변수)
+  * [부작용을 위한 임포트](the_blank_identifier.md#부작용side-effect을-위한-임포트)
 * [임베딩](embedding.md)
 * [Concurrency](concurrency.md)
 * [Errors](errors.md)
