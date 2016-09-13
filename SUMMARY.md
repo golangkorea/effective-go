@@ -2,6 +2,7 @@
 
 * [README](README.md)
 * [Introduction](introduction.md)
+  * [Examples](introduction.md#examples) 
 * [Formatting](formatting.md)
 * [Commentary](commentary.md)
 * [Names](names.md)
