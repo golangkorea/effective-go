@@ -36,6 +36,8 @@
   * [Variables](initializations.md#variables)
   * [The init function](initializations.md#the-init-function)
 * [Methods](methods.md)
+  * [포인터 vs. 값](methods.md#포인터-vs-값)
+  * 
 * [인터페이스와 다른 타입들](interfaces_and_other_types.md)
   * [인터페이스](interfaces_and_other_types.md#인터페이스)
   * [타입 변환](interfaces_and_other_types.md#타입-변환)
