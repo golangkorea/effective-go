@@ -1,7 +1,7 @@
 {
     "plugins": [
         "disqus",
-        "algolia"
+        "-algolia"
     ],
     "pluginsConfig": {
         "disqus": {
