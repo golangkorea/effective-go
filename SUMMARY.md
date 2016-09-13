@@ -49,6 +49,12 @@
   * [부작용을 위한 임포트](the_blank_identifier.md#부작용side-effect을-위한-임포트)
 * [임베딩](embedding.md)
 * [Concurrency](concurrency.md)
+  * [Share by communicating](concurrency.md#share-by-communicating)
+  * [Goroutines](concurrency.md#goroutines)
+  * [Channels](concurrency.md#channels)
+  * [Channels of channels](concurrency.md#channels-of-channels)
+  * [Parallelization](concurrency.md#parallelization)
+  * [A leaky buffer](concurrency.md#a-leaky-buffer)
 * [Errors](errors.md)
 * [A web server](a_web_server.md)
 
