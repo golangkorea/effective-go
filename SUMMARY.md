@@ -56,5 +56,7 @@
   * [Parallelization](concurrency.md#parallelization)
   * [A leaky buffer](concurrency.md#a-leaky-buffer)
 * [Errors](errors.md)
+  * [패닉 - Panic](errors.md#패닉-panic)
+  * [복구 - Recover](errors.md#복구-recover)
 * [A web server](a_web_server.md)
 
