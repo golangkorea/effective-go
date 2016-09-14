@@ -11,7 +11,7 @@ Concurrent programming is a large topic and there is space only for some Go-spec
 
 Concurrent programming in many environments is made difficult by the subtleties required to implement correct access to shared variables. Go encourages a different approach in which shared values are passed around on channels and, in fact, never actively shared by separate threads of execution. Only one goroutine has access to the value at any given time. Data races cannot occur, by design. To encourage this way of thinking we have reduced it to a slogan:
 
-여러 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 억세스를 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 공유 변수가 채널로 전달되는 점에서 다른 접근을 권장하는데, 사실 공유변수는 개별 쓰레드의 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 억세스한다. 데이터 경쟁 (Data Race)은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
+다양한 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 접근을 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 채널이 공유변수를 들고 나른다는 점에서 다른 접근을 권장하고 있다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁 (Data Race)은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
@@ -29,11 +29,11 @@ One way to think about this model is to consider a typical single-threaded progr
 
 They're called goroutines because the existing terms—threads, coroutines, processes, and so on—convey inaccurate connotations. A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It is lightweight, costing little more than the allocation of stack space. And the stacks start small, so they are cheap, and grow by allocating (and freeing) heap storage as required.
 
-쓰레드, 코루틴, 프로세스 등 기존의 용어는 부정확한 함의를 전달하기 때문에 고루틴이라고 부른다. 고루틴은 단순한 모델을 가진다. 즉, 같은 주소 공간 내에서 다른 고루틴과 함께 동시에 실행되는 함수이다. 고루틴은 가볍다. 스택 영역을 할당하는 것에 비해 비용이 적게 든다. 그리고 그 스택은 작은 크기로 시작된다. 그래서 저렴하다. 그리고 필요한만큼 힙 스토리지를 할당(또는 해제)하여 커진다.
+쓰레드, 코루틴, 프로세스 등 기존의 용어는 부정확한 함의를 전달하기 때문에 고루틴이라고 부른다. 고루틴은 단순한 모델이다. 즉, 같은 주소 공간에서 다른 고루틴과 동시에 실행되는 함수이다. 고루틴은 가볍다. 스택 영역을 할당하는 것에 비해 비용이 적게 든다. 그리고 그 스택은 작은 크기로 시작된다. 그래서 저렴하다. 그리고 필요한만큼 힙 스토리지를 할당(또는 해제)하여 커진다.
 
 Goroutines are multiplexed onto multiple OS threads so if one should block, such as while waiting for I/O, others continue to run. Their design hides many of the complexities of thread creation and management.
 
-고루틴은 OS의 다중 쓰레드에 멀티플렉싱되는데, I/O 작업을 위해 대기하는 동안이라든지 하나의 고루틴이 블락이 되면 다른 고루틴이 계속 실행된다. 이런 설계는 쓰레드의 생성과 관리에 관한 복잡한 것들을 숨기게 된다.
+고루틴은 OS의 다중 쓰레드에 멀티플렉싱되는데, I/O 작업을 위해 대기하는 동안이라든지, 하나의 고루틴이 블락이 되면 다른 고루틴이 계속 실행된다. 이런 설계는 쓰레드의 복잡한 생성과 관리를 숨긴다.
 
 Prefix a function or method call with the go keyword to run the call in a new goroutine. When the call completes, the goroutine exits, silently. (The effect is similar to the Unix shell's & notation for running a command in the background.)
 
@@ -58,7 +58,7 @@ func Announce(message string, delay time.Duration) {
 
 In Go, function literals are closures: the implementation makes sure the variables referred to by the function survive as long as they are active.
 
-Go에서 함수 리터럴은 클로저이다. 즉, 함수에 의해 참조되는 변수는 이들이 활성화되어 있는 한 오래 생존하도록 확실하게 구현되어야 한다.
+Go에서 함수 리터럴은 클로저이다. 즉, 함수가 참조하는 변수는 그 변수가 활성화되어 있는 한 살아있음이 확실하다.
 
 These examples aren't too practical because the functions have no way of signaling completion. For that, we need channels.
 
@@ -82,7 +82,7 @@ Unbuffered channels combine communication—the exchange of a value—with synch
 
 There are lots of nice idioms using channels. Here's one to get us started. In the previous section we launched a sort in the background. A channel can allow the launching goroutine to wait for the sort to complete.
 
-채널을 사용하는 멋진 Go 언어다운 코드가 많이 있다. 다음 한 예제로 시작해보자. 이전 섹션에서 백그라운드에서 정렬을 했다. 채널은 정렬이 완료될 때까지 고루틴 실행을 대기시킬 수 있다.
+채널을 사용하는 멋있는 Go스러운 코드가 많다. 다음 한 예제로 시작해보자. 이전 섹션에서 백그라운드에서 정렬을 했다. 채널은 정렬이 완료될 때까지 고루틴 실행을 대기시킬 수 있다.
 
 ```go
 c := make(chan int)  // 채널을 할당
@@ -372,4 +372,4 @@ func server() {
 
 The client attempts to retrieve a buffer from freeList; if none is available, it allocates a fresh one. The server's send to freeList puts b back on the free list unless the list is full, in which case the buffer is dropped on the floor to be reclaimed by the garbage collector. (The default clauses in the select statements execute when no other case is ready, meaning that the selects never block.) This implementation builds a leaky bucket free list in just a few lines, relying on the buffered channel and the garbage collector for bookkeeping.
 
-클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 전송은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 그럴 경우에 버퍼는 가비지 콜렉터에 의해 회수되도록 바닥에 떨어진다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
+클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 전송은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 이럴 경우에 버퍼는 가비지 콜렉터에 의해 회수되도록 바닥에 떨어진다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
