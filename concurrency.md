@@ -11,7 +11,7 @@ Concurrent programming is a large topic and there is space only for some Go-spec
 
 Concurrent programming in many environments is made difficult by the subtleties required to implement correct access to shared variables. Go encourages a different approach in which shared values are passed around on channels and, in fact, never actively shared by separate threads of execution. Only one goroutine has access to the value at any given time. Data races cannot occur, by design. To encourage this way of thinking we have reduced it to a slogan:
 
-다양한 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 접근을 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 채널이 공유변수를 들고 나른다는 점에서 다른 접근을 권장하고 있다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁 (Data Race)은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
+다양한 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 접근을 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 공유변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
