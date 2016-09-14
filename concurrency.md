@@ -7,11 +7,11 @@
 
 Concurrent programming is a large topic and there is space only for some Go-specific highlights here.
 
-병행 프로그래밍 (Concurrent Programming)은 광범위한 주제이므로 여기에서는 Go에 한정된 중요한 것들에 대해서만 지면을 할애한다.
+병행 프로그래밍은 광범위한 주제이므로 여기에서는 Go에 한정된 중요한 것들에 대해서만 지면을 할애한다.
 
 Concurrent programming in many environments is made difficult by the subtleties required to implement correct access to shared variables. Go encourages a different approach in which shared values are passed around on channels and, in fact, never actively shared by separate threads of execution. Only one goroutine has access to the value at any given time. Data races cannot occur, by design. To encourage this way of thinking we have reduced it to a slogan:
 
-여러 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 억세스를 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 공유 변수가 채널로 전달되는 점에서 다른 접근을 권장하는데, 사실 공유변수는 개별 쓰레드의 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 억세스한다. 데이터 경쟁 (Data Race)은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 우리는 이를 한 슬로건으로 줄여 보았다.
+여러 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 억세스를 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 공유 변수가 채널로 전달되는 점에서 다른 접근을 권장하는데, 사실 공유변수는 개별 쓰레드의 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 억세스한다. 데이터 경쟁 (Data Race)은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
@@ -19,17 +19,17 @@ Do not communicate by sharing memory; instead, share memory by communicating.
 
 This approach can be taken too far. Reference counts may be best done by putting a mutex around an integer variable, for instance. But as a high-level approach, using channels to control access makes it easier to write clear, correct programs.
 
-이런 접근은 너무 지나친 것일 수 있다. 예를 들어, 정수형 변수 주위에 뮤텍스를 두는 방식의 레퍼런스 카운트 (Reference Count)가 최고일지도 모른다. 그러나 상위 레벨에서 접근하는 방법으로써, 억세스를 제어하는 채널을 사용하는 것이 분명하고 정확한 프로그램을 보다 쉽게 작성케 한다.
+이런 접근은 너무 지나친 것일 수 있다. 예를 들어, 정수형 변수 주위에 뮤텍스를 두는 방식의 레퍼런스 카운트가 최고일지도 모른다. 그러나 상위 레벨에서 접근하는 방법으로써, 접근을 제어하는 채널을 사용하면 분명하고 정확한 프로그램을 보다 쉽게 작성할 수 있다.
 
 One way to think about this model is to consider a typical single-threaded program running on one CPU. It has no need for synchronization primitives. Now run another such instance; it too needs no synchronization. Now let those two communicate; if the communication is the synchronizer, there's still no need for other synchronization. Unix pipelines, for example, fit this model perfectly. Although Go's approach to concurrency originates in Hoare's Communicating Sequential Processes (CSP), it can also be seen as a type-safe generalization of Unix pipes.
 
-이 모델에 대해 생각해보는 한가지 방법은 단일 CPU에서 실행되는 전형적인 단일 쓰레드 프로그램을 떠올려 보는 것이다. 여기에는 동기화를 위한 기본 자료형이 필요 없다. 지금 또다른 그 인스턴스를 실행시켜 보라. 그러나 역시 동기화가 필요하지 않다. 이제 그 두 개를 통신하게 하는데, 그 통신 자체가 동기화 장치(synchronizer)인 경우, 여전히 다른 동기화가 필요 없다. 예를 들어, 유닉스 파이프 라인은 이 모델에 완벽하게 들어 맞는다. 동시성에 대한 Go의 접근 방식이 호어의 통신 순차적 프로세스 (CSP, Communicating Sequential Processes)에서 비롯되었지만, 유닉스 파이프의 타입 세이프 일반화 (type-safe generalization)로도 볼 수 있다.
+이 모델에 대해 생각해보는 한가지 방법은 단일 CPU에서 실행되는 전형적인 단일 쓰레드 프로그램을 떠올려 보는 것이다. 여기에는 동기화를 위한 기본 자료형이 필요 없다. 지금 또다른 그 인스턴스를 실행시켜 보라. 그러나 역시 동기화가 필요하지 않다. 이제 그 두 개를 통신하게 하는데, 그 통신 자체가 동기화 장치(synchronizer)인 경우, 여전히 다른 동기화가 필요 없다. 예를 들어, 유닉스 파이프 라인은 이 모델에 완벽하게 들어 맞는다. 동시성에 대한 Go의 접근 방식이 호어의 통신 순차적 프로세스 (CSP, Communicating Sequential Processes)에서 비롯되었지만, 유닉스 파이프의 타입 세이프 일반화(type-safe generalization)로도 볼 수 있다.
 
 ## 고루틴
 
 They're called goroutines because the existing terms—threads, coroutines, processes, and so on—convey inaccurate connotations. A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It is lightweight, costing little more than the allocation of stack space. And the stacks start small, so they are cheap, and grow by allocating (and freeing) heap storage as required.
 
-스레드, 코루틴, 프로세스 등 기존의 용어는 부정확 함의를 전달하기 때문에 그들을 고루틴이라고 부른다. 고루틴은 단순한 모델을 가진다. 즉, 같은 주소 공간 내에서 다른 고루틴과 함께 동시에 실행되는 함수이다. 고루틴은 가볍다. 스택 영역을 할당하는 것에 비해 비용이 적게 든다. 그리고 그 스택은 작은 크기로 시작된다. 그래서 그들은 저렴하다. 그리고 필요한만큼 힙 스토리지를 할당(또는 해제)하여 커진다.
+쓰레드, 코루틴, 프로세스 등 기존의 용어는 부정확한 함의를 전달하기 때문에 고루틴이라고 부른다. 고루틴은 단순한 모델을 가진다. 즉, 같은 주소 공간 내에서 다른 고루틴과 함께 동시에 실행되는 함수이다. 고루틴은 가볍다. 스택 영역을 할당하는 것에 비해 비용이 적게 든다. 그리고 그 스택은 작은 크기로 시작된다. 그래서 저렴하다. 그리고 필요한만큼 힙 스토리지를 할당(또는 해제)하여 커진다.
 
 Goroutines are multiplexed onto multiple OS threads so if one should block, such as while waiting for I/O, others continue to run. Their design hides many of the complexities of thread creation and management.
 
@@ -82,7 +82,7 @@ Unbuffered channels combine communication—the exchange of a value—with synch
 
 There are lots of nice idioms using channels. Here's one to get us started. In the previous section we launched a sort in the background. A channel can allow the launching goroutine to wait for the sort to complete.
 
-채널을 사용하는 멋진 Go언어 다운 코드가 많이 있다. 다음 한 예제로 시작해보자. 이전 섹션에서 백그라운드에서 정렬을 했다. 채널은 정렬이 완료될 때까지 고루틴 실행을 대기시킬 수 있다.
+채널을 사용하는 멋진 Go 언어다운 코드가 많이 있다. 다음 한 예제로 시작해보자. 이전 섹션에서 백그라운드에서 정렬을 했다. 채널은 정렬이 완료될 때까지 고루틴 실행을 대기시킬 수 있다.
 
 ```go
 c := make(chan int)  // 채널을 할당
@@ -101,7 +101,7 @@ Receivers always block until there is data to receive. If the channel is unbuffe
 
 A buffered channel can be used like a semaphore, for instance to limit throughput. In this example, incoming requests are passed to handle, which sends a value into the channel,processes the request, and then receives a value from the channel to ready the “semaphore” for the next consumer. The capacity of the channel buffer limits the number of simultaneous calls to process.
 
-버퍼드 채널은 세마포처럼 사용될 수 있다. 예를 들어 처리량을 제한하는 것이다. 다음 예제에서, 들어오는 요청은 값을 채널에 전송하는 `handle`에 넘겨진다. 요청을 처리한 후, 다음 (요청) 소비자에 대해 세마포를 준비하는 채널에서 값을 수신한다. (역자 주: 앞서 기술하였듯이 어떤 값이든 문제되지 않는다.)
+버퍼드 채널은 세마포처럼 사용될 수 있다. 예를 들어 처리량을 제한하는 것이다. 다음 예제에서, 들어오는 요청은 값을 채널에 전송하는 `handle`에 넘겨진다. 요청을 처리한 후, 다음 (요청) 소비자에 대해 세마포를 준비하는 채널에서 값을 수신한다.
 
 ```go
 var sem = make(chan int, MaxOutstanding)
@@ -142,7 +142,7 @@ func Serve(queue chan *Request) {
 
 The bug is that in a Go for loop, the loop variable is reused for each iteration, so the req variable is shared across all goroutines. That's not what we want. We need to make sure that req is unique for each goroutine. Here's one way to do that, passing the value of req as an argument to the closure in the goroutine:
 
-버그는 Go `for` 루프 내에 있다. 루프 변수는 각 반복마다 재사용되는데, 따라서 동일한 `req` 변수가 모든 고루틴에 걸쳐 공유된다. 이는 원하는 것이 아니다.  각 고루틴마다 구별된 `req` 변수를 가지도록 해야한다. 다음은 이를 위한 한 가지 방법으로, 고루틴의 클로져에 대한 인자로 `req`의 값을 전달하는 것이다.
+버그는 Go `for` 루프에 있다. 루프 변수는 각 반복마다 재사용되어 동일한 `req` 변수가 모든 고루틴에 걸쳐 공유된다. 이는 원하는 것이 아니다. 각 고루틴마다 구별된 `req` 변수를 가지도록 해야한다. 다음은 이를 위한 한 가지 방법으로, 고루틴의 클로져에 대한 인자로 `req`의 값을 전달하는 것이다.
 
 {
 ```go
@@ -184,11 +184,11 @@ req := req
 
 but it's legal and idiomatic in Go to do this. You get a fresh version of the variable with the same name, deliberately shadowing the loop variable locally but unique to each goroutine.
 
-하지만 Go에서 이렇게 하는 것은 합법적이고 Go 언어다운 코드이다. 변수의 이름은 같지만, 새로운 버전의 변수로 의도적으로 루프 변수를 지역적으로 가리지만, 각 고루틴에 대해서는 유니크한 값이다.
+하지만 Go에서 이렇게 하는 것은 합법적이고 Go 언어다운 코드이다. 이름이 같은 새로운 버전의 변수가 의도적으로 루프 변수를 지역적으로 가리지만, 각 고루틴에 대해서는 유니크한 값이다.
 
 Going back to the general problem of writing the server, another approach that manages resources well is to start a fixed number of handle goroutines all reading from the request channel. The number of goroutines limits the number of simultaneous calls to process. This Serve function also accepts a channel on which it will be told to exit; after launching the goroutines it blocks receiving from that channel.
 
-서버를 작성하는 일반적인 문제로 돌아가면, 리소스를 잘 관리하는 다른 방법은 요청 채널을 읽는 모든 `handle` 고루틴을 고정된 수에서 시작하는 것이다. 고루틴의 수는 `process`가 동시에 호출되는 수를 제한한다. 이 `Serve` 함수는 종료 신호를 수신하게 되는 채널 또한  (매개변수로) 받고 있으므로 고루틴이 시작되면, 이 채널로부터의 수신은 블락된다.
+서버를 작성하는 일반적인 문제로 돌아가면, 리소스를 잘 관리하는 다른 방법은 요청 채널을 읽는 모든 `handle` 고루틴을 고정된 수에서 시작하는 것이다. 고루틴의 수는 `process`가 동시에 호출되는 수를 제한한다. `Serve` 함수는 종료 신호를 수신하게 되는 채널도 (인자로) 받고 있으므로 고루틴이 시작되면, 이 채널로부터의 수신은 블락된다.
 
 ```go
 func handle(queue chan *Request) {
@@ -210,11 +210,11 @@ func Serve(clientRequests chan *Request, quit chan bool) {
 
 One of the most important properties of Go is that a channel is a first-class value that can be allocated and passed around like any other. A common use of this property is to implement safe, parallel demultiplexing.
 
-Go의 가장 중요한 속성 중 하나는 채널이 다른 것들과 마찬가지로 할당되고 전달될 수 있는 일급 변수(first-class value)라는 것이다. 이 속성의 일반적인 사용은 안전한 병렬 역다중화(parallel demultiplexing)를 구현하는 것이다.
+Go의 가장 중요한 속성 중 하나는 채널이 다른 것과 마찬가지로 할당되고 전달될 수 있는 일급변수(first-class value)라는 것이다. 이 속성의 일반적인 사용은 안전한 병렬 역다중화(parallel demultiplexing)를 구현하는 것이다.
 
 In the example in the previous section, handle was an idealized handler for a request but we didn't define the type it was handling. If that type includes a channel on which to reply, each client can provide its own path for the answer. Here's a schematic definition of type Request.
 
-이전 섹션의 예제에서, `handle` 은 요청 자체에 대해서는 이상적인 핸들러였으나 핸들러가 다루는 타입을 정의하지 않았다. 해당 타입이 회신을 하게 되는 채널을 포함하는 경우, 각 클라이언트는 자신에게 응답 경로를 제공할 수 있다. 다음은 `Request` 타입의 개략적인 정의이다.
+이전 섹션의 예제에서, `handle` 은 요청에 대해서는 이상적인 핸들러였으나 핸들러가 다루는 타입은 정의하지 않았다. 해당 타입이 회신을 하는 채널을 포함하는 경우, 각 클라이언트는 자신에게 응답 경로를 제공할 수 있다. 다음은 `Request` 타입의 개략적인 정의이다.
 
 ```go
 type Request struct {
@@ -257,13 +257,13 @@ func handle(queue chan *Request) {
 
 There's clearly a lot more to do to make it realistic, but this code is a framework for a rate-limited, parallel, non-blocking RPC system, and there's not a mutex in sight.
 
-현실성있게 만들기 위해 해야할 것들이 분명히 많긴 하지만, 이 코드는 속도 제한, 병렬, 넌블락 RPC 시스템을 위한 프레임워크이지만, 뮤텍스 코드는 눈에 보이지 않는다.
+현실성있게 만들기 위해 할 것들이 분명히 많지만, 이 코드는 속도 제한, 병렬, 넌블락 RPC 시스템을 위한 프레임워크이다. 그리고 뮤텍스는 눈에 보이지 않는다.
 
 ## 병렬화
 
 Another application of these ideas is to parallelize a calculation across multiple CPU cores. If the calculation can be broken into separate pieces that can execute independently, it can be parallelized, with a channel to signal when each piece completes.
 
-이러한 아이디어의 또 다른 응용 프로그램은 멀티코어 CPU에 대해 계산을 병렬처리하는 것이다. 계산을 독립적으로 실행할 수 있는 부분들로 분리할 수 있다면, 각 부분들이 완료될 때 신호를 보내는 채널들로 병렬처리를 할 수 있다.
+이러한 아이디어의 또 다른 응용 프로그램은 멀티코어 CPU에 대해 계산을 병렬처리하는 것이다. 계산을 독립적으로 실행할 수 있는 부분들로 분리할 수 있다면, 각 부분들이 완료될 때 신호를 보내는 채널들로 병렬처리할 수 있다.
 
 Let's say we have an expensive operation to perform on a vector of items, and that the value of the operation on each item is independent, as in this idealized example.
 
@@ -304,7 +304,7 @@ func (v Vector) DoAll(u Vector) {
 
 Rather than create a constant value for numCPU, we can ask the runtime what value is appropriate. The function runtime.NumCPU returns the number of hardware CPU cores in the machine, so we could write
 
-`numCPU`을 상수값으로 생성하는 것보다 적절한 값을 런타임시에 요구할 수 있다. `runtime.NumCPU` 함수는 장비의 CPU 하드웨어 코어수를 반환한다. 그래서 아래와 같이 작성할 수 있다.
+`numCPU`을 상수값으로 생성하기보다는 적절한 값을 런타임시에 요구할 수 있다. `runtime.NumCPU` 함수는 장비의 CPU 하드웨어 코어수를 반환한다. 그래서 아래와 같이 작성할 수 있다.
 
 ```go
 var numCPU = runtime.NumCPU()
@@ -312,7 +312,7 @@ var numCPU = runtime.NumCPU()
 
 There is also a function runtime.GOMAXPROCS, which reports (or sets) the user-specified number of cores that a Go program can have running simultaneously. It defaults to the value of runtime.NumCPU but can be overridden by setting the similarly named shell environment variable or by calling the function with a positive number. Calling it with zero just queries the value. Therefore if we want to honor the user's resource request, we should write
 
-또한 Go 프로그램은 동시에 실행할 수 있는 사용자 지정 코어수 (user-specified)를 보고하는 (또는 설정하는) `runtime.GOMAXPROCS` 함수가 있다.  `runtime.NumCPU`의 값이 기본값이지만, 비슷하게 명명된 환경 변수 설정에 의해 혹은 양수의 인자로 함수를 호출하여 재정의할 수 있다. 0으로 호출하면 바로 값을 조회한다. 따라서 사용자의 리소스 요청을 따르고 싶은 경우, 다음과 같이 작성해야 한다.
+또한 Go 프로그램은 동시에 실행할 수 있는 사용자 지정 코어수를 보고하는 (또는 설정하는) `runtime.GOMAXPROCS` 함수가 있다. `runtime.NumCPU`의 값이 기본값이지만, 비슷하게 명명된 환경 변수 설정에 의해 혹은 양수의 인자로 함수를 호출하여 재정의할 수 있다. 0으로 호출하면 바로 값을 조회한다. 따라서 사용자의 리소스 요청을 따르고 싶은 경우, 다음과 같이 작성해야 한다.
 
 ```go
 var numCPU = runtime.GOMAXPROCS(0)
@@ -320,13 +320,14 @@ var numCPU = runtime.GOMAXPROCS(0)
 
 Be sure not to confuse the ideas of concurrency—structuring a program as independently executing components—and parallelism—executing calculations in parallel for efficiency on multiple CPUs. Although the concurrency features of Go can make some problems easy to structure as parallel computations, Go is a concurrent language, not a parallel one, and not all parallelization problems fit Go's model. For a discussion of the distinction, see the talk cited in this blog post.
 
-컴포넌트를 독립적으로 처리하여 프로그램을 구조화하는 동시성과 다중 CPU에서 효율성을 위해 계산을 병렬로 처리하는 병렬성의 개념을  혼동하지 않도록 주의하길 바란다. Go의 동시성 특징이 병렬 계산으로 문제를 쉽게 구조화할 수 있지만, Go는 병렬이 아닌 병행 언어이고, 모든 병렬화 문제가 Go에 들어맞지는 않는다. 이 구분에 대한 논의는 [이 블로그 포스트](https://blog.golang.org/concurrency-is-not-parallelism)에 인용된 토크를 참조하라.
+컴포넌트를 독립적으로 처리하여 프로그램을 구조화하는 동시성과 다중 CPU에서 효율성을 위해 계산을 병렬로 처리하는 병렬성의 개념을 혼동하지 않길 바란다. Go의 동시성 특징이 병렬 계산으로 문제를 쉽게 구조화할 수 있지만, Go는 병렬이 아닌 병행 언어이고, 모든 병렬화 문제가 Go에 들어맞지는 않는다. 이 구분에 대한 논의는 [이 블로그 포스트](https://blog.golang.org/concurrency-is-not-parallelism)에 인용된 토크를 참조하라.
+
 
 ## 누설 버퍼
 
 The tools of concurrent programming can even make non-concurrent ideas easier to express. Here's an example abstracted from an RPC package. The client goroutine loops receiving data from some source, perhaps a network. To avoid allocating and freeing buffers, it keeps a free list, and uses a buffered channel to represent it. If the channel is empty, a new buffer gets allocated. Once the message buffer is ready, it's sent to the server on serverChan.
 
-비병행(non-concurrent) 개념도 병행 프로그래밍 도구로 쉽게 표현할 수 있다. 다음은 RPC 패키지에서 추출한 예제이다. 클라이언트 고루틴은 아마도 네트워크일 것 같은 특정 소스의 데이터를 반복해서 수신한다. 버퍼의 할당과 해제를 피하기 위해서 `free list`를 유지하며 이를 대신할 버퍼 채널을 사용한다. 채널이 비어 있으면 새로운 버퍼가 할당된다. 일단 메시지 버퍼가 준비되면 `serverChan`의 서버로 전송한다.
+비병행(non-concurrent) 개념도 병행 프로그래밍 도구로 쉽게 표현할 수 있다. 다음은 RPC 패키지에서 추출한 예제이다. 클라이언트 고루틴은 아마도 네트워크인 특정 소스의 데이터를 반복해서 수신한다. 버퍼의 할당과 해제를 피하기 위해서 `free list`를 유지하며 이를 대신할 버퍼 채널을 사용한다. 채널이 비어 있으면 새로운 버퍼가 할당된다. 일단 메시지 버퍼가 준비되면 `serverChan`의 서버로 전송한다.
 
 ```go
 var freeList = make(chan *Buffer, 100)
@@ -371,4 +372,4 @@ func server() {
 
 The client attempts to retrieve a buffer from freeList; if none is available, it allocates a fresh one. The server's send to freeList puts b back on the free list unless the list is full, in which case the buffer is dropped on the floor to be reclaimed by the garbage collector. (The default clauses in the select statements execute when no other case is ready, meaning that the selects never block.) This implementation builds a leaky bucket free list in just a few lines, relying on the buffered channel and the garbage collector for bookkeeping.
 
-클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 전송은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 그럴 경우에 버퍼는 가비지 콜렉터에 의해 회수되도록 바닥에 떨어진다. (`select` 구문에서 `default`  절은 다른 경우가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 위 구현은 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하여 단지 몇 줄로 누설 버킷 프리 리스트(leaky bucket free list)을 만든다.
+클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 전송은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 그럴 경우에 버퍼는 가비지 콜렉터에 의해 회수되도록 바닥에 떨어진다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
