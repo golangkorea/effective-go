@@ -94,11 +94,11 @@ func main() {
 
 규약에 의하면, 임포트 에러를 잠재우기 위한 전역 선언은 임포트 구문 바로 다음에 위치되게 하며, 주석을 달아줘야 한다. 이들은 나중에 코드를 정리해야함을 쉽게 상기시키고 쉽게 찾아주게 만든다.
 
-## 부작용(side effect)을 위한 임포트 
+## 부수효과(side effect)를 위한 임포트 
 
 `An unused import like fmt or io in the previous example should eventually be used or removed: blank assignments identify code as a work in progress. But sometimes it is useful to import a package only for its side effects, without any explicit use. For example, during its init function, the net/http/pprof package registers HTTP handlers that provide debugging information. It has an exported API, but most clients need only the handler registration and access the data through a web page. To import the package only for its side effects, rename the package to the blank identifier:`
 
-이전 예시에서 `fmt`나 `io`와 같은 미사용 임포트는 결국 사용되야 하거나 그렇지 않을 경우엔 없애야한다. (공백 할당은 아직 작업이 진행중인 코드로 인식해야 한다.) 그러나 때로는 직접 사용하지는 않으면서, 부작용을 이용하기 위해 패키지를 임포트하기도 하는데, 이는 유용한 사례이다. 예를 들면,`net/http/pprof`패키지는 패키지의 초기화 함수를 실행하는 동안 디버깅 정보를 제공하는 HTTP 핸들러를 등록한다. 이는 노출된 API를 가지고 있지만 대다수의 클라어언트는 오직 핸들러 등록만이 필요하고 정보에는 웹페이지를 통해 접근한다. 부작용만을 위해 이 패키지를 임포트하기 위해선 이 패키지 이름을 공백 식별자로 바꾸면 된다.
+이전 예시에서 `fmt`나 `io`와 같은 미사용 임포트는 결국 사용되야 하거나 그렇지 않을 경우엔 없애야한다. (공백 할당은 아직 작업이 진행중인 코드로 인식해야 한다.) 그러나 때로는 직접 사용하지는 않으면서, 부수효과를 위해 패키지를 임포트하기도 하는데, 이는 유용한 사례이다. 예를 들면,`net/http/pprof`패키지는 패키지의 초기화 함수를 실행하는 동안 디버깅 정보를 제공하는 HTTP 핸들러를 등록한다. 이는 노출된 API를 가지고 있지만 대다수의 클라어언트는 오직 핸들러 등록만이 필요하고 정보에는 웹페이지를 통해 접근한다. 부수효과만을 위해 이 패키지를 임포트하기 위해선 이 패키지 이름을 공백 식별자로 바꾸면 된다.
 
 ```go
 import _ "net/http/pprof"
@@ -106,7 +106,7 @@ import _ "net/http/pprof"
 
 `This form of import makes clear that the package is being imported for its side effects, because there is no other possible use of the package: in this file, it doesn't have a name. (If it did, and we didn't use that name, the compiler would reject the program.)`
 
-이러한 형태의 임포트는 패키지가 부작용을 위해 임포트되고 있음을 명확하게 할 수 있다. 왜냐하면 이 파일에서는 패키지가 이름을 갖고 있지 않기 때문에 사용될 가능성이 없기 때문이다. (만약 이름을 갖고 있고 이를 사용하지 않는다면, 컴파일러는 프로그램을 거부할 것이다.)
+이러한 형태의 임포트는 패키지가 부수효과를 위해 임포트되고 있음을 명확하게 할 수 있다. 왜냐하면 이 파일에서는 패키지가 이름을 갖고 있지 않기 때문에 사용될 가능성이 없기 때문이다. (만약 이름을 갖고 있고 이를 사용하지 않는다면, 컴파일러는 프로그램을 거부할 것이다.)
 
 ## 인터페이스 검사
 
