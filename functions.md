@@ -171,7 +171,9 @@ func main() {
 
 prints
 
-```go
+위 함수는 아래와 같은 결과물을 출력한다.
+
+```sh
 entering: b
 in b
 entering: a
@@ -182,6 +184,4 @@ leaving: b
 
 For programmers accustomed to block-level resource management from other languages, defer may seem peculiar, but its most interesting and powerful applications come precisely from the fact that it's not block-based but function-based. In the section on `panic` and `recover` we'll see another example of its possibilities.
 
-다른 언어로 부터 블록 레벨 자원 관리에 익숙한 프로그래머에게 `defer` 는 좀 이상해 보일지도 모르지만,
-이는 블록 기반이 아니라 함수 기반이다.
-`panic` 과 `recover` 세션에서는 이러한 가능성에 대한 또 다른 예제를 살펴 볼 것이다.
+다른 언어로 부터 블록 레벨 자원 관리에 익숙한 프로그래머에게는 `defer` 이 생소해 보일지도 모르지만, 가장 흥미로우면서도 강력한 애플리케이션은 분명 블록 기반이 아니라 함수 기반이라는 사실로 부터 온다는 것이다. `panic` 과 `recover` 세션에서는 이러한 가능성에 대한 또 다른 예제를 살펴 볼 것이다.
