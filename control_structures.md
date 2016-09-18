@@ -48,7 +48,7 @@ codeUsing(f)
 
 This is an example of a common situation where code must guard against a sequence of error conditions. The code reads well if the successful flow of control runs down the page, eliminating error cases as they arise. Since error cases tend to end in `return` statements, the resulting code needs no `else` statements.
 
-다음은 코드가 오류 상태의 시퀀스를 방지해야하는 일반적인 상황에 대한 예제이다. 만약 제어의 흐름이 성공적이라면 코드는 잘 동작할 것이고, error가 발생할 때마다 error를 제거 할 것이다. error 케이스는 return 구문에서 종료하는 경향이 있기 때문에, 결과 코드는 else 구문이 필요하지 않다. 
+다음은 코드가 에러 상태의 시퀀스를 방지해야하는 일반적인 상황에 대한 예제이다. 만약 제어의 흐름이 성공적이라면 코드는 잘 동작할 것이고, 에러가 발생할 때마다 에러를 제거 할 것이다. 에러 케이스들은 `return` 구문에서 종료하는 경향이 있기 때문에, 결과적으로 코드에는 `else` 구문이 필요하지 않다. 
 
 ```go
 f, err := os.Open(name)
@@ -68,7 +68,7 @@ codeUsing(f, d)
 
 An aside: The last example in the previous section demonstrates a detail of how the := short declaration form works. The declaration that calls `os.Open` reads,
 
-이어서: 이전 섹션의 마지막 예제에서는 어떻게 := 짧은 선언문이 동작하는지 확인할 수 있었다. `os.Open`을 호출하는 선언을 보자.
+이어서: 이전 섹션의 마지막 예제에서는 어떻게 := 짧은 선언문이 동작하는지 확인할 수 있었다. `os.Open`을 호출하는 선언코드를 보자.
 
 ```go
 f, err := os.Open(name)
@@ -84,20 +84,23 @@ d, err := f.Stat()
 
 which looks as if it declares d and err. Notice, though, that `err` appears in both statements. This duplication is legal: err is declared by the first statement, but only re-assigned in the second. This means that the call to `f.Stat` uses the existing `err` variable declared above, and just gives it a new value.
 
-여기서 `d` 와 `err` 를 선언하는 것처럼 보인다. 주목할 부분은 저 `err`가 위에서와 아래 두 곳 모두에서 나타난다는 것이다. 이 선언의 중복은 합법적이다. `err` 은 첫번째 구문을 통해서 선언되어지만 두번째에서는 재할당된다. 이는 `f.Stat` 를 호출하는 것에서는 이미 선언되어 존재하는 `err` 변수를 사용하고, 그 뒤 다시 새로운 값을 준다는 것을 의미한다.
+여기서 `d` 와 `err` 를 선언하는 것처럼 보인다. 주목할 부분은 저 `err`가 위에서와 아래 두 곳 모두에서 나타난다는 것이다. 이 선언의 중복은 합법적이다. `err` 은 첫번째 구문을 통해서 선언되어지만 두번째에서는 재할당된다. 이는 `f.Stat` 를 호출하는 것에서는 이미 선언되어 존재하는 `err` 변수를 사용하고, 다시 새로운 값을 부여한다는 것을 의미한다.
 
 In `a :=` declaration a variable v may appear even if it has already been declared, provided:
 
-`a :=` 선언에서 변수 v 는 변수가 이미 선언되었더라도 다음의 경우, 나타날 수 있다. 
+어떤 `:=` 선언에서 변수 v 는 그 변수가 이미 선언되었더라도 다음의 경우, 나타날 수 있다. 
 
 * this declaration is in the same scope as the existing declaration of v (if v is already declared in an outer scope, the declaration on will create a new variable §),
 * the corresponding value in the initialization is assignable to v, and
 * there is at least one other variable in the declaration that is being declared anew.
+
+* 이 선언은 v 의 기존 선언과 같은 범위에 있는 경우( 만약 v가 바깥의 스코프에서 선언되었다면 새로운 변수를 생성한다 §참고)
+* 초기화된 값과 일치하는 경우 v에 할당 가능하다
+* 그리고 이것이 마지막 하나의 다른 변수 선언 안에서 
+
 This unusual property is pure pragmatism, making it easy to use a single err value, for example, in a long if-else chain. You'll see it used often.
 
-* 이 선언은 동일한 스코프 존재하는 v 의 선언 (만약 v가 바깥의 스코프에서 선언되었다면, 새로운 변수 §)
-* 초기화에서 일치하는 값 은 v 에 할당가능하다 그리고
-* 이것이 마지막 하나의 다른 변수 선언 안에서 
+이 독특한 속성은 완전히 실용적이며, 예를 들어  긴 if-else 구문에서 하나의 에러 값을 손쉽게 사용하게 만들어 준다. 
 
 § It's worth noting here that in Go the scope of function parameters and return values is the same as the function body, even though they appear lexically outside the braces that enclose the body.
 
@@ -107,7 +110,7 @@ This unusual property is pure pragmatism, making it easy to use a single err val
 
 The Go for loop is similar to—but not the same as—C's. It unifies for and while and there is no do-while. There are three forms, only one of which has semicolons.
 
-GO언어에서 for 반복문은 C언어와 비슷하지만 일치하지는 않는다. for 는 while 처럼 동작할 수 있고, 따라서 do-while 이 없습니다. 다음은 세가지 형태를 확인할 수 있으며, 하나의 경우에서만 세미콜론을 사용되는 것을 확인할 수 있다. 
+GO언어에서 for 반복문은 C언어와 비슷하지만 일치하지는 않는다. for 는 while 처럼 동작할 수 있고, 따라서 do-while 이 없다. 다음의 세가지 형태를 확인할 수 있으며, 하나의 경우에서만 세미콜론을 사용되는 것을 확인할 수 있다. 
 
 ```go
 // C언어와 같은 경우
@@ -168,12 +171,16 @@ The blank identifier has many uses, as described in [a later section](https://go
 
 공백 식별자는 많은 사용법이 있는데, [a later section](https://golang.org/doc/effective_go.html#blank)에 잘 설명되어 있다. 
 
-For strings, the range does more work for you, breaking out individual Unicode code points by parsing the UTF-8. Erroneous encodings consume one byte and produce the replacement rune U+FFFD. (The name (with associated builtin type) rune is Go terminology for a single Unicode code point. See [the language specification](https://golang.org/ref/spec#Rune_literals) for details.) The loop
+For strings, the range does more work for you, breaking out individual Unicode code points by parsing the UTF-8. Erroneous encodings consume one byte and produce the replacement rune U+FFFD. (The name (with associated builtin type) rune is Go terminology for a single Unicode code point. See [the language specification](https://golang.org/ref/spec#Rune_literals) for details.) 
 
-(진행중) 
+string 의 경우, range 는 UTF-8 파싱에 의한 개별적인 유니코드 문자를 처리하는데 유용할 것이다. 잘못된 인코딩은 하나의 바이트를 제거하고 U+FFFD 룬 문자로 대체할 것이다. ( 룬(내장된 타입으로 지정된)의 이름은 GO 언어의 단일 유니코드 코드에 대한 용어이다. 보다 자세한 사항은 [언어 스펙](https://golang.org/ref/spec#Rune_literals)을 참고하자) 
+
+The loop
+
+다음 반복문은 
 
 ```go
-for pos, char := range "日本\x80語" { // \x80 is an illegal UTF-8 encoding
+for pos, char := range "日本\x80語" { // \x80 은 합법적인 UTF-8 인코딩이다 
     fmt.Printf("character %#U starts at byte position %d\n", char, pos)
 }
 ```
@@ -298,7 +305,7 @@ func Compare(a, b []byte) int {
 
 A switch can also be used to discover the dynamic type of an interface variable. Such a type switch uses the syntax of a type assertion with the keyword type inside the parentheses. If the switch declares a variable in the expression, the variable will have the corresponding type in each clause. It's also idiomatic to reuse the name in such cases, in effect declaring a new variable with the same name but a different type in each case.
 
-스위치 구문은 인터페이스 변수의 동적 타입을 확인하는데 사용될 수도 있다. (진행중)
+스위치 구문은 인터페이스 변수의 동적 타입을 확인하는데 사용될 수도 있다. 타입 스위치가 괄호안에서 키워드 타입을 통해서 타입 단업표현의 문법을 사용하는 것 처럼, 만약 스위치 표현식 안에서 변수를 선언한다면, 변수는 각각의 절에서 일치하는 타입을 가질 것이다. 사실상 각각의 절 안에서 새로운 변수를 다른 타입이지만 동일한 이름으로 선언하는 것과 각각의 절 안에서 이름을 재사용하는 것이 관용적이다. 
 
 ```go
 var t interface{}
