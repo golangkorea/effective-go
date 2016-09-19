@@ -13,6 +13,8 @@ The program—and web server—godoc processes Go source files to extract docume
 
 Every package should have a package comment, a block comment preceding the package clause. For multi-file packages, the package comment only needs to be present in one file, and any one will do. The package comment should introduce the package and provide information relevant to the package as a whole. It will appear first on the godoc page and should set up the detailed documentation that follows.
 
+모든 패키지(package)는 패키지(package)구문 이전에 블럭주석형태의 패키지 주석이 있어야 한다. 다중파일 패키지들의 경우, 패키지 주석은 어느 파일이든 상관없이 하나의 파일내에 존재하면 된다. 패키지 주석은 패키지를 소개해야하고, 전체 패키지에 관련된 정보를 제공해야한다.패키지 주석은 godoc문서의 처음에 나타나게 될것이고, 반듯이 작성되어야할 상세한 내용은 아래와 같다.
+
 ```go
 /*
 Package regexp implements a simple library for regular expressions.
@@ -37,6 +39,7 @@ package regexp
 ```
 
 If the package is simple, the package comment can be brief.
+만약 패키지가 단순하다면, 패키지주석은 간단히 작성할 수 있다.
 
 ```
 // Package path implements utility routines for
@@ -45,7 +48,12 @@ If the package is simple, the package comment can be brief.
 
 Comments do not need extra formatting such as banners of stars. The generated output may not even be presented in a fixed-width font, so don't depend on spacing for alignment—godoc, like `gofmt`, takes care of that. The comments are uninterpreted plain text, so HTML and other annotations such as _this_ will reproduce verbatim and should not be used. One adjustment godoc does do is to display indented text in a fixed-width font, suitable for program snippets. The package comment for the [fmt package](https://golang.org/pkg/fmt/) uses this to good effect.
 
+주석은 추가적인 형식은 필요하지 않는다. 생성된 결과는 고정폭의 폰트(font)로 표시되지 않을 수 있다. 그래서 godoc정렬(alignment—godoc)을 위해 "gofmt"처럼 스페이스(spacing)에 의존하지 마라. 주석은 실행되지 않는 일반적인글이다. 그래서 HTML이나 "_this_"같은 다른 형태의 주석은 작성된 그대로 나타날것이고 그래서 사용하면 안된다.
+[fmt package](https://golang.org/pkg/fmt/)의 패키지주석은 좋은 예이다.
+
 Depending on the context, godoc might not even reformat comments, so make sure they look good straight up: use correct spelling, punctuation, and sentence structure, fold long lines, and so on.
+
+상황에 따라, godoc은 주석을 변
 
 Inside a package, any comment immediately preceding a top-level declaration serves as a doc comment for that declaration. Every exported (capitalized) name in a program should have a doc comment.
 
