@@ -1,17 +1,17 @@
 # Concurrency
 
-* 원문: [Introduction](https://golang.org/doc/effective_go.html#concurrency)
+* 원문: [Concurrency](https://golang.org/doc/effective_go.html#concurrency)
 * 번역자: Philbert Yoon (@ziwon)
 
 ## 통신에 의한 공유
 
 Concurrent programming is a large topic and there is space only for some Go-specific highlights here.
 
-병행 프로그래밍은 광범위한 주제이므로 여기에서는 Go에 한정된 중요한 것들에 대해서만 지면을 할애한다.
+동시성 프로그래밍은 광범위한 주제이므로 여기에서는 Go에 한정된 중요한 것들에 대해서만 지면을 할애한다.
 
 Concurrent programming in many environments is made difficult by the subtleties required to implement correct access to shared variables. Go encourages a different approach in which shared values are passed around on channels and, in fact, never actively shared by separate threads of execution. Only one goroutine has access to the value at any given time. Data races cannot occur, by design. To encourage this way of thinking we have reduced it to a slogan:
 
-다양한 환경에서 병행 프로그래밍은 공유 변수에 대한 정확한 접근을 구현하는데 필요한 중요한 세부 요소들로 어렵게 만들어졌다. Go는 공유변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
+공유 변수에 대한 정확한 접근을 구현하기 위해 엄수해야할 세세한 내용들은 다양한 환경에서 동시성 프로그래밍을 어렵게 했다. Go는 공유변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
@@ -23,7 +23,7 @@ This approach can be taken too far. Reference counts may be best done by putting
 
 One way to think about this model is to consider a typical single-threaded program running on one CPU. It has no need for synchronization primitives. Now run another such instance; it too needs no synchronization. Now let those two communicate; if the communication is the synchronizer, there's still no need for other synchronization. Unix pipelines, for example, fit this model perfectly. Although Go's approach to concurrency originates in Hoare's Communicating Sequential Processes (CSP), it can also be seen as a type-safe generalization of Unix pipes.
 
-이 모델에 대해 생각해보는 한가지 방법은 단일 CPU에서 실행되는 전형적인 단일 쓰레드 프로그램을 떠올려 보는 것이다. 여기에는 동기화를 위한 기본 자료형이 필요 없다. 지금 또다른 그 인스턴스를 실행시켜 보라. 그러나 역시 동기화가 필요하지 않다. 이제 그 두 개를 통신하게 하는데, 그 통신 자체가 동기화 장치(synchronizer)인 경우, 여전히 다른 동기화가 필요 없다. 예를 들어, 유닉스 파이프 라인은 이 모델에 완벽하게 들어 맞는다. 동시성에 대한 Go의 접근 방식이 호어의 통신 순차적 프로세스 (CSP, Communicating Sequential Processes)에서 비롯되었지만, 유닉스 파이프의 타입 세이프 일반화(type-safe generalization)로도 볼 수 있다.
+이 모델에 대해 생각해보는 한가지 방법은 단일 CPU에서 실행되는 전형적인 단일 쓰레드 프로그램을 떠올려 보는 것이다. 여기에는 동기화를 위한 기본 자료형이 필요 없다. 지금 또다른 그 인스턴스를 실행시켜 보라. 그러나 역시 동기화가 필요하지 않다. 이제 그 두 개를 통신하게 하는데, 그 통신 자체가 동기화 장치(synchronizer)인 경우, 여전히 다른 동기화가 필요 없다. 예를 들어, 유닉스 파이프 라인은 이 모델에 완벽하게 들어 맞는다. 동시성에 대한 Go의 접근 방식이 호어(Hoare)의 통신 순차적 프로세스 (CSP, Communicating Sequential Processes)에서 비롯되었지만, 타입 안전이 보장되는 식의 일반화된 유닉스 파이프라고 볼 수 있다.
 
 ## 고루틴
 
@@ -33,7 +33,7 @@ They're called goroutines because the existing terms—threads, coroutines, proc
 
 Goroutines are multiplexed onto multiple OS threads so if one should block, such as while waiting for I/O, others continue to run. Their design hides many of the complexities of thread creation and management.
 
-고루틴은 OS의 다중 쓰레드에 멀티플렉싱되는데, I/O 작업을 위해 대기하는 동안이라든지, 하나의 고루틴이 블락이 되면 다른 고루틴이 계속 실행된다. 이런 설계는 쓰레드의 복잡한 생성과 관리를 숨긴다.
+고루틴은 OS의 다중 쓰레드에 멀티플렉싱되는데, I/O 작업을 위해 대기중일 때와 같이 하나의 고루틴이 블락이 되면 다른 고루틴이 계속 실행된다. 이런 설계는 쓰레드의 복잡한 생성과 관리에 대해 굳이 알 필요가 없게 해준다.
 
 Prefix a function or method call with the go keyword to run the call in a new goroutine. When the call completes, the goroutine exits, silently. (The effect is similar to the Unix shell's & notation for running a command in the background.)
 
@@ -58,11 +58,11 @@ func Announce(message string, delay time.Duration) {
 
 In Go, function literals are closures: the implementation makes sure the variables referred to by the function survive as long as they are active.
 
-Go에서 함수 리터럴은 클로저이다. 즉, 함수가 참조하는 변수는 그 변수가 활성화되어 있는 한 살아있음이 확실하다.
+Go에서 함수 리터럴은 클로저이다. 즉, 함수가 참조하는 변수를 사용하는 동안에는 그 생존을 보장하는 방식으로 구현되어 있다는 것이다.
 
 These examples aren't too practical because the functions have no way of signaling completion. For that, we need channels.
 
-위의 예제는 함수가 시그널링을 종료하는 방법이 없기 때문에 아주 실용적이진 않다. 이를 위해 채널이 필요하다.
+위의 예제는 함수가 종료를 알릴 방법이 없기 때문에 아주 실용적이진 않다. 이를 위해 채널이 필요하다.
 
 ## 채널
 
@@ -78,7 +78,7 @@ cs := make(chan *os.File, 100)  // File 포인터형의 버퍼드 채널
 
 Unbuffered channels combine communication—the exchange of a value—with synchronization—guaranteeing that two calculations (goroutines) are in a known state.
 
-언버퍼드 채널은 동기화로 값을 교환하는 통신을 결합하는데, 이는 두 계산(고루틴들)이 상태를 알고 있다는 것을 보장한다.
+언버퍼드 채널은 동기화로 값을 교환하며 두 계산(고루틴들)이 어떤 상태에 있는지 알 수 있다는 것을 보장하는 통신을 결합한다.
 
 There are lots of nice idioms using channels. Here's one to get us started. In the previous section we launched a sort in the background. A channel can allow the launching goroutine to wait for the sort to complete.
 
@@ -101,7 +101,7 @@ Receivers always block until there is data to receive. If the channel is unbuffe
 
 A buffered channel can be used like a semaphore, for instance to limit throughput. In this example, incoming requests are passed to handle, which sends a value into the channel,processes the request, and then receives a value from the channel to ready the “semaphore” for the next consumer. The capacity of the channel buffer limits the number of simultaneous calls to process.
 
-버퍼드 채널은 세마포처럼 사용될 수 있다. 예를 들어 처리량을 제한하는 것이다. 다음 예제에서, 들어오는 요청은 값을 채널에 전송하는 `handle`에 넘겨진다. 요청을 처리한 후, 다음 (요청) 소비자에 대해 세마포를 준비하는 채널에서 값을 수신한다.
+버퍼드 채널은 세마포처럼 사용될 수 있다. 예를 들어 처리량을 제한하는 것이다. 다음 예제에서, 들어오는 요청들은 `handle`에 넘겨진다. `handle`에서는 하나의 값(어떤 값이라도 상관없음)을 채널에 송신하고, 요청을 처리한 다음, 채널로부터 한 값을 받아 다음 소비자를 위해 "세마포"를 준비 시킨다. 채널 버퍼의 크기가 동시에 처리할 수 있는 숫자를 제한하는 것이다.
 
 ```go
 var sem = make(chan int, MaxOutstanding)
@@ -122,11 +122,274 @@ func Serve(queue chan *Request) {
 
 Once MaxOutstanding handlers are executing process, any more will block trying to send into the filled channel buffer, until one of the existing handlers finishes and receives from the buffer.
 
-일단 MaxOutstanding 핸들러가 `process`를 실행하게 되면, 기존 핸들러 중 하나가 완료되고 버퍼로부터 값을 받을 때까지 더 이상의 꽉 찬 채널 버퍼에 전송하는 것은 블락될 것이다.
+일단 MaxOutstanding 수 만큼의 핸들러가 `process`를 실행하는 동안에는, 기존 핸들러 중 하나가 완료되고 버퍼로부터 값을 받을 때까지 더 이상의 꽉 찬 채널 버퍼에 송신하는 것은 블락될 것이다.
 
 This design has a problem, though: Serve creates a new goroutine for every incoming request, even though only MaxOutstanding of them can run at any moment. As a result, the program can consume unlimited resources if the requests come in too fast. We can address that deficiency by changing Serve to gate the creation of the goroutines. Here's an obvious solution, but beware it has a bug we'll fix subsequently:
 
-그렇지만 이 설계는 문제가 있다. 즉, 전체 요청에서 겨우 `MaxOutstanding` 수만큼 `process`를 실행할 수 있음에도 서버는 들어오는 모든 요청에 대해 새로운 고루틴을 생성한다는 것이다. 그 결과, 요청이 너무 빨리 들어올 경우, 무제한으로 리소스를 낭비할 수 있다. 이 결함은 `Serve`를 고루틴을 생성하는 게이트로 수정해서 처리할 수 있다. 확실한 솔루션은 다음과 같지만, 나중에 수정하게 될 버그가 있다는 것에 주의하라.
+그렇지만 이 설계는 문제가 있다. 즉, 전체 요청에서 겨우 `MaxOutstanding` 수 만큼 `process`를 실행할 수 있음에도 서버는 들어오는 모든 요청에 대해 새로운 고루틴을 생성한다는 것이다. 그 결과, 요청이 너무 빨리 들어올 경우, 무제한으로 리소스를 낭비할 수 있다. 이 결함은 고루틴의 생성을 제한하는 게이트로 `Serve`를 수정함으로써 해결될 수 있다. 확실한 솔루션은 다음과 같지만, 나중에 수정하게 될 버그가 있다는 것에 주의하라.
+Welcome to StackEdit!
+===================
+
+
+Hey! I'm your first Markdown document in **StackEdit**[^stackedit]. Don't delete me, I'm very helpful! I can be recovered anyway in the **Utils** tab of the <i class="icon-cog"></i> **Settings** dialog.
+
+----------
+
+
+Documents
+-------------
+
+StackEdit stores your documents in your browser, which means all your documents are automatically saved locally and are accessible **offline!**
+
+> **Note:**
+
+> - StackEdit is accessible offline after the application has been loaded for the first time.
+> - Your local documents are not shared between different browsers or computers.
+> - Clearing your browser's data may **delete all your local documents!** Make sure your documents are synchronized with **Google Drive** or **Dropbox** (check out the [<i class="icon-refresh"></i> Synchronization](#synchronization) section).
+
+#### <i class="icon-file"></i> Create a document
+
+The document panel is accessible using the <i class="icon-folder-open"></i> button in the navigation bar. You can create a new document by clicking <i class="icon-file"></i> **New document** in the document panel.
+
+#### <i class="icon-folder-open"></i> Switch to another document
+
+All your local documents are listed in the document panel. You can switch from one to another by clicking a document in the list or you can toggle documents using <kbd>Ctrl+[</kbd> and <kbd>Ctrl+]</kbd>.
+
+#### <i class="icon-pencil"></i> Rename a document
+
+You can rename the current document by clicking the document title in the navigation bar.
+
+#### <i class="icon-trash"></i> Delete a document
+
+You can delete the current document by clicking <i class="icon-trash"></i> **Delete document** in the document panel.
+
+#### <i class="icon-hdd"></i> Export a document
+
+You can save the current document to a file by clicking <i class="icon-hdd"></i> **Export to disk** from the <i class="icon-provider-stackedit"></i> menu panel.
+
+> **Tip:** Check out the [<i class="icon-upload"></i> Publish a document](#publish-a-document) section for a description of the different output formats.
+
+
+----------
+
+
+Synchronization
+-------------------
+
+StackEdit can be combined with <i class="icon-provider-gdrive"></i> **Google Drive** and <i class="icon-provider-dropbox"></i> **Dropbox** to have your documents saved in the *Cloud*. The synchronization mechanism takes care of uploading your modifications or downloading the latest version of your documents.
+
+> **Note:**
+
+> - Full access to **Google Drive** or **Dropbox** is required to be able to import any document in StackEdit. Permission restrictions can be configured in the settings.
+> - Imported documents are downloaded in your browser and are not transmitted to a server.
+> - If you experience problems saving your documents on Google Drive, check and optionally disable browser extensions, such as Disconnect.
+
+#### <i class="icon-refresh"></i> Open a document
+
+You can open a document from <i class="icon-provider-gdrive"></i> **Google Drive** or the <i class="icon-provider-dropbox"></i> **Dropbox** by opening the <i class="icon-refresh"></i> **Synchronize** sub-menu and by clicking **Open from...**. Once opened, any modification in your document will be automatically synchronized with the file in your **Google Drive** / **Dropbox** account.
+
+#### <i class="icon-refresh"></i> Save a document
+
+You can save any document by opening the <i class="icon-refresh"></i> **Synchronize** sub-menu and by clicking **Save on...**. Even if your document is already synchronized with **Google Drive** or **Dropbox**, you can export it to a another location. StackEdit can synchronize one document with multiple locations and accounts.
+
+#### <i class="icon-refresh"></i> Synchronize a document
+
+Once your document is linked to a <i class="icon-provider-gdrive"></i> **Google Drive** or a <i class="icon-provider-dropbox"></i> **Dropbox** file, StackEdit will periodically (every 3 minutes) synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be detected.
+
+If you just have modified your document and you want to force the synchronization, click the <i class="icon-refresh"></i> button in the navigation bar.
+
+> **Note:** The <i class="icon-refresh"></i> button is disabled when you have no document to synchronize.
+
+#### <i class="icon-refresh"></i> Manage document synchronization
+
+Since one document can be synchronized with multiple locations, you can list and manage synchronized locations by clicking <i class="icon-refresh"></i> **Manage synchronization** in the <i class="icon-refresh"></i> **Synchronize** sub-menu. This will let you remove synchronization locations that are associated to your document.
+
+> **Note:** If you delete the file from **Google Drive** or from **Dropbox**, the document will no longer be synchronized with that location.
+
+----------
+
+
+Publication
+-------------
+
+Once you are happy with your document, you can publish it on different websites directly from StackEdit. As for now, StackEdit can publish on **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **Tumblr**, **WordPress** and on any SSH server.
+
+#### <i class="icon-upload"></i> Publish a document
+
+You can publish your document by opening the <i class="icon-upload"></i> **Publish** sub-menu and by choosing a website. In the dialog box, you can choose the publication format:
+
+- Markdown, to publish the Markdown text on a website that can interpret it (**GitHub** for instance),
+- HTML, to publish the document converted into HTML (on a blog for example),
+- Template, to have a full control of the output.
+
+> **Note:** The default template is a simple webpage wrapping your document in HTML format. You can customize it in the **Advanced** tab of the <i class="icon-cog"></i> **Settings** dialog.
+
+#### <i class="icon-upload"></i> Update a publication
+
+After publishing, StackEdit will keep your document linked to that publication which makes it easy for you to update it. Once you have modified your document and you want to update your publication, click on the <i class="icon-upload"></i> button in the navigation bar.
+
+> **Note:** The <i class="icon-upload"></i> button is disabled when your document has not been published yet.
+
+#### <i class="icon-upload"></i> Manage document publication
+
+Since one document can be published on multiple locations, you can list and manage publish locations by clicking <i class="icon-upload"></i> **Manage publication** in the <i class="icon-provider-stackedit"></i> menu panel. This will let you remove publication locations that are associated to your document.
+
+> **Note:** If the file has been removed from the website or the blog, the document will no longer be published on that location.
+
+----------
+
+
+Markdown Extra
+--------------------
+
+StackEdit supports **Markdown Extra**, which extends **Markdown** syntax with some nice features.
+
+> **Tip:** You can disable any **Markdown Extra** feature in the **Extensions** tab of the <i class="icon-cog"></i> **Settings** dialog.
+
+> **Note:** You can find more information about **Markdown** syntax [here][2] and **Markdown Extra** extension [here][3].
+
+
+### Tables
+
+**Markdown Extra** has a special syntax for tables:
+
+Item     | Value
+-------- | ---
+Computer | $1600
+Phone    | $12
+Pipe     | $1
+
+You can specify column alignment with one or two colons:
+
+| Item     | Value | Qty   |
+| :------- | ----: | :---: |
+| Computer | $1600 |  5    |
+| Phone    | $12   |  12   |
+| Pipe     | $1    |  234  |
+
+
+### Definition Lists
+
+**Markdown Extra** has a special syntax for definition lists too:
+
+Term 1
+Term 2
+:   Definition A
+:   Definition B
+
+Term 3
+
+:   Definition C
+
+:   Definition D
+
+	> part of definition D
+
+
+### Fenced code blocks
+
+GitHub's fenced code blocks are also supported with **Highlight.js** syntax highlighting:
+
+```
+// Foo
+var bar = 0;
+```
+
+> **Tip:** To use **Prettify** instead of **Highlight.js**, just configure the **Markdown Extra** extension in the <i class="icon-cog"></i> **Settings** dialog.
+
+> **Note:** You can find more information:
+
+> - about **Prettify** syntax highlighting [here][5],
+> - about **Highlight.js** syntax highlighting [here][6].
+
+
+### Footnotes
+
+You can create footnotes like this[^footnote].
+
+  [^footnote]: Here is the *text* of the **footnote**.
+
+
+### SmartyPants
+
+SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
+
+|                  | ASCII                        | HTML              |
+ ----------------- | ---------------------------- | ------------------
+| Single backticks | `'Isn't this fun?'`            | 'Isn't this fun?' |
+| Quotes           | `"Isn't this fun?"`            | "Isn't this fun?" |
+| Dashes           | `-- is en-dash, --- is em-dash` | -- is en-dash, --- is em-dash |
+
+
+### Table of contents
+
+You can insert a table of contents using the marker `[TOC]`:
+
+[TOC]
+
+
+### MathJax
+
+You can render *LaTeX* mathematical expressions using **MathJax**, as on [math.stackexchange.com][1]:
+
+The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
+
+$$
+\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
+$$
+
+> **Tip:** To make sure mathematical expressions are rendered properly on your website, include **MathJax** into your template:
+
+```
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+```
+
+> **Note:** You can find more information about **LaTeX** mathematical expressions [here][4].
+
+
+### UML diagrams
+
+You can also render sequence diagrams like this:
+
+```sequence
+Alice->Bob: Hello Bob, how are you?
+Note right of Bob: Bob thinks
+Bob-->Alice: I am good thanks!
+```
+
+And flow charts like this:
+
+```flow
+st=>start: Start
+e=>end
+op=>operation: My Operation
+cond=>condition: Yes or No?
+
+st->op->cond
+cond(yes)->e
+cond(no)->op
+```
+
+> **Note:** You can find more information:
+
+> - about **Sequence diagrams** syntax [here][7],
+> - about **Flow charts** syntax [here][8].
+
+### Support StackEdit
+
+[![](https://cdn.monetizejs.com/resources/button-32.png)](https://monetizejs.com/authorize?client_id=ESTHdCYOi18iLhhO&summary=true)
+
+  [^stackedit]: [StackEdit](https://stackedit.io/) is a full-featured, open-source Markdown editor based on PageDown, the Markdown library used by Stack Overflow and the other Stack Exchange sites.
+
+
+  [1]: http://math.stackexchange.com/
+  [2]: http://daringfireball.net/projects/markdown/syntax "Markdown"
+  [3]: https://github.com/jmcmanus/pagedown-extra "Pagedown Extra"
+  [4]: http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference
+  [5]: https://code.google.com/p/google-code-prettify/
+  [6]: http://highlightjs.org/
+  [7]: http://bramp.github.io/js-sequence-diagrams/
+  [8]: http://adrai.github.io/flowchart.js/
 
 ```go
 func Serve(queue chan *Request) {
@@ -142,10 +405,10 @@ func Serve(queue chan *Request) {
 
 The bug is that in a Go for loop, the loop variable is reused for each iteration, so the req variable is shared across all goroutines. That's not what we want. We need to make sure that req is unique for each goroutine. Here's one way to do that, passing the value of req as an argument to the closure in the goroutine:
 
-버그는 Go `for` 루프에 있다. 루프 변수는 각 반복마다 재사용되어 동일한 `req` 변수가 모든 고루틴에 걸쳐 공유된다. 이는 원하는 것이 아니다. 각 고루틴마다 구별된 `req` 변수를 가지도록 해야한다. 다음은 이를 위한 한 가지 방법으로, 고루틴의 클로져에 대한 인자로 `req`의 값을 전달하는 것이다.
+버그는 Go `for` 루프에 있다. 루프 변수는 각 반복마다 재사용되어 동일한 `req` 변수가 모든 고루틴에 걸쳐 공유된다. 이는 원하는 바가 아니다. 각 고루틴마다 구별된 `req` 변수를 가지도록 해야한다. 다음은 이를 위한 한 가지 방법으로, 고루틴의 클로져에 대한 인자로 `req`의 값을 전달하는 것이다.
 
 {
-```go
+```go다
 func Serve(queue chan *Request) {
     for req := range queue {
         sem <- 1
@@ -210,7 +473,7 @@ func Serve(clientRequests chan *Request, quit chan bool) {
 
 One of the most important properties of Go is that a channel is a first-class value that can be allocated and passed around like any other. A common use of this property is to implement safe, parallel demultiplexing.
 
-Go의 가장 중요한 속성 중 하나는 채널이 다른 것과 마찬가지로 할당되고 전달될 수 있는 일급변수(first-class value)라는 것이다. 이 속성의 일반적인 사용은 안전한 병렬 역다중화(parallel demultiplexing)를 구현하는 것이다.
+Go의 가장 중요한 속성 중 하나는 채널이 다른 것과 마찬가지로 할당되고 전달될 수 있는 일급변수(first-class value)라는 것이다. 일반적으로 이 속성은 안전한 병렬 역다중화(parallel demultiplexing)를 구현하는데 사용된다.
 
 In the example in the previous section, handle was an idealized handler for a request but we didn't define the type it was handling. If that type includes a channel on which to reply, each client can provide its own path for the answer. Here's a schematic definition of type Request.
 
@@ -257,7 +520,7 @@ func handle(queue chan *Request) {
 
 There's clearly a lot more to do to make it realistic, but this code is a framework for a rate-limited, parallel, non-blocking RPC system, and there's not a mutex in sight.
 
-현실성있게 만들기 위해 할 것들이 분명히 많지만, 이 코드는 속도 제한, 병렬, 넌블락 RPC 시스템을 위한 프레임워크이다. 그리고 뮤텍스는 눈에 보이지 않는다.
+실제로 사용하기 위해서는 아직 할 일이 많은 것이 명백하다. 그러나 이 코드는 속도 제한, 병렬, 넌블락 RPC 시스템을 위한 프레임워크이다. 그리고 뮤텍스는 눈에 보이지 않는다.
 
 ## 병렬화
 
@@ -320,14 +583,14 @@ var numCPU = runtime.GOMAXPROCS(0)
 
 Be sure not to confuse the ideas of concurrency—structuring a program as independently executing components—and parallelism—executing calculations in parallel for efficiency on multiple CPUs. Although the concurrency features of Go can make some problems easy to structure as parallel computations, Go is a concurrent language, not a parallel one, and not all parallelization problems fit Go's model. For a discussion of the distinction, see the talk cited in this blog post.
 
-컴포넌트를 독립적으로 처리하여 프로그램을 구조화하는 동시성과 다중 CPU에서 효율성을 위해 계산을 병렬로 처리하는 병렬성의 개념을 혼동하지 않길 바란다. Go의 동시성 특징이 병렬 계산으로 문제를 쉽게 구조화할 수 있지만, Go는 병렬이 아닌 병행 언어이고, 모든 병렬화 문제가 Go에 들어맞지는 않는다. 이 구분에 대한 논의는 [이 블로그 포스트](https://blog.golang.org/concurrency-is-not-parallelism)에 인용된 토크를 참조하라.
+컴포넌트를 독립적으로 처리하여 프로그램을 구조화하는 동시성과 다중 CPU에서 효율성을 위해 계산을 병렬로 처리하는 병렬성의 개념을 혼동하지 않길 바란다. Go의 동시성 특징이 병렬 계산으로 문제를 쉽게 구조화할 수 있지만, Go는 병렬이 아닌 동시성 언어이고, 모든 병렬화 문제가 Go에 들어맞지는 않는다. 이 구분에 대한 논의는 [이 블로그 포스트](https://blog.golang.org/concurrency-is-not-parallelism)에 인용된 토크를 참조하라.
 
 
 ## 누설 버퍼
 
 The tools of concurrent programming can even make non-concurrent ideas easier to express. Here's an example abstracted from an RPC package. The client goroutine loops receiving data from some source, perhaps a network. To avoid allocating and freeing buffers, it keeps a free list, and uses a buffered channel to represent it. If the channel is empty, a new buffer gets allocated. Once the message buffer is ready, it's sent to the server on serverChan.
 
-비병행(non-concurrent) 개념도 병행 프로그래밍 도구로 쉽게 표현할 수 있다. 다음은 RPC 패키지에서 추출한 예제이다. 클라이언트 고루틴은 아마도 네트워크인 특정 소스의 데이터를 반복해서 수신한다. 버퍼의 할당과 해제를 피하기 위해서 `free list`를 유지하며 이를 대신할 버퍼 채널을 사용한다. 채널이 비어 있으면 새로운 버퍼가 할당된다. 일단 메시지 버퍼가 준비되면 `serverChan`의 서버로 전송한다.
+비동시성(non-concurrent) 개념도 동시성 프로그래밍 도구로 쉽게 표현할 수 있다. 다음은 RPC 패키지에서 추출한 예제이다. 클라이언트 고루틴은 아마도 네트워크인 특정 소스의 데이터를 반복해서 수신한다. 버퍼의 할당과 해제를 피하기 위해서 `free list`를 유지하며 이를 대신할 버퍼 채널을 사용한다. 채널이 비어 있으면 새로운 버퍼가 할당된다. 일단 메시지 버퍼가 준비되면 `serverChan`의 서버로 전송한다.
 
 ```go
 var freeList = make(chan *Buffer, 100)
@@ -372,4 +635,4 @@ func server() {
 
 The client attempts to retrieve a buffer from freeList; if none is available, it allocates a fresh one. The server's send to freeList puts b back on the free list unless the list is full, in which case the buffer is dropped on the floor to be reclaimed by the garbage collector. (The default clauses in the select statements execute when no other case is ready, meaning that the selects never block.) This implementation builds a leaky bucket free list in just a few lines, relying on the buffered channel and the garbage collector for bookkeeping.
 
-클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 전송은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 이럴 경우에 버퍼는 가비지 콜렉터에 의해 회수되도록 바닥에 떨어진다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
+클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 송신은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 사실 이럴 경우, 버퍼는 바닥에 떨어져 가비지 콜렉터에 의해 회수된다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
