@@ -11,7 +11,7 @@ Concurrent programming is a large topic and there is space only for some Go-spec
 
 Concurrent programming in many environments is made difficult by the subtleties required to implement correct access to shared variables. Go encourages a different approach in which shared values are passed around on channels and, in fact, never actively shared by separate threads of execution. Only one goroutine has access to the value at any given time. Data races cannot occur, by design. To encourage this way of thinking we have reduced it to a slogan:
 
-공유 변수에 대한 정확한 접근을 구현하기 위해 엄수해야 하는 세세한 내용들은 다양한 환경에서 동시성 프로그래밍을 어렵게 했다. Go는 공유변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다. 그리고 사실 공유변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
+공유 변수에 대한 정확한 접근을 구현하기 위해 엄수해야 하는 세세한 내용들은 다양한 환경에서 동시성 프로그래밍을 어렵게 했다. Go는 공유 변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다. 그리고 사실 공유 변수는 개별 쓰레드 실행에 의해서 결코 공유되지 않는다. 언제든지 하나의 고루틴이 값에 접근한다. 데이터 경쟁은 구현 설계상 발생할 수 없다. 이러한 사고방식을 권장하기 위해 이를 한 슬로건으로 줄였다.
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
@@ -176,7 +176,7 @@ func Serve(queue chan *Request) {
 
 It may seem odd to write
 
-이상하게 코드를 작성한 것처럼 보일지도 모르겠다.
+이상한 코드를 작성하는 것처럼 보일 수 있다.
 
 ```go
 req := req
@@ -312,7 +312,7 @@ var numCPU = runtime.NumCPU()
 
 There is also a function runtime.GOMAXPROCS, which reports (or sets) the user-specified number of cores that a Go program can have running simultaneously. It defaults to the value of runtime.NumCPU but can be overridden by setting the similarly named shell environment variable or by calling the function with a positive number. Calling it with zero just queries the value. Therefore if we want to honor the user's resource request, we should write
 
-또한 Go 프로그램은 동시에 실행할 수 있는 사용자 지정 코어수를 보고하는 (또는 설정하는) `runtime.GOMAXPROCS` 함수가 있다. `runtime.NumCPU`의 값이 기본값이지만, 비슷하게 명명된 환경 변수 설정에 의해 혹은 양수의 인자로 함수를 호출하여 재정의할 수 있다. 0으로 호출하면 바로 값을 조회한다. 따라서 사용자의 리소스 요청을 따르고 싶은 경우, 다음과 같이 작성해야 한다.
+또한 Go 프로그램은 동시에 실행할 수 있는 사용자 지정 코어수를 보고하는 (또는 설정하는) `runtime.GOMAXPROCS` 함수가 있다. `runtime.NumCPU`의 값이 기본값이지만, 비슷하게 명명된 환경변수 설정에 의해 혹은 양수의 인자로 함수를 호출하여 재정의할 수 있다. 0으로 호출하면 바로 값을 조회한다. 따라서 사용자의 리소스 요청을 따르고 싶은 경우, 다음과 같이 작성해야 한다.
 
 ```go
 var numCPU = runtime.GOMAXPROCS(0)
@@ -372,4 +372,4 @@ func server() {
 
 The client attempts to retrieve a buffer from freeList; if none is available, it allocates a fresh one. The server's send to freeList puts b back on the free list unless the list is full, in which case the buffer is dropped on the floor to be reclaimed by the garbage collector. (The default clauses in the select statements execute when no other case is ready, meaning that the selects never block.) This implementation builds a leaky bucket free list in just a few lines, relying on the buffered channel and the garbage collector for bookkeeping.
 
-클라이언트는 `freeList`에서 버퍼를 획득하려고 시도한다. 그래서 어떤 버퍼도 사용할 수 없는 경우, 새로운 버퍼를 할당한다. `freeList`의 서버 송신은 리스트가 꽉 차지 않는 한 프리 리스트에 `b`를 다시 둔다. 사실 이럴 경우, 버퍼는 바닥에 떨어져 가비지 콜렉터에 의해 회수된다. (`select` 구문에서 `default`  절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.) 버퍼 채널과 장부 기록을 위한 가비지 컬렉터에 의존하는 단지 몇 줄의 구현으로  누설 버킷 프리 리스트(leaky bucket free list)을 만들고 있다.
+클라이언트는 `freeList`에서 버퍼를 획득하려고 시도하는데, 버퍼를 사용할 수 없는 경우에는 새로운 버퍼를 할당한다. 리스트가 꽉 차 있지 않는 이상, 서버는 버퍼를 `freeList`에 송신하여 프리 리스트에 버퍼 b를 다시 둔다. 리스트가 꽉 차 있는 경우, 버퍼는 바닥에 떨어져 가비지 콜렉터에 의해 회수된다. (`select` 구문에서 `default` 절은 다른 case가 준비되지 않은 경우에 실행된다. 이는 `select`는 결코 블락되지 않는다는 것을 뜻한다.)  단지 몇 줄로 버퍼 채널과 버퍼 크기를 부기하는 가비지 컬렉터에 기대어 구현된 누설 버킷 프리 리스트(leaky bucket free list)를 만들었다.
