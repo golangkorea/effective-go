@@ -1,4 +1,6 @@
 # effective-go
+
+[![Join the chat at https://gitter.im/golangkorea/effective-go](https://badges.gitter.im/golangkorea/effective-go.svg)](https://gitter.im/golangkorea/effective-go?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 > Effective Go 한국어 번역 문서입니다.
 
 
