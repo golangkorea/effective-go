@@ -5,7 +5,7 @@
   * [예제](introduction.md#예제)
 * [포맷팅](formatting.md)
 * [주석](commentary.md)
-* [Names](names.md)
+* [명칭](names.md)
    * [패키지명](names.md#패키지명)
    * [게터 - Getters](names.md#게터-getters)
    * [인터페이스명](names.md#인터페이스명)
