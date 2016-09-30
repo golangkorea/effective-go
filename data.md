@@ -185,7 +185,7 @@ func (f *File) Read(buf []byte) (n int, err error)
 
 The method returns the number of bytes read and an error value, if any. To read into the first 32 bytes of a larger buffer buf, slice (here used as a verb) the buffer.
 
-메서드는 읽은 바이트의 수와 생길 수도 있는 에러 값을 리턴한다. 아래 예제에서는, 더 큰 버퍼 buf의 첫 32 바이트를 읽어 들이기 위해 그 버퍼를 슬라이스했다(여기에서는 slice를 동사로 썼다).
+메서드는 읽은 바이트의 수와 생길 수도 있는 에러 값을 반환한다. 아래 예제에서는, 더 큰 버퍼 buf의 첫 32 바이트를 읽어 들이기 위해 그 버퍼를 슬라이스했다(여기에서는 slice를 동사로 썼다).
 
 ```go
     n, err := f.Read(buf[0:32])
@@ -210,7 +210,7 @@ Such slicing is common and efficient. In fact, leaving efficiency aside for the 
 
 The length of a slice may be changed as long as it still fits within the limits of the underlying array; just assign it to a slice of itself. The capacity of a slice, accessible by the built-in function `cap`, reports the maximum length the slice may assume. Here is a function to append data to a slice. If the data exceeds the capacity, the slice is reallocated. The resulting slice is returned. The function uses the fact that `len` and `cap` are legal when applied to the `nil` slice, and return 0.
 
-slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 할당하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 리턴된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 리턴하는 사실을 이용하고 있다.
+slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 할당하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 반환된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 반환하는 사실을 이용하고 있다.
 
 ```go
 func Append(slice, data []byte) []byte {
@@ -232,7 +232,7 @@ func Append(slice, data []byte) []byte {
 
 We must return the slice afterwards because, although Append can modify the elements of `slice`, the slice itself (the run-time data structure holding the pointer, length, and capacity) is passed by value.
 
-slice는 꼭 처리후 리턴되어야 한다. Append가 `slice`의 요소들을 변경할 수 있지만, slice 자체(포인터, 크기, 용량을 갖고 있는 런타임 데이터 구조)는 값으로 패스되었기 때문이다.
+slice는 꼭 처리후 반환되어야 한다. Append가 `slice`의 요소들을 변경할 수 있지만, slice 자체(포인터, 크기, 용량을 갖고 있는 런타임 데이터 구조)는 값으로 패스되었기 때문이다.
 
 The idea of appending to a slice is so useful it's captured by the append built-in function. To understand that function's design, though, we need a little more information, so we'll return to it later.
 
@@ -321,7 +321,7 @@ offset := timeZone["EST"]
 
 An attempt to fetch a map value with a key that is not present in the map will return the zero value for the type of the entries in the map. For instance, if the map contains integers, looking up a non-existent key will return 0. A set can be implemented as a map with value type bool. Set the map entry to `true` to put the value in the set, and then test it by simple indexing.
 
-Map에 없는 key를 가지고 값을 추출하려는 시도는 값의 타입에 해당하는 제로값을 리턴할 것이다. 예를 들어, 만약 map이 integer를 가지고 있으면, 존재하지 않는 key에 대한 조회는 0을 리턴한다. bool 타입의 값을 가진 map으로 set을 구현할 수 있다. map의 엔트리를 `true`로 저장함으로써 set안에 값을 집어 넣을 수 있고, 간단히 인덱싱을 통해 검사해 볼 수 있다.
+Map에 없는 key를 가지고 값을 추출하려는 시도는 값의 타입에 해당하는 제로값을 반환할 것이다. 예를 들어, 만약 map이 integer를 가지고 있으면, 존재하지 않는 key에 대한 조회는 0을 반환한다. bool 타입의 값을 가진 map으로 set을 구현할 수 있다. map의 엔트리를 `true`로 저장함으로써 set안에 값을 집어 넣을 수 있고, 간단히 인덱싱을 통해 검사해 볼 수 있다.
 
 ```go
 attended := map[string]bool{
@@ -379,7 +379,7 @@ delete(timeZone, "PDT")  // Now on Standard Time
 
 Formatted printing in Go uses a style similar to C's `printf` family but is richer and more general. The functions live in the fmt package and have capitalized names: `fmt.Printf`, `fmt.Fprintf`, `fmt.Sprintf` and so on. The string functions (`Sprintf` etc.) return a string rather than filling in a provided buffer.
 
-Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍부하고 일반적인다. 함수들은 [fmt](https://godoc.org/fmt) 패키지에 있고 대문자화된 이름을 가진다: `[fmt.Printf](https://godoc.org/fmt#Printf)`, `[fmt.Fprintf](https://godoc.org/fmt#Fprintf)`, `[fmt.Sprintf](https://godoc.org/fmt#Sprintf)`, 기타 등등. 문자열 함수(`Sprintf`, 기타등등)은 제공된 버퍼를 채우기 보다는 문자열을 리턴한다.
+Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍부하고 일반적인다. 함수들은 [fmt](https://godoc.org/fmt) 패키지에 있고 대문자화된 이름을 가진다: `[fmt.Printf](https://godoc.org/fmt#Printf)`, `[fmt.Fprintf](https://godoc.org/fmt#Fprintf)`, `[fmt.Sprintf](https://godoc.org/fmt#Sprintf)`, 기타 등등. 문자열 함수(`Sprintf`, 기타등등)은 제공된 버퍼를 채우기 보다는 문자열을 반환한다.
 
 You don't need to provide a format string. For each of Printf, `Fprintf` and `Sprintf` there is another pair of functions, for instance `Print` and `Println`. These functions do not take a format string but instead generate a default format for each argument. The `Println` versions also insert a blank between arguments and append a newline to the output while the `Print` versions add blanks only if the operand on neither side is a string. In this example each line produces the same output.
 
@@ -586,7 +586,7 @@ where T is a placeholder for any given type. You can't actually write a function
 
 What append does is append the elements to the end of the slice and return the result. The result needs to be returned because, as with our hand-written Append, the underlying array may change. This simple example
 
-append이 하는 일은 slice의 끝에 요소들을 붙이고 결과를 리턴하는 것이다. 결과는 리턴되어야 한다. 왜냐면, 손으로 쓴 Append와 같이, 내부의 배열은 변할 수 있다. 다음의 간단한 예를 보라.
+append이 하는 일은 slice의 끝에 요소들을 붙이고 결과를 반환하는 것이다. 결과는 반환되어야 한다. 왜냐면, 손으로 쓴 Append와 같이, 내부의 배열은 변할 수 있다. 다음의 간단한 예를 보라.
 
 ```go
 x := []int{1,2,3}
