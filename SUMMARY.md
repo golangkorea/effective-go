@@ -16,7 +16,7 @@
    * [재선언과 재할당](control_structures.md#재선언과-재할당)
    * [For](control_structures.md#for)
    * [Switch](control_structures.md#switch)
-   * [타입 switch](control_structures.md#type-switch)
+   * [타입 switch](control_structures.md#타입-switch)
 * [Functions](functions.md)
    * [Multiple return values](functions.md#multiple-return-values)
    * [Named result parameters](functions.md#named-result-parameters)
