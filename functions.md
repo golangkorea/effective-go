@@ -7,7 +7,6 @@
 
 Go 언어가 가지고 있는 특징 중 하나는 함수와 메소드가 여러 값을 반환 할 수 있다는 것이다. 이러한 형태는 `C` 프로그램에서 대역 내 (`in-band`) 에러에서 EOF를 나타내기 위해 -1 과 같은 값을 반환하고 주소로 전달한 매개변수를 변환시키는 것과 같은 여러 골치아팠던 문법을 개선하는데 사용할 수 있다.
 
-In C, a write error is signaled by a negative count with the error code secreted away in a volatile location. In Go, `Write` can return a count and an error: “Yes, you wrote some bytes but not all of them because you filled the device”. The signature of the Write method on files from package `os` is:
 
 C 언어 에서는 임의의 장소에 비밀스러운 방법으로 에러 코드와 음수로 쓰기 에러를 나타낸다. Go 언어의 [Write](https://golang.org/pkg/os/#File.Write) 에서는 카운트와 에러를 반환 할 수 있다. "그래, 몇 바이트 정도는 쓰긴 했지만 장치에 가득 차기 때문에 모든 바이트를 쓰지는 못했어". `os` 패키지 파일에 있는 [Write](https://golang.org/pkg/os/#File.Write) 메소드의 시그니처는 다음과 같다.
 
@@ -15,9 +14,7 @@ C 언어 에서는 임의의 장소에 비밀스러운 방법으로 에러 코�
 func (file *File) Write(b []byte) (n int, err error)
 ```
 
-and as the documentation says, it returns the number of bytes written and a non-nil `error` when `n != len(b)`. This is a common style; see the section on error handling for more examples.
-
-그리고 문서에서도 언급하고 있듯이, Write 메소드는 `n != len(b)`인 경우에는 쓴 바이트 숫자와 nil 이 아닌 `error` 를 반환한다. 이와 같은 형태는 지극히 일반적이며 더 많은 예제를 보고자 할 경우에는 에러 핸들링 세션을 살펴보도록 하자.
+그리고 문서에서도 언급하고 있듯이, Write 메소드는 `n != len(b)`인 경우에는 쓰인 바이트 갯수와 nil 이 아닌 `error` 를 반환한다. 이와 같은 형태는 지극히 일반적이며 더 많은 예제를 보고자 할 경우에는 에러 핸들링 세션을 살펴보도록 하자.
 
 A similar approach obviates the need to pass a pointer to a return value to simulate a reference parameter. Here's a simple-minded function to grab a number from a position in a byte slice, returning the number and the next position.
 
