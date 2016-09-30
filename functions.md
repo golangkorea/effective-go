@@ -30,8 +30,6 @@ func nextInt(b []byte, i int) (int, int) {
 }
 ```
 
-You could use it to scan the numbers in an input slice b like this:
-
 또는 다음과 같이 입력 슬라이스 b 에서 숫자를 스캔하는데도 사용할 수 있다.
 
 ```go
@@ -43,9 +41,8 @@ You could use it to scan the numbers in an input slice b like this:
 
 ## 이름 있는 결과 인자값 (Named result parameters)
 
-The return or result "parameters" of a Go function can be given names and used as regular variables, just like the incoming parameters. When named, they are initialized to the zero values for their types when the function begins; if the function executes a return statement with no arguments, the current values of the result parameters are used as the returned values.
 
-Go 함수에서는 반환 "인자"나 결과 "인자"에 이름을 부여하고 인자로 들어온 매개변수 처럼 일반 변수로 사용할 수 있다. 이름을 부여하면, 해당 변수는 함수가 시작될 때 해당 타입의 제로 값으로 초기화 된다. 함수가 인자 없이 반환 문을 수행할 경우에는 결과 매개변수의 현재 값이 반환 값으로 사용된다.
+Go 함수에서는 반환 "인자"나 결과 "인자"에 이름을 부여하고 인자로 들어온 매개변수처럼 일반 변수로 사용할 수 있다. 이름을 부여하면, 해당 변수는 함수가 시작될 때 해당 타입의 제로 값으로 초기화 된다. 함수가 인자 없이 반환문을 수행할 경우에는 결과 매개변수의 현재 값이 반환 값으로 사용된다.
 
 The names are not mandatory but they can make code shorter and clearer: they're documentation. If we name the results of `nextInt` it becomes obvious which returned `int` is which.
 
