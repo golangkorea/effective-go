@@ -71,31 +71,23 @@ d, err := f.Stat()
 
 여기서 `d` 와 `err` 를 선언하는 것처럼 보인다. 주목할 부분은 저 `err`가 위에서와 아래 두 곳 모두에서 나타난다는 것이다. 이 선언의 중복은 합법적이다. `err` 은 첫번째 구문을 통해서 선언되어지만 두번째에서는 재할당된다. 이는 `f.Stat` 를 호출하는 것에서는 이미 선언되어 존재하는 `err` 변수를 사용하고, 다시 새로운 값을 부여한다는 것을 의미한다.
 
-In `a :=` declaration a variable v may appear even if it has already been declared, provided:
 
-어떤 `:=` 선언에서 변수 v 는 그 변수가 이미 선언되었더라도 다음의 경우, 나타날 수 있다. 
+변수의 단축선언, `a :=` 에서 변수 v 는 이미 선언되었더라도 다음의 경우 재선언이 가능하다. 
 
-* this declaration is in the same scope as the existing declaration of v (if v is already declared in an outer scope, the declaration on will create a new variable §),
-* the corresponding value in the initialization is assignable to v, and
-* there is at least one other variable in the declaration that is being declared anew.
+* 이 선언이 기존의 선언과 같은 스코프에 있어야 하고 (만약 v가 이미 외부 스코프에 선언되었다면, 이 선언은 새 변수를 만들것 이다. §),
+* 초기화 표현내에서 상응하는 값은 v에 할당할 수 있고,
+* 적어도 하나 이상의 새로운 변수가 선언문 안에 함께 있어야 한다.
 
-* 이 선언은 v 의 기존 선언과 같은 범위에 있는 경우( 만약 v가 바깥의 스코프에서 선언되었다면 새로운 변수를 생성한다 §참고)
-* 초기화된 값과 일치하는 경우 v에 할당 가능하다
-* 그리고 이것이 마지막 하나의 다른 변수 선언 안에서 
 
-This unusual property is pure pragmatism, making it easy to use a single err value, for example, in a long if-else chain. You'll see it used often.
-
-이 독특한 속성은 완전히 실용적이며, 예를 들어  긴 if-else 구문에서 하나의 에러 값을 손쉽게 사용하게 만들어 준다. 
+이 독특한 속성은 완전히 실용적이며, 예를 들어 길고 연쇄적인 if-else 구문에서 하나의 에러 값을 쉽게 사용할 수 있게 해 준다. 자주 사용되는 것을 보게 될 것이다. 
 
 § It's worth noting here that in Go the scope of function parameters and return values is the same as the function body, even though they appear lexically outside the braces that enclose the body.
 
-§ GO언어에서 함수 파라미터의 스코프와 리턴 값들은, 비록 그들이 사전적으로 body 에 둘어싸인 중괄호 밖에 나타나더라도 함수의 body 로써 동일하며, 이부분을 주목할 가치가 있다
+§ Go언어에서 함수 파라미터와 리턴 값들은, 함수를 감싸고 있는 브래이스들(braces)밖에 위치해 있음에도, 그 스코프는 함수 몸통의 스코프와 동일하다는 점을 주목할 가치가 있다.
 
 ## For
 
-The Go for loop is similar to—but not the same as—C's. It unifies for and while and there is no do-while. There are three forms, only one of which has semicolons.
-
-GO언어에서 for 반복문은 C언어와 비슷하지만 일치하지는 않는다. for 는 while 처럼 동작할 수 있고, 따라서 do-while 이 없다. 다음의 세가지 형태를 확인할 수 있으며, 하나의 경우에서만 세미콜론을 사용되는 것을 확인할 수 있다. 
+Go언어에서 for 반복문은 C언어와 비슷하지만 일치하지는 않는다. for 는 while 처럼 동작할 수 있고, 따라서 do-while 이 없다. 다음의 세가지 형태를 확인할 수 있으며, 하나의 경우에서만 세미콜론을 사용되는 것을 확인할 수 있다. 
 
 ```go
 // C언어와 같은 경우
@@ -108,8 +100,6 @@ for condition { }
 for { }
 ```
 
-Short declarations make it easy to declare the index variable right in the loop.
-
 짧은 선언문은 반복문에서 index 변수 선언을 쉽게 만든다.
 
 ```go
@@ -119,8 +109,6 @@ for i := 0; i < 10; i++ {
 }
 ```
 
-If you're looping over an array, slice, string, or map, or reading from a channel, a range clause can manage the loop.
-
 만약 배열, slice, string, map, 채널로 부터 읽어 들이는 반복문을 작성한다면, range 구문이 이 반복문을 관리해줄 수 있다.
 
 ```go
@@ -128,8 +116,6 @@ for key, value := range oldMap {
     newMap[key] = value
 }
 ```
-
-If you only need the first item in the range (the key or index), drop the second:
 
 만약 range 안에서 첫번째 아이템만이 필요하다면 (키 또는 인덱스), 두번째 뒤는 날려버리자:
 
@@ -141,9 +127,7 @@ for key := range m {
 }
 ```
 
-If you only need the second item in the range (the value), use the blank identifier, an underscore, to discard the first:
-
-만약 range 안에서 두번째 아이템만이 필요하다면 (값), 빈 식별자, 언더스코어를 사용하여 첫번째를 버리도록 하자:
+만약 range 안에서 두번째 아이템만이 필요하다면 (값), 공백 식별자, 언더스코어를 사용하여 첫번째를 버리도록 하자:
 
 ```go
 sum := 0
@@ -152,13 +136,10 @@ for _, value := range array {
 }
 ```
 
-The blank identifier has many uses, as described in [a later section](https://golang.org/doc/effective_go.html#blank).
+공백 식별자는 많은 사용법이 있는데, [나중에 보일 섹션](https://golang.org/doc/effective_go.html#blank)에 잘 설명되어 있다. 
 
-공백 식별자는 많은 사용법이 있는데, [a later section](https://golang.org/doc/effective_go.html#blank)에 잘 설명되어 있다. 
 
-For strings, the range does more work for you, breaking out individual Unicode code points by parsing the UTF-8. Erroneous encodings consume one byte and produce the replacement rune U+FFFD. (The name (with associated builtin type) rune is Go terminology for a single Unicode code point. See [the language specification](https://golang.org/ref/spec#Rune_literals) for details.) 
-
-string 의 경우, range 는 UTF-8 파싱에 의한 개별적인 유니코드 문자를 처리하는데 유용할 것이다. 잘못된 인코딩은 하나의 바이트를 제거하고 U+FFFD 룬 문자로 대체할 것이다. ( 룬(내장된 타입으로 지정된)의 이름은 GO 언어의 단일 유니코드 코드에 대한 용어이다. 보다 자세한 사항은 [언어 스펙](https://golang.org/ref/spec#Rune_literals)을 참고하자) 
+string의 경우, range 는 UTF-8 파싱에 의한 개별적인 유니코드 문자를 처리하는데 유용할 것이다. 잘못된 인코딩은 하나의 바이트를 제거하고 U+FFFD 룬 문자로 대체할 것이다. ( 룬(내장된 타입으로 지정된)의 이름은 Go 언어의 단일 유니코드 코드에 대한 용어이다. 보다 자세한 사항은 [언어 스펙](https://golang.org/ref/spec#Rune_literals)을 참고하자) 
 
 The loop
 
