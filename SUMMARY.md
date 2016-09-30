@@ -17,7 +17,7 @@
    * [For](control_structures.md#for)
    * [Switch](control_structures.md#switch)
    * [타입 switch](control_structures.md#타입-switch)
-* [Functions](functions.md)
+* [함수](functions.md)
    * [Multiple return values](functions.md#multiple-return-values)
    * [Named result parameters](functions.md#named-result-parameters)
    * [Defer](functions.md#defer)
