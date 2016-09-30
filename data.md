@@ -11,7 +11,7 @@ Go에는 메모리를 할당하는 두가지 기본 방식이 있는데, 내장(
 
 Since the memory returned by `new` is zeroed, it's helpful to arrange when designing your data structures that the zero value of each type can be used without further initialization. This means a user of the data structure can create one with new and get right to work. For example, the documentation for `bytes.Buffer` states that "the zero value for Buffer is an empty buffer ready to use." Similarly, `sync.Mutex` does not have an explicit constructor or Init method. Instead, the zero value for a `sync.Mutex` is defined to be an unlocked mutex.
 
-`new`를 통해 반환된 메모리는 제로값을 갖기 때문에, 데이터 구조를 설계할 때 굳이 초기화 없이도 사용된 타입의 제로값을 그대로 쓸 수 있도록 조정하면 도움이 된다. 무슨 말이냐 하면 데이터 구조의 사용자가 new로 새 구조를 만들고 바로 일에 사용할 수 있다는 것이다. 예를 들어, [bytes.Buffer](https://godoc.org/bytes#Buffer)의 문서는 "Buffer의 제로값은 바로 사용할 수 있는 텅빈 버퍼이다"라고 말하고 있다. 유사하게, [sync.Mutex](https://godoc.org/sync#Mutex)도 명시된 constructor도 Init 메서드도 가지고 있지 않다. 대신, [sync.Mutex](https://godoc.org/sync#Mutex)의 제로값이 잠기지 않은 mutex로 정의되어 있다.
+`new`를 통해 반환된 메모리는 제로값을 갖기 때문에, 데이터 구조를 설계할 때 굳이 초기화 없이도 사용된 타입의 제로값을 그대로 쓸 수 있도록 조정하면 도움이 된다. 무슨 말이냐 하면 데이터 구조의 사용자가 new로 새 구조를 만들고 바로 일에 사용할 수 있다는 것이다. 예를 들어, [bytes.Buffer](https://godoc.org/bytes#Buffer)의 문서는 "Buffer의 제로값은 바로 사용할 수 있는 텅빈 버퍼이다"라고 말하고 있다. 유사하게, [sync.Mutex](https://godoc.org/sync#Mutex)도 명시된 constructor도 Init 메서드도 가지고 있지 않다. 대신, [sync.Mutex](https://godoc.org/sync#Mutex)의 제로값인 잠기지 않은 mutex로 정의되어 있다.
 
 `The zero-value-is-useful property works transitively. Consider this type declaration.`
 
