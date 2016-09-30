@@ -16,9 +16,7 @@ func (file *File) Write(b []byte) (n int, err error)
 
 그리고 문서에서도 언급하고 있듯이, Write 메소드는 `n != len(b)`인 경우에는 쓰인 바이트 갯수와 nil 이 아닌 `error` 를 반환한다. 이와 같은 형태는 지극히 일반적이며 더 많은 예제를 보고자 할 경우에는 에러 핸들링 세션을 살펴보도록 하자.
 
-A similar approach obviates the need to pass a pointer to a return value to simulate a reference parameter. Here's a simple-minded function to grab a number from a position in a byte slice, returning the number and the next position.
-
-유사한 방식으로 반환 값을 참조 매개변수를 흉내냄으로써 포인터를 전달 할 필요가 없게 만들 수 있다. 아래에는 숫자와 다음 위치를 반환 함으로써 바이트 슬라이스에 위치한 숫자를 가져오는 간단한 함수가 있다.
+유사하게 반환 값으로 참조 매개변수 흉내를 냄으로써 포인터를 전달 할 필요가 없게 만들 수 있다. 아래는 숫자와 다음 위치를 반환 함으로써 바이트 슬라이스에 위치한 숫자를 가져오는 간단한 함수이다.
 
 ```go
 func nextInt(b []byte, i int) (int, int) {
