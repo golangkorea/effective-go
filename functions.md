@@ -44,17 +44,13 @@ func nextInt(b []byte, i int) (int, int) {
 
 Go 함수에서는 반환 "인자"나 결과 "인자"에 이름을 부여하고 인자로 들어온 매개변수처럼 일반 변수로 사용할 수 있다. 이름을 부여하면, 해당 변수는 함수가 시작될 때 해당 타입의 제로 값으로 초기화 된다. 함수가 인자 없이 반환문을 수행할 경우에는 결과 매개변수의 현재 값이 반환 값으로 사용된다.
 
-The names are not mandatory but they can make code shorter and clearer: they're documentation. If we name the results of `nextInt` it becomes obvious which returned `int` is which.
-
 이름을 부여하는것이 필수는 아니지만 이름을 부여하면 코드를 더 짧고 명확하게 만들어 주며, 문서화가 된다. `nextInt`의 결과에 이름을 부여할 경우, 반환되는 `int` 가 어떠한 것인지 명확해 진다.
 
 ```go
 func nextInt(b []byte, pos int) (value, nextPos int) {
 ```
 
-Because named results are initialized and tied to an unadorned return, they can simplify as well as clarify. Here's a version of `io.ReadFull` that uses them well:
-
-이름있는 결과는 초기화 되고 아무 내용 없이 반환되기 떄문에, 명확할 뿐만 아니라 단순해 질 수 있다. 아래는 이를 이용한 `io.ReadFull` 버전이다.
+이름있는 결과는 초기화 되고 아무 내용 없이 반환되기 때문에, 명확할 뿐만 아니라 단순해 질 수 있다. 아래는 이를 이용한 `io.ReadFull` 버전이다.
 
 ```go
 func ReadFull(r Reader, buf []byte) (n int, err error) {
@@ -70,9 +66,7 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
 
 ## Defer
 
-Go's `defer` statement schedules a function call (the deferred function) to be run immediately before the function executing the `defer` returns. It's an unusual but effective way to deal with situations such as resources that must be released regardless of which path a function takes to return. The canonical examples are unlocking a mutex or closing a file.
-
-Go 의 `defer` 문은 `defer` 를 실행하는 함수가 반환되기 전에 즉각 함수 호출(연기된 함수)을 실행하도록 예약한다. 이는 일반적인 방법은 아니긴 하지만 함수가 반환하기 위해 갖는 경로에 관계 없이 자원을 해지 해야만 하는 것과 같은 상황을 처리해야 하는 경우에는 효과적인 방법이다. 가장 대표적인 예제로는 뮤텍스(mutex)의 잠금을 풀거나 파일을 닫는 것이 있다.
+Go 의 `defer` 문은 `defer` 를 실행하는 함수가 반환되기 전에 즉각 함수 호출(연기된 함수)을 실행하도록 예약한다. 이는 일반적인 방법은 아니긴 하지만 함수가 어떤 실행경로를 통해 반환을 하던간에 자원을 해지 해야만 하는 것과 같은 상황을 처리해야 하는 경우에는 효과적인 방법이다. 가장 대표적인 예제로는 뮤텍스(mutex)의 잠금을 풀거나 파일을 닫는 것이 있다.
 
 ```go
 // Contents returns the file's contents as a string.
