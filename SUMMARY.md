@@ -4,7 +4,7 @@
 * [소개](introduction.md)
   * [예제](introduction.md#예제)
 * [포맷팅](formatting.md)
-* [Commentary](commentary.md)
+* [주석](commentary.md)
 * [Names](names.md)
    * [패키지명](names.md#패키지명)
    * [게터 - Getters](names.md#게터-getters)
