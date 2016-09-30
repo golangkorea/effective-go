@@ -3,13 +3,10 @@
 * 원문 : [Control Structures](https://golang.org/doc/effective_go.html#control-structures)
 * 번역자 : Jungsoo Ahn (@findstar)
 
-The control structures of Go are related to those of C but differ in important ways. There is no `do` or `while` loop, only a slightly generalized `for`; `switch` is more flexible; `if` and `switch` accept an optional initialization statement like that of `for`; `break` and `continue` statements take an optional label to identify what to break or continue; and there are new control structures including a type switch and a multiway communications multiplexer, `select`. The syntax is also slightly different: there are no parentheses and the bodies must always be brace-delimited.
 
-Go언어의 제어구조는 C 와 연관성이 있지만 중요한 점에서 차이가 있다. Go언어에서는 `do` 나 `while` 반복문이 존재하지 않으며, 단지 좀 더 일반화된 `for`, 좀 더 유연한 `switch`가  존재한다. `if` 와 `switch` 는 선택적으로 `for` 와 같은 같은 초기화 구문을 받을 수 있다. `break` 와  `continue` 구문들은 선택적으로 어느것을 멈추거나 계속할지 식별하기 위해서 라벨을 받을 수 있다. 또한 `type switch`와 `multiway communications multiplexer`, `select`의 새로운 제어 구조가 포함되어 있다. 문법은 조금 다르다. 괄호는 필요하지 않으며 body는 항상 중괄호로 구분해야 한다. 
+Go언어의 제어구조는 C 와 연관성이 있지만 중요한 점에서 차이가 있다. Go언어에서는 `do` 나 `while` 반복문이 존재하지 않으며, 단지 좀 더 일반화된 `for`, 좀 더 유연한 `switch`가  존재한다. `if` 와 `switch` 는 선택적으로 `for` 와 같은 초기화 구문을 받을 수 있다. `break` 와  `continue` 구문들은 선택적으로 어느것을 멈추거나 계속할지 식별하기 위해서 라벨을 받을 수 있다. 또한 `타입 switch`와 `다방향 통신 멀티플랙서`, `select`의 새로운 제어 구조가 포함되어 있다. 문법은 조금 다르다. 괄호는 필요하지 않으며 body는 항상 중괄호로 구분해야 한다. 
 
 ## If
-
-In Go a simple if looks like this:
 
 Go언어에서 if문의 간단한 예제는 다음과 같다:
 
@@ -19,13 +16,11 @@ if x > 0 {
 }
 ```
 
-Mandatory braces encourage writing simple if statements on multiple lines. It's good style to do so anyway, especially when the body contains a control statement such as a `return` or `break`.
-
-중괄호를 의무적으로 사용해야 하기 때문에, 다중 라인에서 if 구문들이 간단하게 작성된다. 특히 body 안에 `return` 이나 `break` 와 같은 제어 구문을 포함하고 있는 경우 좋은 스타일이 되게 해준다.
+중괄호를 의무적으로 사용해야 하기 때문에, 다중 라인에서 if 구문들이 간단하게 작성된다. 어차피 그렇게 하는 것이 좋은 스타일이며, 특히 구문 몸체에 return이나 break와 같은 제어 구문을 포함하고 있는 경우에는 더욱더 그러하다.
 
 Since `if` and `switch` accept an initialization statement, it's common to see one used to set up a local variable.
 
-`if` 와 `switch` 가 초기화 구문을 받을 수 있기 때문에, 지역변수를 설정하기 위해서 이 방법을 사용하는 것을 일반적으로 볼 수 있다. 
+`if`와 `switch`가 초기화 구문을 허용하므로 지역변수를 설정하기 위해 사용된 초기화 구문을 흔히 볼 수 있다. 
 
 ```go
 if err := file.Chmod(0664); err != nil {
