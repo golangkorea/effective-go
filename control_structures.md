@@ -175,9 +175,7 @@ for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
 
 ## Switch
 
-Go's switch is more general than C's. The expressions need not be constants or even integers, the cases are evaluated top to bottom until a match is found, and if the `switch` has no expression it switches on `true`. It's therefore possible—and idiomatic—to write an `if-else-if-else` chain as a `switch`.
-
-GO언어에서 스위치는 C언어에서 보다 더 일반적인 표현이 가능하다. 표현식은 상수이거나 꼭 정수일 필요가 없고 case 구문은 위에서부터 바닥까지 해당 구문이 `true` 가 아닌 동안에 일치하는 값을 찾을 때까지 계속 값을 비교한다. 따라서 `if-else-if-else` 형태로 작성하는 것 대신 `switch` 를 사용하는 것이 가능하다-그리고 이것이 좀 더 관용적 표현이 가능하다-.
+Go언어에서 스위치는 C언어에서 보다 더 일반적인 표현이 가능하다. 표현식은 상수이거나 꼭 정수일 필요가 없고 case 구문은 위에서부터 바닥까지 해당 구문이 `true` 가 아닌 동안에 일치하는 값을 찾을 때까지 계속 값을 비교한다. 따라서 `if-else-if-else` 형태로 작성하는 것 대신 `switch` 를 사용하는 것이 가능하다며 더 Go 언어답다.
 
 ```go
 func unhex(c byte) byte {
@@ -193,8 +191,6 @@ func unhex(c byte) byte {
 }
 ```
 
-There is no automatic fall through, but cases can be presented in comma-separated lists.
-
 스위치에서는 자동으로 다음으로 통과하는 동작이 없지만(케이스 구문을 지나가는 동작), 콤마로 구분된 목록을 사용해 case들을 표현할 수 있다. 
 
 ```go
@@ -207,9 +203,8 @@ func shouldEscape(c byte) bool {
 }
 ```
 
-Although they are not nearly as common in Go as some other C-like languages, break statements can be used to terminate a switch early. Sometimes, though, it's necessary to break out of a surrounding loop, not the switch, and in Go that can be accomplished by putting a label on the loop and "breaking" to that label. This example shows both uses.
 
-비록 GO언어의 것들이 다른 C와 같은 언어에서의 일반적인 경우와 거리가 있지만, `break` 구문은 스위치를 일찍 종료하기 위해서 사용될 수 있다. 가끔이지만, 스위치가 아닌 둘러쌓인 반복문을 중단하는 것이 필요하기도 하고, 라벨을 반복문 위에 넣고, 해당 라벨로 "탈출" 하는 것에 의해서 완료되어 질수도 있다. 다음 예제는 이 두가지 사용예이다. 
+비록 C와 같은 언어들에서 처럼 그렇게 보편적이진 않지만, Go에서도 break 구문으로 switch를 일찍 종료하기 위해 쓸 수 있다. 가끔이지만, 스위치가 아닌 둘러쌓인 반복문을 중단하는 것이 필요하기도 하고, 라벨을 반복문 위에 넣고, 해당 라벨로 "탈출" 하는 것에 의해서 완료되어 질수도 있다. 다음 예제는 이 두가지 사용예이다. 
 
 ```go
 Loop:
@@ -236,13 +231,11 @@ Loop:
 	}
 ```
 
-Of course, the `continue` statement also accepts an optional label but it applies only to loops.
 
 물론 `continue` 구문 또한 선택적으로 라벨을 받을 수 있지만, 반복문에만 적용된다.
 
-To close this section, here's a comparison routine for byte slices that uses two `switch` statements:
 
-섹션을 마무리하며, 다음은 두개의 `switch` 구문을 사용하여 바이트 슬라이스를 비교하는 루틴에 대한 예제이다. 
+섹션을 마무리하며, 다음은 두개의 `switch` 구문을 사용하여 바이트 슬라이스를 비교하는 루틴에 대한 예제이다: 
 
 ```go
 // Compare returns an integer comparing the two byte slices,
