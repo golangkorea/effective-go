@@ -56,7 +56,6 @@ codeUsing(f, d)
 
 ## 재선언과 재할당
 
-An aside: The last example in the previous section demonstrates a detail of how the := short declaration form works. The declaration that calls `os.Open` reads,
 
 이어서: 이전 섹션의 마지막 예제에서는 어떻게 := 짧은 선언문이 동작하는지 확인할 수 있었다. `os.Open`을 호출하는 선언코드를 보자.
 
@@ -64,15 +63,11 @@ An aside: The last example in the previous section demonstrates a detail of how 
 f, err := os.Open(name)
 ```
 
-This statement declares two variables, f and err. A few lines later, the call to f.Stat reads,
-
 이 구문은 `f` 와 `err`의 두개의 변수를 선언한다. 몇줄 아래 `f.Stat` 를 호출하는 부분을 보자.
 
 ```go
 d, err := f.Stat()
 ```
-
-which looks as if it declares d and err. Notice, though, that `err` appears in both statements. This duplication is legal: err is declared by the first statement, but only re-assigned in the second. This means that the call to `f.Stat` uses the existing `err` variable declared above, and just gives it a new value.
 
 여기서 `d` 와 `err` 를 선언하는 것처럼 보인다. 주목할 부분은 저 `err`가 위에서와 아래 두 곳 모두에서 나타난다는 것이다. 이 선언의 중복은 합법적이다. `err` 은 첫번째 구문을 통해서 선언되어지만 두번째에서는 재할당된다. 이는 `f.Stat` 를 호출하는 것에서는 이미 선언되어 존재하는 `err` 변수를 사용하고, 다시 새로운 값을 부여한다는 것을 의미한다.
 
