@@ -31,7 +31,7 @@ if err := file.Chmod(0664); err != nil {
 
 In the Go libraries, you'll find that when an if statement doesn't flow into the next statement—that is, the body ends in `break`, `continue`, `goto`, or `return`—the unnecessary `else` is omitted.
 
-GO 라이브러리에서, if 구문이 다음 구문으로 진행되지 않을 때 -`break`, `continue`, `goto` 또는 `return` 으로 인해서 body가 으로 종료되는- 불 필요한 `else` 는 생략되는 것을 찾을 수 있다.
+Go 여러 라이브러리를 보게되면, if 구문이 다음 구문으로 진행되지 않을 때, 즉 `break`, `continue`, `goto` 또는 `return` 으로 인해서 구문 몸체가 종료될 경우, 불필요한 `else` 는 생략되는 것을 발견할 수 있다.
 
 ```go
 f, err := os.Open(name)
