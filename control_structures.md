@@ -81,8 +81,6 @@ d, err := f.Stat()
 
 이 독특한 속성은 완전히 실용적이며, 예를 들어 길고 연쇄적인 if-else 구문에서 하나의 에러 값을 쉽게 사용할 수 있게 해 준다. 자주 사용되는 것을 보게 될 것이다. 
 
-§ It's worth noting here that in Go the scope of function parameters and return values is the same as the function body, even though they appear lexically outside the braces that enclose the body.
-
 § Go언어에서 함수 파라미터와 리턴 값들은, 함수를 감싸고 있는 브래이스들(braces)밖에 위치해 있음에도, 그 스코프는 함수 몸통의 스코프와 동일하다는 점을 주목할 가치가 있다.
 
 ## For
