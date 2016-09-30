@@ -264,7 +264,7 @@ func Compare(a, b []byte) int {
 
 A switch can also be used to discover the dynamic type of an interface variable. Such a type switch uses the syntax of a type assertion with the keyword type inside the parentheses. If the switch declares a variable in the expression, the variable will have the corresponding type in each clause. It's also idiomatic to reuse the name in such cases, in effect declaring a new variable with the same name but a different type in each case.
 
-스위치 구문은 인터페이스 변수의 동적 타입을 확인하는데 사용될 수도 있다. 타입 스위치가 괄호안에서 키워드 타입을 통해서 타입 단업표현의 문법을 사용하는 것 처럼, 만약 스위치 표현식 안에서 변수를 선언한다면, 변수는 각각의 절에서 일치하는 타입을 가질 것이다. 사실상 각각의 절 안에서 새로운 변수를 다른 타입이지만 동일한 이름으로 선언하는 것과 각각의 절 안에서 이름을 재사용하는 것이 관용적이다. 
+스위치 구문은 인터페이스 변수의 동적 타입을 확인하는데 사용될 수도 있다. 타입 스위치가 괄호안에서 키워드 타입을 통해서 타입 단언 표현의 문법을 사용하는 것 처럼, 만약 스위치 표현식 안에서 변수를 선언한다면, 변수는 각각의 절에서 일치하는 타입을 가질 것이다. 사실상 각각의 절 안에서 새로운 변수를 다른 타입이지만 동일한 이름으로 선언하는 것과 각각의 절 안에서 이름을 재사용하는 것이 관용적이다. 
 
 ```go
 var t interface{}
