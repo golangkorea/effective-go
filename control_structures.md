@@ -18,7 +18,6 @@ if x > 0 {
 
 중괄호를 의무적으로 사용해야 하기 때문에, 다중 라인에서 if 구문들이 간단하게 작성된다. 어차피 그렇게 하는 것이 좋은 스타일이며, 특히 구문 몸체에 return이나 break와 같은 제어 구문을 포함하고 있는 경우에는 더욱더 그러하다.
 
-Since `if` and `switch` accept an initialization statement, it's common to see one used to set up a local variable.
 
 `if`와 `switch`가 초기화 구문을 허용하므로 지역변수를 설정하기 위해 사용된 초기화 구문을 흔히 볼 수 있다. 
 
@@ -28,8 +27,6 @@ if err := file.Chmod(0664); err != nil {
     return err
 }
 ```
-
-In the Go libraries, you'll find that when an if statement doesn't flow into the next statement—that is, the body ends in `break`, `continue`, `goto`, or `return`—the unnecessary `else` is omitted.
 
 Go 여러 라이브러리를 보게되면, if 구문이 다음 구문으로 진행되지 않을 때, 즉 `break`, `continue`, `goto` 또는 `return` 으로 인해서 구문 몸체가 종료될 경우, 불필요한 `else` 는 생략되는 것을 발견할 수 있다.
 
@@ -41,9 +38,8 @@ if err != nil {
 codeUsing(f)
 ```
 
-This is an example of a common situation where code must guard against a sequence of error conditions. The code reads well if the successful flow of control runs down the page, eliminating error cases as they arise. Since error cases tend to end in `return` statements, the resulting code needs no `else` statements.
 
-다음은 코드가 에러 상태의 시퀀스를 방지해야하는 일반적인 상황에 대한 예제이다. 만약 제어의 흐름이 성공적이라면 코드는 잘 동작할 것이고, 에러가 발생할 때마다 에러를 제거 할 것이다. 에러 케이스들은 `return` 구문에서 종료하는 경향이 있기 때문에, 결과적으로 코드에는 `else` 구문이 필요하지 않다. 
+다음은 코드가 일련의 에러 조건들을 반드시 검사해야 하는 일반적인 상황에 대한 예제이다. 만약 제어의 흐름이 성공적이라면 코드는 잘 동작할 것이고, 에러가 발생할 때마다 에러를 제거 할 것이다. 에러 케이스들은 `return` 구문에서 종료하는 경향이 있기 때문에, 결과적으로 코드에는 `else` 구문이 필요하지 않다. 
 
 ```go
 f, err := os.Open(name)
@@ -58,7 +54,6 @@ if err != nil {
 codeUsing(f, d)
 ```
 
-## Redeclaration and reassignment
 ## 재선언과 재할당
 
 An aside: The last example in the previous section demonstrates a detail of how the := short declaration form works. The declaration that calls `os.Open` reads,
