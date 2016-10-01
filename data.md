@@ -209,31 +209,25 @@ text := LinesOfText{
 }
 ```
 
-Sometimes it's necessary to allocate a 2D slice, a situation that can arise when processing scan lines of pixels, for instance. There are two ways to achieve this. One is to allocate each slice independently; the other is to allocate a single array and point the individual slices into it. Which to use depends on your application. If the slices might grow or shrink, they should be allocated independently to avoid overwriting the next line; if not, it can be more efficient to construct the object with a single allocation. For reference, here are sketches of the two methods. First, a line at a time:
-
-때로 이차원의 slice를 메모리에 할당할 필요가 생기는데, 예를 들면 픽셀로 된 줄들은 스캔하는 상황이다. 두 가지 방식으로 해결할 수 있는데, 첫번째는 각 slice를 독립적으로 할당하는 것이고; 두번째는 slice 하나를 할당해서 각 slice를 자른 다음 가리키는 것이다. 어느 것을 쓸지는 애플리케이션에 달렸다. 만약 slice가 자라거나 줄어들 수 있다면, 독립적으로 할당해서 다음 줄을 덮어쓰는 일을 방지해야 하고; 그렇지 않다면, 객체를 생성하기 위한 메모리 할당을 한번에 하는 것이 더 효율적일 수 있다. 참고로, 여기 두 방식의 스케치가 잇다. 우선, 한번에 한줄씩:
+때로 이차원의 slice를 메모리에 할당할 필요가 생기는데, 예를 들면 픽셀로 된 줄들은 스캔하는 상황이다. 두 가지 방식으로 해결할 수 있는데, 첫번째는 각 slice를 독립적으로 할당하는 것이고; 두번째는 slice 하나를 할당하고 각 slice로 자른 다음 포인터를 주는 방식이다. 어느 것을 쓸지는 애플리케이션에 달렸다. 만약 slice가 자라거나 줄어들 수 있다면, 독립적으로 할당해서 다음 줄을 덮어쓰는 일을 방지해야 하고; 그렇지 않다면, 객체를 생성하기 위한 메모리 할당을 한번에 하는 것이 더 효율적일 수 있다. 참고로, 여기 두 방식을 스케치해 보았다. 우선, 한번에 한줄씩:
 
 ```go
-// Allocate the top-level slice.
 // 최상위 레벨의 slice를 할당하라.
-picture := make([][]uint8, YSize) // One row per unit of y. 유닛 y마다 한 줄씩
-// Loop over the rows, allocating the slice for each row.
-//
+picture := make([][]uint8, YSize) // 유닛 y마다 한 줄씩.
+// 각 줄을 반복하면서 slice를 할당하라.
 for i := range picture {
 	picture[i] = make([]uint8, XSize)
 }
 ```
 
-And now as one allocation, sliced into lines:
-
 그리고 이제 한번의 메모리 할당으로, 잘라서 줄을 만드는 경우:
 
 ```go
-// Allocate the top-level slice, the same as before.
-picture := make([][]uint8, YSize) // One row per unit of y.
-// Allocate one large slice to hold all the pixels.
-pixels := make([]uint8, XSize*YSize) // Has type []uint8 even though picture is [][]uint8.
-// Loop over the rows, slicing each row from the front of the remaining pixels slice.
+// 위에서 한 것처럼, 최상위 레벨의 배열을 할당하라.
+picture := make([][]uint8, YSize) // 유닛 y마다 한 줄씩.
+// 모든 픽셀들을 담을 수 있는 큰 slice를 할당하라.
+pixels := make([]uint8, XSize*YSize) // picture는 [][]uint8 타입이지만 pixels는 []uint8 타입.
+// 각 줄을 반복하면서, 남겨진 pixels slice의 처음부터 크기대로 슬라이싱하라.
 for i := range picture {
 	picture[i], pixels = pixels[:XSize], pixels[XSize:]
 }
@@ -241,11 +235,7 @@ for i := range picture {
 
 ## Maps
 
-Maps are a convenient and powerful built-in data structure that associate values of one type (the key) with values of another type (the element or value) The key can be of any type for which the equality operator is defined, such as integers, floating point and complex numbers, strings, pointers, interfaces (as long as the dynamic type supports equality), structs and arrays. Slices cannot be used as map keys, because equality is not defined on them. Like slices, maps hold references to an underlying data structure. If you pass a map to a function that changes the contents of the map, the changes will be visible in the caller.
-
 Map은 편리하고 강력한 내장 데이타 구조로 한 타입의 값들(the key)을 다른 타입의 값들에 연결해준다. Key는 equality연산이 정의되어 있는 어떤 타입이라도 사용 가능하며, integers, floating point, 복소수(complex numbers), strings, 포인터(pointers), 인터페이스(equality를 지원하는 동적 타입에 한해서), structs 그리고 배열(arrays)이 그러한 예이다. Slice는 map의 key로 사용될 수 없는데, 그 이유는 equality가 정의되어 있지 않기 때문이다. Slice와 마찬가지로 map 역시 내부 데이터 구조를 가진다. 함수에 map을 입력하고 map의 내용물을 변경하면, 그 변화는 호출자에게도 보인다.
-
-Maps can be constructed using the usual composite literal syntax with colon-separated key-value pairs, so it's easy to build them during initialization.
 
 Map 또한 콜론으로 분리된 key-value 짝을 이용한 합성 리터럴로 생성될 수 있으며, 초기화중에 쉽게 만들 수 있다.
 
@@ -259,17 +249,13 @@ var timeZone = map[string]int{
 }
 ```
 
-Assigning and fetching map values looks syntactically just like doing the same for arrays and slices except that the index doesn't need to be an integer.
-
-Map에 값을 할당하거나 추출하는 문법은, 인덱스가 integer일 필요가 없다는 것외에는 배열과 slice과 거의 동일하다.
+Map에 값을 할당(assign)하거나 추출(fetch)하는 문법은, 인덱스가 integer일 필요가 없다는 것외에는 배열과 slice과 거의 동일하다.
 
 ```go
 offset := timeZone["EST"]
 ```
 
-An attempt to fetch a map value with a key that is not present in the map will return the zero value for the type of the entries in the map. For instance, if the map contains integers, looking up a non-existent key will return 0. A set can be implemented as a map with value type bool. Set the map entry to `true` to put the value in the set, and then test it by simple indexing.
-
-Map에 없는 key를 가지고 값을 추출하려는 시도는 값의 타입에 해당하는 제로값을 반환할 것이다. 예를 들어, 만약 map이 integer를 가지고 있으면, 존재하지 않는 key에 대한 조회는 0을 반환한다. bool 타입의 값을 가진 map으로 set을 구현할 수 있다. map의 엔트리를 `true`로 저장함으로써 set안에 값을 집어 넣을 수 있고, 간단히 인덱싱을 통해 검사해 볼 수 있다.
+Map에 없는 key를 가지고 값을 추출하려는 시도는 요소 값의 타입에 해당하는 제로값을 반환할 것이다. 예를 들어, 만약 map이 integer를 가지고 있으면, 존재하지 않는 key에 대한 조회는 0을 반환한다. bool 타입의 값을 가진 map으로 set을 구현할 수 있다. map의 엔트리를 `true`로 저장함으로써 set안에 값을 집어 넣을 수 있고, 간단히 인덱싱을 통해 검사해 볼 수 있다.
 
 ```go
 attended := map[string]bool{
@@ -278,14 +264,12 @@ attended := map[string]bool{
     ...
 }
 
-if attended[person] { // will be false if person is not in the map
+if attended[person] { // 만약 person이 맵에 없다면 false일 것이다.
     fmt.Println(person, "was at the meeting")
 }
 ```
 
-Sometimes you need to distinguish a missing entry from a zero value. Is there an entry for "UTC" or is that the empty string because it's not in the map at all? You can discriminate with a form of multiple assignment.
-
-때로는 부재값과 제로값을 구분할 필요도 있다. "UTC"에 대한 엔트리가 있는지 혹은 map내 정말 없어 빈 문자열인 건지? 복수 할당의 형태로 차이를 나타낼 수 있다.
+때로는 부재값과 제로값을 구분할 필요도 있다. "UTC"에 대한 엔트리가 있는지 혹은 map내 정말 없어 빈 문자열인 건지? 복수 할당(assign)의 형태로 구별할 수 있다.
 
 ```go
 var seconds int
@@ -295,7 +279,7 @@ seconds, ok = timeZone[tz]
 
 For obvious reasons this is called the “comma ok” idiom. In this example, if tz is present, seconds will be set appropriately and ok will be true; if not, seconds will be set to zero and ok will be false. Here's a function that puts it together with a nice error report:
 
-뚜렷한 이유로 이것을 "comma ok" 관용구라고 부른다. 이 예제에서, 만약 tz가 있다면, seconds는 적절히 세팅될 것이고 ok는 true가 된다; 반면 없다면, seconds는 제로값이 되고 ok는 false가 된다. 여기 보기 좋은 에러 보고와 동반하는 함수의 예가 있다.
+뚜렷한 이유로 이것을 "comma ok" 관용구라고 부른다. 이 예제에서, 만약 tz가 있다면, seconds는 적절히 세팅될 것이고 ok는 true가 된다; 반면 없다면, seconds는 제로값이 되고 ok는 false가 된다. 여기 보기 좋은 에러 보고를 사용해 만든 함수의 예가 있다.
 
 ```go
 func offset(tz string) int {
@@ -307,15 +291,12 @@ func offset(tz string) int {
 }
 ```
 
-To test for presence in the map without worrying about the actual value, you can use the [blank identifier](https://golang.org/doc/effective_go.html#blank) (`_`) in place of the usual variable for the value.
-
 실제 값에 상관없이 map내 존재 여부를 검사하려면, [공백 식별자](https://golang.org/doc/effective_go.html#blank) (`_`)를 값에 대한 변수가 있어야 할 자리에 놓으면 된다.
 
 ```go
 _, present := timeZone[tz]
 ```
 
-To delete a map entry, use the delete built-in function, whose arguments are the map and the key to be deleted. It's safe to do this even if the key is already absent from the map.
 
 Map의 엔트리를 제거하기 위해서는, 내장 함수 delete을 쓰는데, map과 제거할 key를 인수로 쓴다. map에 key가 이미 부재하는 경우에도 안전하게 사용할 수 있다.
 
@@ -325,13 +306,12 @@ delete(timeZone, "PDT")  // Now on Standard Time
 
 ## 출력
 
-Formatted printing in Go uses a style similar to C's `printf` family but is richer and more general. The functions live in the fmt package and have capitalized names: `fmt.Printf`, `fmt.Fprintf`, `fmt.Sprintf` and so on. The string functions (`Sprintf` etc.) return a string rather than filling in a provided buffer.
 
-Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍부하고 일반적인다. 함수들은 [fmt](https://godoc.org/fmt) 패키지에 있고 대문자화된 이름을 가진다: `[fmt.Printf](https://godoc.org/fmt#Printf)`, `[fmt.Fprintf](https://godoc.org/fmt#Fprintf)`, `[fmt.Sprintf](https://godoc.org/fmt#Sprintf)`, 기타 등등. 문자열 함수(`Sprintf`, 기타등등)은 제공된 버퍼를 채우기 보다는 문자열을 반환한다.
+Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍부하고 일반적이다. 함수들은 [fmt](https://godoc.org/fmt) 패키지에 있고 대문자화된 이름을 가진다: `[fmt.Printf](https://godoc.org/fmt#Printf)`, `[fmt.Fprintf](https://godoc.org/fmt#Fprintf)`, `[fmt.Sprintf](https://godoc.org/fmt#Sprintf)`, 기타 등등. 문자열 함수(`Sprintf`, 기타등등)은 제공된 버퍼를 채우기 보다는 문자열을 반환한다.
 
 You don't need to provide a format string. For each of Printf, `Fprintf` and `Sprintf` there is another pair of functions, for instance `Print` and `Println`. These functions do not take a format string but instead generate a default format for each argument. The `Println` versions also insert a blank between arguments and append a newline to the output while the `Print` versions add blanks only if the operand on neither side is a string. In this example each line produces the same output.
 
-반드시 포맷 문자열을 제공할 필요는 없다. `Printf`, `Fprintf` 그리고 `Sprintf`에 대해 짝을 이루는 함수들이 있는데, 예를 들면 `Print`와 `Println`이다. 이 함수들은 포맷 문자열을 취하지 않는 대신 입력된 인수에 대해 이미 정해진 포맷을 발생시킨다. `Println` 버전들은 인수들 사이에 공백을 삽입하고 출력에 줄바꿈을 추가한다. 그런 반면 `Print` 버전들은 인수 양쪽이 다 문자역이 난 경우에만 공백을 삽입한다. 아래 예제에서 각 줄이 같은 출력을 만든다.
+반드시 포맷 문자열을 제공할 필요는 없다. `Printf`, `Fprintf` 그리고 `Sprintf`에 대해 짝을 이루는 함수들이 있는데, 예를 들면 `Print`와 `Println`이다. 이 함수들은 포맷 문자열을 취하지 않는 대신 입력된 인수에 대해 이미 정해진 포맷을 발생시킨다. `Println` 버전들은 인수들 사이에 공백을 삽입하고 출력에 줄바꿈을 추가한다. 그런 반면 `Print` 버전들은 인수 양쪽이 다 문자열이 아닌 경우에만 공백을 삽입한다. 아래 예제에서 각 줄이 같은 출력을 만든다.
 
 ```go
 fmt.Printf("Hello %d\n", 23)
