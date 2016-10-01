@@ -95,7 +95,7 @@ func Contents(filename string) (string, error) {
 
 Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function.
 
-`Close`와 같은 함수의 호출을 지연시키면 두 가지 장점을 얻게 된다. 첫 번째로 새로운 반환 경로를 추가하기 위해 나중에 함수를 수정할 경우 하기 쉬운 실수인 파일을 닫는 것을 결코 잊지 않도록 보장 해준다. 두 번째로 `open` 근처에 `close` 가 위치하면 함수 맨 끝에 위치하는 것 보다 훨씬 명확한 코드가 되는것을 의미한다.
+`Close`와 같은 함수의 호출을 지연시키면 두 가지 장점을 얻게 된다. 첫번째로 파일을 닫는 것을 잊어버리는 실수를 하지 않도록 보장해 준다. 함수에 새로운 반환 경로를 추가해야 하는 경우에 흔히 발생하는 실수이다. 두 번째로 `open` 근처에 `close` 가 위치하면 함수 맨 끝에 위치하는 것 보다 훨씬 명확한 코드가 되는것을 의미한다.
 
 The arguments to the deferred function (which include the receiver if the function is a method) are evaluated when the defer executes, not when the call executes. Besides avoiding worries about variables changing values as the function executes, this means that a single deferred call site can defer multiple function executions. Here's a silly example.
 
