@@ -135,19 +135,14 @@ x := Sum(&array)  // 명시적인 주소 연산자(&)를 주목하라.
 
 ## Slices
 
-Slices wrap arrays to give a more general, powerful, and convenient interface to sequences of data. Except for items with explicit dimension such as transformation matrices, most array programming in Go is done with slices rather than simple arrays.
 
 Slice는 배열을 포장하므로써 데이터 시퀀스에 더 일반적이고, 강력하며, 편리한 인터페이스를 제공한다. 변환 메스릭스와 같이 뚜렷한 차원(dimension)을 갖고 있는 항목들을 제외하고는, Go에서 거의 모든 배열 프로그래밍은 단순한 배열보다는 slice를 사용한다.
 
-Slices hold references to an underlying array, and if you assign one slice to another, both refer to the same array. If a function takes a slice argument, changes it makes to the elements of the slice will be visible to the caller, analogous to passing a pointer to the underlying array. A Read function can therefore accept a slice argument rather than a pointer and a count; the length within the slice sets an upper limit of how much data to read. Here is the signature of the Read method of the `File` type in package os:
-
-Slice는 내부의 배열을 가리키는 레퍼런스를 쥐고 있어, 만약에 다른 slice에 할당(assign)되어도, 둘 다 같은 배열을 가리킨다. 함수가 slice를 받아 그 요소에 변화를 주면 호출자도 볼 수 있는데, 이것은 내부의 배열를 가리키는 포인터를 함수에 보내는 것과 유사하다. 그러므로 Read 함수는 포인터와 카운터 대신, slice를 받아 들일 수 있다; slice내 length는 데이터를 읽을 수 있는 최대 한계치에 정해져 있다. 아래에 [File](https://godoc.org/os#File)타입의 Read 메서드의 시그너쳐가 있다.
+Slice는 내부의 배열을 가리키는 레퍼런스를 쥐고 있어, 만약에 다른 slice에 할당(assign)되어도, 둘 다 같은 배열을 가리킨다. 함수가 slice를 받아 그 요소에 변화를 주면 호출자도 볼 수 있는데, 이것은 내부의 배열를 가리키는 포인터를 함수에 보내는 것과 유사하다. 그러므로 Read 함수는 포인터와 카운터 대신, slice를 받아 들일 수 있다; slice내 length는 데이터를 읽을 수 있는 최대 한계치에 정해져 있다. 아래에 [File](https://godoc.org/os#File)타입의 Read 메서드의 시그너처가 있다.
 
 ```go
 func (f *File) Read(buf []byte) (n int, err error)
 ```
-
-The method returns the number of bytes read and an error value, if any. To read into the first 32 bytes of a larger buffer buf, slice (here used as a verb) the buffer.
 
 메서드는 읽은 바이트의 수와 생길 수도 있는 에러 값을 반환한다. 아래 예제에서는, 더 큰 버퍼 buf의 첫 32 바이트를 읽어 들이기 위해 그 버퍼를 슬라이스했다(여기에서는 slice를 동사로 썼다).
 
@@ -155,9 +150,7 @@ The method returns the number of bytes read and an error value, if any. To read 
     n, err := f.Read(buf[0:32])
 ```
 
-Such slicing is common and efficient. In fact, leaving efficiency aside for the moment, the following snippet would also read the first 32 bytes of the buffer.
-
-그런 슬라이싱은 흔히 사용되고 효율적이다. 효율성은 잠시 뒤로한 체 얘기를 하자면, 아래 예제도 역시 버퍼의 첫 32 바이트를 읽는다.
+그런 슬라이싱은 흔히 사용되고 효율적이다. 사실, 효율성을 잠시 보류하자면, 아래 예제도 역시 버퍼의 첫 32 바이트를 읽는다.
 
 ```go
     var n int
@@ -172,17 +165,15 @@ Such slicing is common and efficient. In fact, leaving efficiency aside for the 
     }
 ```
 
-The length of a slice may be changed as long as it still fits within the limits of the underlying array; just assign it to a slice of itself. The capacity of a slice, accessible by the built-in function `cap`, reports the maximum length the slice may assume. Here is a function to append data to a slice. If the data exceeds the capacity, the slice is reallocated. The resulting slice is returned. The function uses the fact that `len` and `cap` are legal when applied to the `nil` slice, and return 0.
-
-slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 단순히 slice 차체에 할당하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 여기 slice에 데이터를 부착할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 반환된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 반환하는 사실을 이용하고 있다.
+slice의 길이는 내부배열의 한계내에서는 얼마든지 바뀔 수 있다; 그냥 slice 차체에 할당(assign)하면 된다. slice의 용량은, 내장함수 `cap`을 통해 얻을 수 있는데, slice가 가질 수 있는 최대 크기를 보고한다. 아래를 보면 slice에 데이터를 부착(append)할 수 있는 함수가 있다. 만약 데이터가 용량을 초과하면, slice의 메모리는 재할당된다. 결과물인 slice는 반환된다. 이 함수는 `len`과 `cap`이 `nil` slice에 합법적으로 적용할 수 있고, 0을 반환하는 사실을 이용하고 있다.
 
 ```go
 func Append(slice, data []byte) []byte {
     l := len(slice)
-    if l + len(data) > cap(slice) {  // reallocate
-        // Allocate double what's needed, for future growth.
+    if l + len(data) > cap(slice) {  // 재할당의 경우
+        // 미래의 성장폭을 위해, 필요한 양의 두배를 할당하라.
         newSlice := make([]byte, (l+len(data))*2)
-        // The copy function is predeclared and works for any slice type.
+        // copy 함수는 사전에 선언되어 있고 어떤 slice 타입에도 사용될 수 있다.
         copy(newSlice, slice)
         slice = newSlice
     }
@@ -194,26 +185,19 @@ func Append(slice, data []byte) []byte {
 }
 ```
 
-We must return the slice afterwards because, although Append can modify the elements of `slice`, the slice itself (the run-time data structure holding the pointer, length, and capacity) is passed by value.
 
 slice는 꼭 처리후 반환되어야 한다. Append가 `slice`의 요소들을 변경할 수 있지만, slice 자체(포인터, 크기, 용량을 갖고 있는 런타임 데이터 구조)는 값으로 패스되었기 때문이다.
 
-The idea of appending to a slice is so useful it's captured by the append built-in function. To understand that function's design, though, we need a little more information, so we'll return to it later.
-
-Slice에 부착한다는 생각은 매우 유용하기 때문에 내장함수 append로 만들어져 있다. 이 함수의 설계를 이해하려면, 우선 좀 더 정보가 필요하다. 그래서 나중에 다시 얘기하기로 하겠다.
+Slice에 부착(append)한다는 생각은 매우 유용하기 때문에 내장함수 append로 만들어져 있다. 이 함수의 설계를 이해하려면 정보가 좀 더 필요함으로 나중에 다시 얘기하기로 하겠다.
 
 ## 이차원 slices
 
-Go's arrays and slices are one-dimensional. To create the equivalent of a 2D array or slice, it is necessary to define an array-of-arrays or slice-of-slices, like this:
-
-Go의 배열과 slice는 일차원적이다. 이차원의 배열이나 slice와 동일한 것을 만들려면, 배열의 배열 혹은 slice의 slice을 다음과 같이 정의해야 한다.
+Go의 배열과 slice는 일차원적이다. 이차원의 배열이나 slice와 동일한 것을 만들려면, 배열의 배열 혹은 slice의 slice을 다음과 같이 정의해야 한다:
 
 ```go
 type Transform [3][3]float64  // A 3x3 array, really an array of arrays.
 type LinesOfText [][]byte     // A slice of byte slices.
 ```
-
-Because slices are variable-length, it is possible to have each inner slice be a different length. That can be a common situation, as in our LinesOfText example: each line has an independent length.
 
 Slice는 크기가 변할 수 있기 때문에, 내부의 slice들은 크기가 각자 다를 수 있다. 다음의 LinesOfText 예와 같이 흔히 일어 날 수 있는 일이다: 각 줄은 독립적으로 다른 크기를 가지고 있다.
 
