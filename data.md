@@ -465,19 +465,13 @@ func Min(a ...int) int {
 
 ## Append
 
-Now we have the missing piece we needed to explain the design of the append built-in function. The signature of append is different from our custom Append function above. Schematically, it's like this:
-
-이제 내장함수 append의 설계를 설명하는데 필요했지만 누락된 부분을 갖게 되었다. append의 시그너처는 위에 주문제작된 Append 함수와 다르다. 의미론적으로, 아래와 같이 생각해 볼 수 있다.
+이제 내장함수 append의 설계를 설명하는데 필요했지만 누락된 부분을 갖게 되었다. append의 시그너처는 위에서 만들어 본 Append 함수와 다르다. 도식적으로, 아래와 같다:
 
 ```go
 func append(slice []T, elements ...T) []T
 ```
 
-where T is a placeholder for any given type. You can't actually write a function in Go where the type T is determined by the caller. That's why append is built in: it needs support from the compiler.
-
-여기서 T는 어떤 타입의 플래이스홀더이다. 실제로 Go 언어에서는 호출자에 의해 결정되는 타입 T를 쓰는 함수를 만들 수 없다. 그래서 append는 내장함수 인 것이다: 컴파일러의 지원이 필요한 것이다.
-
-What append does is append the elements to the end of the slice and return the result. The result needs to be returned because, as with our hand-written Append, the underlying array may change. This simple example
+여기서 T는 어떤 타입의 플레이스 홀더이다. 실제로 Go 언어에서는 호출자에 의해 결정되는 타입 T를 쓰는 함수를 만들 수 없다. 그래서 append는 내장함수 인 것이다: 컴파일러의 지원이 필요한 것이다.
 
 append이 하는 일은 slice의 끝에 요소들을 붙이고 결과를 반환하는 것이다. 결과는 반환되어야 한다. 왜냐면, 손으로 쓴 Append와 같이, 내부의 배열은 변할 수 있다. 다음의 간단한 예를 보라.
 
@@ -487,11 +481,7 @@ x = append(x, 4, 5, 6)
 fmt.Println(x)
 ```
 
-prints [1 2 3 4 5 6]. So append works a little like `Printf`, collecting an arbitrary number of arguments.
-
-이 예제는 [1 2 3 4 5 6]을 출력한다. append가 `Printf`처럼 임의적인 숫자의 인수들을 모으며 동작하는 것이다.
-
-But what if we wanted to do what our Append does and append a slice to a slice? Easy: use ... at the call site, just as we did in the call to Output above. This snippet produces identical output to the one above.
+이 예제는 [1 2 3 4 5 6]을 출력한다. append가 `Printf`처럼 임의적인 숫자의 인수들을 모으며 작동하는 것이다.
 
 그런데 만약 Append와 같이 slice에 slice를 붙이고 싶다면 어떻게 해야 하는가? 쉬운 방법으로, 위에서 Output을 호출하면서 그랬듯이, 호출 지점에서 ...를 이용하는 것이다. 아래 예재 단편은 위와 동일한 결과를 산출한다.
 
@@ -501,7 +491,5 @@ y := []int{4,5,6}
 x = append(x, y...)
 fmt.Println(x)
 ```
-
-Without that ..., it wouldn't compile because the types would be wrong; y is not of type int.
 
 ...이 없다면 컴파일되지 않는다. 왜냐하면 타입이 틀리기 때문이다: y는 int 타입이 아니다.
