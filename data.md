@@ -406,19 +406,16 @@ fmt.Printf("%v\n", t)
 
 (만약 타입 T와 동시에 포인터 타입 T도 함께 출력할 필요가 있으면, `String`의 리시버는 값 타입이러야 한다; 위에 예제에서 struct 타입에 포인터를 사용한 이유는 더 효율적이고 Go 언어다운 선택이기 때문이다. 더 상세한 정보는 다음의 링크를 참고하라: [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values))
 
-Our String method is able to call Sprintf because the print routines are fully reentrant and can be wrapped this way. There is one important detail to understand about this approach, however: don't construct a String method by calling Sprintf in a way that will recur into your String method indefinitely. This can happen if the Sprintf call attempts to print the receiver directly as a string, which in turn will invoke the method again. It's a common and easy mistake to make, as this example shows.
 
-String 메서드가 Sprintf를 호출할 수 있는 이유는 print 루틴들의 재진입(reentrant)이 충분히 가능하고 예제와 같이 감싸도 되기 때문이다. 하지만 이 방식에 대해 한가지 이해하고 넘어가야 하는 매우 중요한 디테일이 있는데: String 매서드를 만들면서 Sprintf를 호출할 때 다시 String 매서드로 영구히 재귀하는 방식은 안 된다는 것이다. Sprintf가 리시터를 string처럼 직접 출력하는 경우에 이런 일이 발생할 수 있는데, 그렇게 되면 다시 같은 메서드를 호출하게 되고 말 것이다. 흔하고 쉽게 하는 실수로, 다음의 예제에서 살펴보자.
+String 메서드가 Sprintf를 호출할 수 있는 이유는 print 루틴들의 재진입(reentrant)이 충분히 가능하고 예제와 같이 감싸도 되기 때문이다. 하지만 이 방식에 대해 한가지 이해하고 넘어가야 하는 매우 중요한 디테일이 있는데: String 매서드를 만들면서 Sprintf를 호출할 때 다시 String 매서드로 영구히 재귀하는 방식은 안 된다는 것이다. Sprintf가 리시버를 string처럼 직접 출력하는 경우에 이런 일이 발생할 수 있는데, 그렇게 되면 다시 같은 메서드를 호출하게 되고 말 것이다. 흔하고 쉽게 하는 실수로, 다음의 예제에서 살펴보자.
 
 ```go
 type MyString string
 
 func (m MyString) String() string {
-    return fmt.Sprintf("MyString=%s", m) // Error: will recur forever.
+    return fmt.Sprintf("MyString=%s", m) // 에러: 영원히 재귀할 것임.
 }
 ```
-
-It's also easy to fix: convert the argument to the basic string type, which does not have the method.
 
 이러한 실수는 또 쉽게 고칠 수도 있다: 인수를 기본적인 문자열 타입으로 변환하면, 같은 메서드가 없기 때문이다.
 
@@ -429,11 +426,8 @@ func (m MyString) String() string {
 }
 ```
 
-In the [initialization section](https://golang.org/doc/effective_go.html#initialization) we'll see another technique that avoids this recursion.
-
 [initialization section](https://golang.org/doc/effective_go.html#initialization) 섹션에 가면 이 같은 재귀호출을 피할 수 있는 다른 테크닉을 보게 될 것이다.
 
-Another printing technique is to pass a print routine's arguments directly to another such routine. The signature of `Printf` uses the type `...interface{}` for its final argument to specify that an arbitrary number of parameters (of arbitrary type) can appear after the format.
 
 또 다른 출력 기법으로는 출력 루틴의 인수들을 직접 또 다른 유사한 루틴으로 대입하는 것이다. `Printf`의 시그너처는 마지막 인수로 임의적인 숫자의 파라미터가 포맷 다음에 나타날 수 있음을 명시하기 위해 타입 `...interface{}`를 사용한다.
 
@@ -441,28 +435,23 @@ Another printing technique is to pass a print routine's arguments directly to an
 func Printf(format string, v ...interface{}) (n int, err error) {
 ```
 
-Within the function `Printf`, v acts like a variable of type `[]interface{}` but if it is passed to another variadic function, it acts like a regular list of arguments. Here is the implementation of the function `log.Println` we used above. It passes its arguments directly to `fmt.Sprintln` for the actual formatting.
 
-`Printf` 함수내에, v는 `[]interface{}` 타입의 변수 처럼 행동하지만 만약에 다른 가변 함수(variadic function)에 대입되면, 보통의 인수리스트로 동작한다. 위에서 사용한 `log.Println`의 구현이 아래에 있다. 실질적 출력을 위해 `fmt.Sprintln` 함수에 직접 인수들을 대입하고 있다.
+`Printf` 함수내에, v는 `[]interface{}` 타입의 변수 처럼 행동하지만 만약에 다른 가변 인수 함수(variadic function)에 대입되면, 보통의 인수리스트처럼 동작한다. 위에서 사용한 `log.Println`의 구현이 아래에 있다. 실제로 포맷팅을 위해 `fmt.Sprintln` 함수에 직접 인수들을 대입하고 있다.
 
 ```go
-// Println prints to the standard logger in the manner of fmt.Println.
+// Println 함수는 fmt.Println처럼 표준 로거에 출력한다.
 func Println(v ...interface{}) {
-    std.Output(2, fmt.Sprintln(v...))  // Output takes parameters (int, string)
+    std.Output(2, fmt.Sprintln(v...))  // Output 함수는 (int, string) 파라미터를 취한다.
 }
 ```
 
-We write ... after v in the nested call to `Sprintln` to tell the compiler to treat v as a list of arguments; otherwise it would just pass v as a single slice argument.
 
 `Sprintln`을 부르는 중첩된 호출안에 v 다음에 오는 ...는 컴파일러에게 v를 인수 리스트로 취급하라고 말하는 것이고; 그렇지 않은 경우는 v를 하나의 slice 인수로 대입한다.
 
-There's even more to printing than we've covered here. See the `godoc` documentation for package fmt for the details.
 
 여기에서 살펴 본 출력에 관한 내용보다 훨씬 많은 정보들이 있다. `godoc`에 있는 [fmt](https://godoc.org/fmt) 패키지를 통해 상세하게 알아보라.
 
-By the way, a ... parameter can be of a specific type, for instance `...int` for a min function that chooses the least of a list of integers:
-
-그나저나, ... 파라미터는 특정한 타입을 가질 수도 있는데, 예로 integer 리스트에서 최소값을 선택하는 함수인 min에 대한 `...int`를 살려보라.
+그나저나, ... 파라미터는 특정한 타입을 가질 수도 있는데, 예로 integer 리스트에서 최소값을 선택하는 함수인 min에 대한 `...int`를 살려보라:
 
 ```go
 func Min(a ...int) int {
