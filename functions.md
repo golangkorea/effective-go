@@ -93,13 +93,11 @@ func Contents(filename string) (string, error) {
 }
 ```
 
-Deferring a call to a function such as Close has two advantages. First, it guarantees that you will never forget to close the file, a mistake that's easy to make if you later edit the function to add a new return path. Second, it means that the close sits near the open, which is much clearer than placing it at the end of the function.
 
 `Close`와 같은 함수의 호출을 지연시키면 두 가지 장점을 얻게 된다. 첫번째로 파일을 닫는 것을 잊어버리는 실수를 하지 않도록 보장해 준다. 함수에 새로운 반환 경로를 추가해야 하는 경우에 흔히 발생하는 실수이다. 두 번째로 `open` 근처에 `close` 가 위치하면 함수 맨 끝에 위치하는 것 보다 훨씬 명확한 코드가 되는것을 의미한다.
 
-The arguments to the deferred function (which include the receiver if the function is a method) are evaluated when the defer executes, not when the call executes. Besides avoiding worries about variables changing values as the function executes, this means that a single deferred call site can defer multiple function executions. Here's a silly example.
 
-지연된 함수의 매개변수 () 는 호출을 실행할 때가 아닌 `defer` 가 실행될 때 평가된다. 또한 함수가 실행될 때 변수 값이 변하는 것에 대해 걱정할 필요가 없는데, 이는 단일 지연 호출 위치는
+defer 함수의 매개 변수들(함수가 메서드일 경우는 리시버도 포함되는)은 함수의 호출이 실행될 때가 아닌 defer가 실행될 때 평가된다. 또한 함수가 실행될 때 변수 값이 변하는 것에 대해 걱정할 필요가 없는데, 이는 하나의 defer 호출 위치에서 여러개의 함수 호출을 지연할 수 있음을 의미한다. 여기 다소 유치한 예가 있다.
 
 ```go
 for i := 0; i < 5; i++ {
@@ -107,9 +105,7 @@ for i := 0; i < 5; i++ {
 }
 ```
 
-Deferred functions are executed in LIFO order, so this code will cause 4 3 2 1 0 to be printed when the function returns. A more plausible example is a simple way to trace function execution through the program. We could write a couple of simple tracing routines like this:
-
-지연된 함수는 LIFO 순서에 의해 실행되므로, 위 코드에서는 함수가 반환되면 4 3 2 1 0 을 출력할 것이다. 좀 더 그럴듯 한 예제로 프로그램을 통해 함수 실행을 추적하기 위한 간단한 방법이 있다. 여기서는 아래와 같이 간단한 추적 루틴을 몇가지 작생 했다.
+지연된 함수는 LIFO 순서에 의해 실행되므로, 위 코드에서는 함수가 반환되면 4 3 2 1 0 을 출력할 것이다. 좀 더 그럴듯 한 예제로 프로그램을 통해 함수 실행을 추적하기 위한 간단한 방법이 있다. 여기서는 아래와 같이 간단한 추적 루틴을 몇가지 작생 했다:
 
 ```go
 func trace(s string)   { fmt.Println("entering:", s) }
@@ -123,9 +119,8 @@ func a() {
 }
 ```
 
-  We can do better by exploiting the fact that arguments to deferred functions are evaluated when the `defer` executes. The tracing routine can set up the argument to the untracing routine. This example:
 
-`defer` 가 실행 될 때 지연된 함수의 매개변수가 평가된다는 사실을 이용하면 더 잘 할 수 있다. 추적 루틴은 아래와 같이 추적을 끝내는 루틴의 매개변수로 설정할 수 있다.
+`defer` 가 실행 될 때 지연된 함수의 매개변수가 평가된다는 사실을 이용하면 더 잘 할 수 있다. 추적 루틴은 아래와 같이 추적을 끝내는 루틴의 매개변수로 설정할 수 있다:
 
 ```go
 func trace(s string) string {
