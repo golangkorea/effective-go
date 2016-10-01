@@ -320,20 +320,15 @@ fmt.Println("Hello", 23)
 fmt.Println(fmt.Sprint("Hello ", 23))
 ```
 
-The formatted print functions fmt.Fprint and friends take as a first argument any object that implements the `io.Writer` interface; the variables `os.Stdout` and `os.Stderr` are familiar instances.
 
-포맷된 출력 함수인 [fmt.Fprint](https://godoc.org/fmt#Fprint)와 유사 함수들은 첫번째 인수로 `io.Writer` 인터페이스를 구현한 객체를 취한다; 변수 `os.Stdout`과 `os.Stderr`가 친숙한 인스턴스들이다.
+포맷된 출력 함수인 [fmt.Fprint](https://godoc.org/fmt#Fprint)와 유사 함수들은 첫번째 인수로 `io.Writer` 인터페이스를 구현한 객체를 취한다; 변수 `os.Stdout`과 `os.Stderr`가 친숙한 이러한 객체들의 예이다.
 
 Here things start to diverge from C. First, the numeric formats such as %d do not take flags for signedness or size; instead, the printing routines use the type of the argument to decide these properties.
-
-여기서 부터 C로 부터 갈라져 나오기 시작한다. 첫째로, %d같은 숫자 형식들은 부호기호의 여부나 크기를 나타내는 플래그를 취하지 않는다; 그 대신, 출력 루틴이 인수의 타입을 이용해서 이러한 특징들을 결정한다.
 
 ```go
 var x uint64 = 1<<64 - 1
 fmt.Printf("%d %x; %d %x\n", x, x, int64(x), int64(x))
 ```
-
-prints
 
 위의 예제는 다음과 같은 출력을 한다.
 
@@ -341,15 +336,11 @@ prints
 18446744073709551615 ffffffffffffffff; -1 -1
 ```
 
-If you just want the default conversion, such as decimal for integers, you can use the catchall format %v (for “value”); the result is exactly what `Print` and `Println` would produce. Moreover, that format can print any value, even arrays, slices, structs, and maps. Here is a print statement for the time zone map defined in the previous section.
-
-정수(integer)에 대한 소수같은 기본적인 변환을 원할 경우는, 다목적 용도 포맷인 %v(value라는 의미로)를 사용할 수 있다; 결과는 `Print`와 `Println`의 출력과 동일하다. 더우기, 그 포맷은 어떤 값이라도 출력할 수 있으며, 심지어 배열, slice, 그리고 map도 출력한다. 아래에는 이전 섹션에서 정의된 시간대 map을 위한 print문이 있다.
+정수(integer)를 소수로 바꾸는 예와 같은 기본적인 변환을 원할 경우는, 다목적 용도 포맷인 %v(value라는 의미로)를 사용할 수 있다; 결과는 `Print`와 `Println`의 출력과 동일하다. 더우기, 그 포맷은 어떤 값이라도 출력할 수 있으며, 심지어 배열, slice, 그리고 map도 출력한다. 아래에는 이전 섹션에서 정의된 시간대 map을 위한 print문이 있다.
 
 ```go
 fmt.Printf("%v\n", timeZone)  // or just fmt.Println(timeZone)
 ```
-
-which gives output
 
 아래와 같이 출력을 제공한다.
 
@@ -359,7 +350,7 @@ map[CST:-21600 PST:-28800 EST:-18000 UTC:0 MST:-25200]
 
 For maps the keys may be output in any order, of course. When printing a struct, the modified format %+v annotates the fields of the structure with their names, and for any value the alternate format %#v prints the value in full Go syntax.
 
-물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정 포맷인 %+v를 통해 구조체의 필드에 주석으로 이름을 달며, 대안 포맷인 %#v를 사용하면 어떤 값이든 와전한 Go 문법을 출력한다.
+물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정된 포맷인 %+v를 통해 구조체의 필드에 주석으로 이름을 달며, 대안 포맷인 %#v를 사용하면 어떤 값이든 완전한 Go 문법을 출력한다.
 
 ```go
 type T struct {
@@ -374,8 +365,6 @@ fmt.Printf("%#v\n", t)
 fmt.Printf("%#v\n", timeZone)
 ```
 
-prints
-
 위의 예제는 다음과 같이 출력된다.
 
 ```go
@@ -385,19 +374,14 @@ prints
 map[string] int{"CST":-21600, "PST":-28800, "EST":-18000, "UTC":0, "MST":-25200}
 ```
 
-(Note the ampersands.) That quoted string format is also available through %q when applied to a value of type string or []byte. The alternate format %#q will use backquotes instead if possible. (The %q format also applies to integers and runes, producing a single-quoted rune constant.) Also, %x works on strings, byte arrays and byte slices as well as on integers, generating a long hexadecimal string, and with a space in the format (% x) it puts spaces between the bytes.
 
 (엠퍼센트에 주목하라.) 인용 문자열 포맷은 %q를 이용해 string 타입이나 []byte 타입 값에 적용했을때 얻어진다. 대안 포맷인 %#q는 가능한 경우 backquote을 사용한다. (%q 포맷은 또 integer와 rune에 적용되어, single-quoted rune 상수를 만든다.) %x는 문자열, byte 배열, 그리고 byte slice와 integer에 작용하여 긴 16진수 문자열을 생성하는데, (% x) 포맷처럼 스페이스를 중간에 넣으면 (출력하는) byte사이에 공백을 넣어 준다.
 
-Another handy format is %T, which prints the type of a value.
-
-또 다른 유용한 포맷은 %T로 값의 타입을 출력한다.
+또 다른 유용한 포맷은 %T로, 값의 타입을 출력한다.
 
 ```go
 fmt.Printf("%T\n", timeZone)
 ```
-
-prints
 
 위의 예제는 다음과 같이 출력된다.
 
@@ -405,9 +389,7 @@ prints
 map[string] int
 ```
 
-If you want to control the default format for a custom type, all that's required is to define a method with the signature String() string on the type. For our simple type T, that might look like this.
-
-커스텀 타입의 기본 포맷을 조종하기 위해 요구되는 모든 조치는 단지 `String() string`의 시그너처를 갖는 메서드를 정의해 주면 된다. (위에 정의된) 단순한 타입 T는 아래와 같은 포맷을 가질 수 있다.
+커스텀 타입의 기본 포맷을 조종하기 위해 해야할 것은 단지 `String() string`의 시그너처를 갖는 메서드를 정의해 주는 것이다. (위에 정의된) 단순한 타입 T는 아래와 같은 포맷을 가질 수 있다.
 
 ```go
 func (t *T) String() string {
@@ -416,17 +398,13 @@ func (t *T) String() string {
 fmt.Printf("%v\n", t)
 ```
 
-to print in the format
-
 다음과 같은 포맷으로 출력된다.
 
 ```go
 7/-2.35/"abc\tdef"
 ```
 
-(If you need to print values of type T as well as pointers to T, the receiver for `String` must be of value type; this example used a pointer because that's more efficient and idiomatic for struct types. See the section below on [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values) for more information.)
-
-(만약 타입 T와 동시에 포인터 타입 T도 함께 출력할 필요가 있으면, `String`의 리시버는 값 타입이러야 한다; 위에 예제에서 struct 타입에 포인터를 사용한 이유는 더 효율적이고 Go 언어다운 선택이기 때문이다. 더 상세한 정보는 다음의 링크를 참고하라: [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values) )
+(만약 타입 T와 동시에 포인터 타입 T도 함께 출력할 필요가 있으면, `String`의 리시버는 값 타입이러야 한다; 위에 예제에서 struct 타입에 포인터를 사용한 이유는 더 효율적이고 Go 언어다운 선택이기 때문이다. 더 상세한 정보는 다음의 링크를 참고하라: [pointers vs. value receivers](https://golang.org/doc/effective_go.html#pointers_vs_values))
 
 Our String method is able to call Sprintf because the print routines are fully reentrant and can be wrapped this way. There is one important detail to understand about this approach, however: don't construct a String method by calling Sprintf in a way that will recur into your String method indefinitely. This can happen if the Sprintf call attempts to print the receiver directly as a string, which in turn will invoke the method again. It's a common and easy mistake to make, as this example shows.
 
