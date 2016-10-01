@@ -10,7 +10,7 @@
    * [게터 - Getters](names.md#게터-getters)
    * [인터페이스명](names.md#인터페이스명)
    * [대소문자 혼합](names.md#대소문자-혼합)
-* [Semicolons](semicolons.md)
+* [세미콜론](semicolons.md)
 * [제어구조](control_structures.md)
    * [If](control_structures.md#if)
    * [재선언과 재할당](control_structures.md#재선언과-재할당)
