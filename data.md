@@ -81,35 +81,28 @@ m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 
 ## make를 사용하는 메모리 할당
 
-Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not `*T`). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use. A slice, for example, is a three-item descriptor containing a pointer to the data (inside an array), the length, and the capacity, and until those items are initialized, the slice is `nil`. For slices, maps, and channels, make initializes the internal data structure and prepares the value for use. For instance,
 
-다시 메로리 할당으로 돌아가자. 내장 함수인 make(T, args)는 new(T)와 다른 목적으로 제공된다. slices, maps, 그리고 channels에만 사용하고 (`*T`가 아닌) 타입 T의 (제로값이 아닌) 초기화된 값을 반환한다. 이러한 차이가 있는 이유는 이 세 타입이 내부적으로 반드시 사용 전 초기화 되어야 하는 데이터 구조를 가리키고 있기 때문이다. 예를 들어, slice는 세가지 항목의 기술항으로 (array내) 데이터를 가리키는 포인터, 크기, 그리고 용량를 가지며, 이 항목들이 초기화되기 전 까지, slice는 `nil`이다. slices, maps, 그리고 channels은 내부 데이터 구조를 초기화하고 사용할 값들을 준비한다. 예를 들면,
+다시 메로리 할당으로 돌아가자. 내장 함수인 make(T, args)는 new(T)와 다른 목적의 서비스를 제공한다. slices, maps, 그리고 channels에만 사용하고 (`*T`가 아닌) 타입 T의 (제로값이 아닌) 초기화된 값을 반환한다. 이러한 차이가 있는 이유는 이 세 타입이 내부적으로 반드시 사용 전 초기화 되어야 하는 데이터 구조를 가리키고 있기 때문이다. 예를 들어, slice는 세가지 항목의 기술항으로 (array내) 데이터를 가리키는 포인터, 크기, 그리고 용량를 가지며, 이 항목들이 초기화되기 전 까지, slice는 `nil`이다. slices, maps, 그리고 channels에 대해, make는 내부 데이터 구조를 초기화하고 사용될 값을 준비한다. 예를 들면,
 
 ```go
 make([]int, 10, 100)
 ```
 
-allocates an array of 100 ints and then creates a slice structure with length 10 and a capacity of 100 pointing at the first 10 elements of the array. (When making a slice, the capacity can be omitted; see the section on slices for more information.) In contrast, `new([]int)` returns a pointer to a newly allocated, zeroed slice structure, that is, a pointer to a `nil` slice value.
-
-메모리에 크기가 100인 int 배열을 할당하고 그 배열의 처음 10개를 가리키는, 크기 10와 용량이 100인 slice 데이터 구조를 생성한다. (slice를 만들때 용량은 생략해도 된다. 자세한 내용은 slice 섹션을 보기 바란다.) 그에 반해, `new([]int)`는 새로 할당되고, 제로값으로 채워진 slice 구조를 가리키는 포인터를 반환하는데, 이 때 slice 값은 `nil`이다.
-
-These examples illustrate the difference between new and make.
+메모리에 크기가 100인 int 배열을 할당하고 그 배열의 처음 10개를 가리키는, 크기 10와 용량이 100인 slice 데이터 구조를 생성한다. (slice를 만들때 용량은 생략해도 된다. 자세한 내용은 slice 섹션을 보기 바란다.) 그에 반해, `new([]int)`는 새로 할당되고, 제로값으로 채워진 slice 구조를 가리키는 포인터를 반환하는데, 즉 `nil` slice 값의 포인터인 것이다.
 
 다음 예제들이 new와 make의 차이점을 잘 그리고 있다.
 
 ```go
-var p *[]int = new([]int)       // allocates slice structure; *p == nil; rarely useful
-var v  []int = make([]int, 100) // the slice v now refers to a new array of 100 ints
+var p *[]int = new([]int)       // slice 구조체를 할당한다; *p == nil; 거의 유용하지 않다
+var v  []int = make([]int, 100) // slice v는 이제 100개의 int를 갖는 배열을 참조한다
 
-// Unnecessarily complex:
+// 불필요하게 복잡한 경우:
 var p *[]int = new([]int)
 *p = make([]int, 100, 100)
 
-// Idiomatic:
+// Go 언어다운 경우:
 v := make([]int, 100)
 ```
-
-`Remember that make applies only to maps, slices and channels and does not return a pointer. To obtain an explicit pointer allocate with new or take the address of a variable explicitly.`
 
 make는 maps, slices 그리고 channels에만 적용되며 포인터를 반환하지 않음을 기억하라. 포인터를 얻고 싶으면 new를 사용해서 메모리를 할당하거나 변수의 주소를 명시적으로 취하라.
 
