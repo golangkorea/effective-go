@@ -277,9 +277,7 @@ var ok bool
 seconds, ok = timeZone[tz]
 ```
 
-For obvious reasons this is called the “comma ok” idiom. In this example, if tz is present, seconds will be set appropriately and ok will be true; if not, seconds will be set to zero and ok will be false. Here's a function that puts it together with a nice error report:
-
-뚜렷한 이유로 이것을 "comma ok" 관용구라고 부른다. 이 예제에서, 만약 tz가 있다면, seconds는 적절히 세팅될 것이고 ok는 true가 된다; 반면 없다면, seconds는 제로값이 되고 ok는 false가 된다. 여기 보기 좋은 에러 보고를 사용해 만든 함수의 예가 있다.
+분명한 이유들로 이것을 "comma ok" 관용구라고 부른다. 이 예제에서, 만약 tz가 있다면, seconds는 적절히 세팅될 것이고 ok는 true가 된다; 반면 없다면, seconds는 제로값이 되고 ok는 false가 된다. 여기 보기 좋은 에러 보고를 사용해 만든 함수의 예가 있다.
 
 ```go
 func offset(tz string) int {
@@ -469,7 +467,7 @@ func Min(a ...int) int {
 
 Now we have the missing piece we needed to explain the design of the append built-in function. The signature of append is different from our custom Append function above. Schematically, it's like this:
 
-이제 내장함수 append의 설계를 설명하는데 필요했지만 없었던 부분을 갖게 되었다. append의 시그너처는 위에 주문제작된 Append 함수와 다르다. 의미론적으로, 아래와 같이 생각해 볼 수 있다.
+이제 내장함수 append의 설계를 설명하는데 필요했지만 누락된 부분을 갖게 되었다. append의 시그너처는 위에 주문제작된 Append 함수와 다르다. 의미론적으로, 아래와 같이 생각해 볼 수 있다.
 
 ```go
 func append(slice []T, elements ...T) []T
