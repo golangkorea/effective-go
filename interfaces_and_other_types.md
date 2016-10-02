@@ -159,17 +159,15 @@ type Stream interface {
 
 ```go
 // NewCTR은 카운더 모드로 주어진 Block을 이용하여 암호화하고/해독하는 스트림을 반환한다.
-// iv의 길이는 Block의 block 크기와 같아야 합니다.
+// iv의 길이는 Block의 block 크기와 같아야 한다.
 func NewCTR(block Block, iv []byte) Stream
 ```
 
-`NewCTR applies not just to one specific encryption algorithm and data source but to any implementation of the Block interface and any Stream. Because they return interface values, replacing CTR encryption with other encryption modes is a localized change. The constructor calls must be edited, but because the surrounding code must treat the result only as a Stream, it won't notice the difference.`
 
 NewCTR은 특정한 암호화 알고리즘과 데이터 소스에만 적용되는 것이 아니라 [Block](https://godoc.org/crypto/cipher#Block)와 [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스를 구현하는 어떤 알고리즘이나 데이터 소스에도 적용이 가능하다. 왜냐하면 인터페시스 값들을 반환하고, CTR 암호화를 다른 암호화 모드로 교체하는 것이 국부적인 변화이기 때문이다. constructor 콜은 반드시 편집되어야 합니다. 하지만 둘러싸고 있는 코드는 반환 결과를 [Stream](https://godoc.org/crypto/cipher#Stream)으로 처리해야 하기 때문에, 차이를 알지 못 한다.
 
 ## 인터페이스와 메서드
 
-`Since almost anything can have methods attached, almost anything can satisfy an interface. One illustrative example is in the http package, which defines the Handler interface. Any object that implements Handler can serve HTTP requests.`
 
 거의 모든 것에 메서드를 첨부할 수 있다는 말은 거의 모든 것이 인터페이스를 만족 시킬 수 있다는 말이기도 하다. 한 회화적인 예가 [http](https://godoc.org/net/http) 패키지내 정의되어 있는 [Handler](https://godoc.org/net/http#Handler) 인터페이스 이다. [Handler](https://godoc.org/net/http#Handler)를 구현하는 어떤 객체도 HTTP request에 서비스를 제공할 수 있다.
 
@@ -179,11 +177,9 @@ type Handler interface {
 }
 ```
 
-`ResponseWriter is itself an interface that provides access to the methods needed to return the response to the client. Those methods include the standard Write method, so an http.ResponseWriter can be used wherever an io.Writer can be used. Request is a struct containing a parsed representation of the request from the client.`
 
-[ResponseWriter](https://godoc.org/net/http#ResponseWriter) 역시 클라이어트에 응답을 리턴하는데 필요한 메서드들의 접근을 제공하는 인터페이스이다. 이 메서드들은 표준 Write 메서드를 포함하여서, [http.ResponseWriter](https://godoc.org/net/http#ResponseWriter)는 [io.Writer](https://godoc.org/io#Writer)가 사용될 수 있는 곳이면 어디든 사용할 수 있다. [Request](https://godoc.org/net/http#Request)는 클라이언트로 부터 오는 request의 분석된 내용을 담은 struct이다.
+[ResponseWriter](https://godoc.org/net/http#ResponseWriter) 역시 클라이어트에 응답을 반환하는데 필요한 메서드들의 접근을 제공하는 인터페이스이다. 이 메서드들은 표준 Write 메서드를 포함하여서, [http.ResponseWriter](https://godoc.org/net/http#ResponseWriter)는 [io.Writer](https://godoc.org/io#Writer)가 사용될 수 있는 곳이면 어디든 사용할 수 있다. [Request](https://godoc.org/net/http#Request)는 클라이언트로 부터 오는 request의 분석된 내용을 담은 struct이다.
 
-`For brevity, let's ignore POSTs and assume HTTP requests are always GETs; that simplification does not affect the way the handlers are set up. Here's a trivial but complete implementation of a handler to count the number of times the page is visited.`
 
 간결함을 위해, POST는 무시하고 항상 HTTP request가 GET라고 가정하자; 이런 단순화는 handler들이 셑업되는 방식에 영향을 미치지 않는다. 여기 사소한 예이긴 하지만 페이지 방문 수를 세는 hander의 완전한 구현이 있다.
 
@@ -199,7 +195,7 @@ func (ctr *Counter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-`(Keeping with our theme, note how Fprintf can print to an http.ResponseWriter.) For reference, here's how to attach such a server to a node on the URL tree.`
+
 
 (지금까지 얘기와 일맥상통하는 예로 [Fprintf](https://godoc.org/fmt#Fprintf)가 [http.ResponseWriter](https://godoc.org/net/http#ResponseWriter)에 출력할 수 있음을 주목하라.) 참고로, 여기 URL에 그런 서버를 어떻게 부착하는 예가 있다.
 
@@ -209,7 +205,6 @@ import "net/http"
 ctr := new(Counter)
 http.Handle("/counter", ctr)
 ```
-`But why make Counter a struct? An integer is all that's needed. (The receiver needs to be a pointer so the increment is visible to the caller.)`
 
 그런데 굳이 Counter를 struct으로 만들 이유가 있을까? integer면 충분하다. (caller에게 값의 증가를 보이기 위해 리시버는 포인터일 필요가 있다.)
 
@@ -222,8 +217,6 @@ func (ctr *Counter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     fmt.Fprintf(w, "counter = %d\n", *ctr)
 }
 ```
-
-`What if your program has some internal state that needs to be notified that a page has been visited? Tie a channel to the web page.`
 
 만약에 여러분의 프로그램 내부 상태가 페이지를 방문을 알아야 할 경우라면 어떨까? 웹 페이지에 채널을 묶으라.
 
@@ -238,7 +231,6 @@ func (ch Chan) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-`Finally, let's say we wanted to present on /args the arguments used when invoking the server binary. It's easy to write a function to print the arguments.`
 
 마지막으로, 서버를 구동할 때 사용한 명령줄 인수들을 /args에 보여주려는 경우를 상상해 보자. 명령줄 인수를 출력하는 함수를 쓰는 것은 간단하다.
 
@@ -247,7 +239,7 @@ func ArgServer() {
     fmt.Println(os.Args)
 }
 ```
-`How do we turn that into an HTTP server? We could make ArgServer a method of some type whose value we ignore, but there's a cleaner way. Since we can define a method for any type except pointers and interfaces, we can write a method for a function. The http package contains this code:`
+
 
 이것을 어떻게 HTTP 서버로 바꿀 수 있을까? 어떤 타입에다가 값은 무시하면서 ArgServer를 메서드로 만들 수 있을 것이다. 하지만 더 좋은 방법이 있다. 포인터와 인터페이스만 빼고는 어떤 타입에도 메서드를 정의할 수 있는 사실을 이용해서, 함수에 메서드를 쓸 수 있다. [http](https://godoc.org/net/http) 패키지에 다음과 같은 코드가 있다:
 
@@ -263,11 +255,9 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, req *Request) {
 }
 ```
 
-`HandlerFunc is a type with a method, ServeHTTP, so values of that type can serve HTTP requests. Look at the implementation of the method: the receiver is a function, f, and the method calls f. That may seem odd but it's not that different from, say, the receiver being a channel and the method sending on the channel.`
 
 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)는 [ServeHTTP](https://godoc.org/net/http#ServeHTTP)라는 매쏘드를 같는 타입으로, 이 타입의 값은 HTTP request에 서비스를 제공한다. 메서드의 구현을 한번 살펴 보라: 리시버는 함수, f이고 메서드가 f를 부른다. 이상해 보일 수도 있지만, 리시버가 채널이고 메서드가 채널에 데이터를 보내는 예와 비교해도 크게 다르지 않다.
 
-`To make ArgServer into an HTTP server, we first modify it to have the right signature.`
 
 ArgServer를 HTTP 서버로 만들기 위해서, 우선 적절한 signature를 갖도록 고쳐야 한다.
 
@@ -278,18 +268,15 @@ func ArgServer(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-`ArgServer now has same signature as HandlerFunc, so it can be converted to that type to access its methods, just as we converted Sequence to IntSlice to access IntSlice.Sort. The code to set it up is concise:`
 
-ArgServer는 이제 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)와 signature가 동일 하다. 마치 IntSlice.Sort 메서드를 쓰기 위해 Sequence를 [IntSlice](https://godoc.org/sort#IntSlice)로 변환 했듯이, ServeHTTP를 쓰기 위해 ArgServer를 HandlerFunc로 변환 시킬 수 있다. 셑업을 하는 코드는 매우 간결하다.
+ArgServer는 이제 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)와 signature가 동일 하다. 마치 IntSlice.Sort 메서드를 쓰기 위해 Sequence를 [IntSlice](https://godoc.org/sort#IntSlice)로 변환 했듯이, ServeHTTP를 쓰기 위해 ArgServer를 HandlerFunc로 변환 시킬 수 있다. 셑업을 하는 코드는 매우 간결하다:
 
 ```go
 http.Handle("/args", http.HandlerFunc(ArgServer))
 ```
 
-`When someone visits the page /args, the handler installed at that page has value ArgServer and type HandlerFunc. The HTTP server will invoke the method ServeHTTP of that type, with ArgServer as the receiver, which will in turn call ArgServer (via the invocation f(c, req) inside HandlerFunc.ServeHTTP). The arguments will then be displayed.`
 
 누가 /args를 방문했을 때, 그 페이지에 설치된 handler는 ArgServer 값을 갖는 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)타입 이다. HTTP 서버는 그 타입의 ServeHTTP 메서드를 부르면서 ArgServer를 리시버로 사용하고, 결국 ArgServer를 부르게 된다: HandlerFunc.ServeHTTP안에서 f(c, req)를 부르게 된다. 그리고 나면 명령줄 인수가 나타나 보인다.
 
-`In this section we have made an HTTP server from a struct, an integer, a channel, and a function, all because interfaces are just sets of methods, which can be defined for (almost) any type.`
 
 지금까지 struct, integer, channel, 그리고 함수(function)을 가지고 HTTP 서버를 만들어 보았다. 이것이 가능한 이유는 인터페이스가 거의 모든 타입에 정의 할 수 있는 단순한 메서드의 집합이기 때문이다.
