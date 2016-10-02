@@ -55,7 +55,7 @@
    * [채널의 채널](concurrency.md#채널의-채널)
    * [병렬화](concurrency.md#병렬화)
    * [누설 버퍼](concurrency.md#누설-버퍼)
-* [Errors](errors.md)
+* [에러](errors.md)
    * [패닉 - Panic](errors.md#패닉-panic)
    * [복구 - Recover](errors.md#복구-recover)
 * [A web server](a_web_server.md)
