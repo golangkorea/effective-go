@@ -43,7 +43,7 @@
    * [인터페이스 변환과 타입 단언](interfaces_and_other_types.md#인터페이스-변환과-타입-단언)
    * [일반성](interfaces_and_other_types.md#일반성)
    * [인터페이스와 메서드](interfaces_and_other_types.md#인터페이스와-메서드)
-* [The blank identifier](the_blank_identifier.md)
+* [공백 식별자](the_blank_identifier.md)
    * [다중 할당에서의 공백 식별자](the_blank_identifier.md#다중-할당에서의-공백-식별자)
    * [미사용 임포트와 변수](the_blank_identifier.md#미사용-임포트와-변수)
    * [부작용을 위한 임포트](the_blank_identifier.md#부작용side-effect을-위한-임포트)
