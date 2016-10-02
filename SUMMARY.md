@@ -58,5 +58,5 @@
 * [에러](errors.md)
    * [패닉 - Panic](errors.md#패닉-panic)
    * [복구 - Recover](errors.md#복구-recover)
-* [A web server](a_web_server.md)
+* [웹 서버](a_web_server.md)
 
