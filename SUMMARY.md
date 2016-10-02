@@ -18,7 +18,7 @@
    * [Switch](control_structures.md#switch)
    * [타입 switch](control_structures.md#타입-switch)
 * [함수](functions.md)
-   * [다중 반환 값](functions.md#multiple-return-values)
+   * [다중 반환 값](functions.md#다중-반환-값multiple-return-values)
    * [이름있는 결과 인자값](functions.md#이름-있는-결과-인자값-named-result-parameters)
    * [Defer](functions.md#defer)
 * [데이터](data.md)
