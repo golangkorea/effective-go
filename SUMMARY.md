@@ -35,7 +35,7 @@
    * [상수](initializations.md#상수constants)
    * [변수](initializations.md#변수variables)
    * [init 함수](initializations.md#init-함수the-init-function)
-* [Methods](methods.md)
+* [메서드](methods.md)
    * [포인터 vs. 값](methods.md#포인터-vs-값)
 * [인터페이스와 다른 타입들](interfaces_and_other_types.md)
    * [인터페이스](interfaces_and_other_types.md#인터페이스)
