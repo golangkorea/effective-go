@@ -47,6 +47,7 @@
    * [다중 할당에서의 공백 식별자](the_blank_identifier.md#다중-할당에서의-공백-식별자)
    * [미사용 임포트와 변수](the_blank_identifier.md#미사용-임포트와-변수)
    * [부수효과을 위한 임포트](the_blank_identifier.md#부수효과side-effect를-위한-임포트)
+   * [인터페이스 검사](the_blank_identifier.md#인터페이스-검사)
 * [임베딩](embedding.md)
 * [동시성](concurrency.md)
    * [통신에 의한 공유](concurrency.md#통신에-의한-공유)
