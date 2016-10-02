@@ -1,4 +1,4 @@
-# Concurrency
+# 동시성(Concurrency)
 
 * 원문: [Concurrency](https://golang.org/doc/effective_go.html#concurrency)
 * 번역자: Philbert Yoon (@ziwon)
