@@ -17,7 +17,9 @@
 
 [![Join the chat at https://gitter.im/golangkorea/effective-go](https://badges.gitter.im/golangkorea/effective-go.svg)](https://gitter.im/golangkorea/effective-go?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-읽어 나가는 과정에서 발견되는 오류와 건의사항들은 지속적으로 gitbook의 discussion 기능을 통해 번역진에게 전달될 수 있습니다. 다음 레포를 통한 PR 또한 환영하는 바입니다. 
+읽어 나가는 과정에서 발견되는 오류와 건의사항들은 지속적으로 gitbook의 discussion 기능을 통해 번역진에게 전달될 수 있습니다. 문단의 오른쪽 [+] 아이콘을 클릭하시고 질문이나 수정건의등을 기록하시면 됩니다. 또한 각 챕터마다 바닥에 Disqus 코멘트 기능을 이용하셔도 상관 없습니다.
+
+다음 레포를 통한 PR 또한 환영하는 바입니다. 
 
 > https://github.com/golangkorea/effective-go
 
