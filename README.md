@@ -1,7 +1,7 @@
 # 효과적인 Go 프로그래밍
 
 
-> Effective Go 한국어 번역 문서입니다.
+> [Effective Go](https://golang.org/doc/effective_go.html) 한국어 번역 문서입니다.
 
 
 ## 각 챕터별 담당자 테이블
