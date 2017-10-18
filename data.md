@@ -178,9 +178,7 @@ func Append(slice, data []byte) []byte {
         slice = newSlice
     }
     slice = slice[0:l+len(data)]
-    for i, c := range data {
-        slice[l+i] = c
-    }
+    copy(slice[1:], data)
     return slice
 }
 ```
@@ -235,7 +233,7 @@ for i := range picture {
 
 ## Maps
 
-Map은 편리하고 강력한 내장 데이타 구조로 한 타입의 값들(the key)을 다른 타입의 값들에 연결해준다. Key는 equality연산이 정의되어 있는 어떤 타입이라도 사용 가능하며, integers, floating point, 복소수(complex numbers), strings, 포인터(pointers), 인터페이스(equality를 지원하는 동적 타입에 한해서), structs 그리고 배열(arrays)이 그러한 예이다. Slice는 map의 key로 사용될 수 없는데, 그 이유는 equality가 정의되어 있지 않기 때문이다. Slice와 마찬가지로 map 역시 내부 데이터 구조를 가진다. 함수에 map을 입력하고 map의 내용물을 변경하면, 그 변화는 호출자에게도 보인다.
+Map은 편리하고 강력한 내장 데이타 구조로 한 타입의 값들(the <em>key</em>)을 다른 타입(<em>element</em> 또는 <em>value</em>)의 값들에 연결해준다. Key는 equality연산이 정의되어 있는 어떤 타입이라도 사용 가능하며, integers, floating point, 복소수(complex numbers), strings, 포인터(pointers), 인터페이스(equality를 지원하는 동적 타입에 한해서), structs 그리고 배열(arrays)이 그러한 예이다. Slice는 map의 key로 사용될 수 없는데, 그 이유는 equality가 정의되어 있지 않기 때문이다. Slice와 마찬가지로 map 역시 내부 데이터 구조를 가진다. 함수에 map을 입력하고 map의 내용물을 변경하면, 그 변화는 호출자에게도 보인다.
 
 Map 또한 콜론으로 분리된 key-value 짝을 이용한 합성 리터럴로 생성될 수 있으며, 초기화중에 쉽게 만들 수 있다.
 
@@ -269,7 +267,7 @@ if attended[person] { // 만약 person이 맵에 없다면 false일 것이다.
 }
 ```
 
-때로는 부재값과 제로값을 구분할 필요도 있다. "UTC"에 대한 엔트리가 있는지 혹은 map내 정말 없어 빈 문자열인 건지? 복수 할당(assign)의 형태로 구별할 수 있다.
+때로는 부재값과 제로값을 구분할 필요도 있다. "UTC"에 대한 엔트리 값이 있는건지, 혹은 map이 전혀 아니기 때문에 값이 0은 아닌건지? 그것은 복수 할당(assign)의 형태로 구별할 수 있다.
 
 ```go
 var seconds int
@@ -453,7 +451,7 @@ func Println(v ...interface{}) {
 
 ```go
 func Min(a ...int) int {
-    min := int(^uint(0) >> 1)  // largest int
+    min := int(^uint(0) &gt;&gt; 1)  // largest int
     for _, i := range a {
         if i < min {
             min = i
