@@ -249,7 +249,7 @@ func ArgServer() {
 // HandlerFunc(f)는 f를 부르는 Handler 객체인 것이다.
 type HandlerFunc func(ResponseWriter, *Request)
 
-// ServeHTTP calls f(c, req).
+// ServeHTTP calls f(w, req).
 func (f HandlerFunc) ServeHTTP(w ResponseWriter, req *Request) {
     f(w, req)
 }
@@ -276,7 +276,7 @@ http.Handle("/args", http.HandlerFunc(ArgServer))
 ```
 
 
-누가 /args를 방문했을 때, 그 페이지에 설치된 handler는 ArgServer 값을 갖는 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)타입 이다. HTTP 서버는 그 타입의 ServeHTTP 메서드를 부르면서 ArgServer를 리시버로 사용하고, 결국 ArgServer를 부르게 된다: HandlerFunc.ServeHTTP안에서 f(c, req)를 부르게 된다. 그리고 나면 명령줄 인수가 나타나 보인다.
+누가 /args를 방문했을 때, 그 페이지에 설치된 handler는 ArgServer 값을 갖는 [HandlerFunc](https://godoc.org/net/http#HandlerFunc)타입 이다. HTTP 서버는 그 타입의 ServeHTTP 메서드를 부르면서 ArgServer를 리시버로 사용하고, 결국 ArgServer를 부르게 된다: HandlerFunc.ServeHTTP안에서 f(w, req)를 부르게 된다. 그리고 나면 명령줄 인수가 나타나 보인다.
 
 
 지금까지 struct, integer, channel, 그리고 함수(function)을 가지고 HTTP 서버를 만들어 보았다. 이것이 가능한 이유는 인터페이스가 거의 모든 타입에 정의 할 수 있는 단순한 메서드의 집합이기 때문이다.
