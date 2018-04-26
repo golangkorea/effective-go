@@ -104,7 +104,7 @@ job := &Job{command, log.New(os.Stderr, "Job: ", log.Ldate)}
 ```
 
 
-만약 임베드된 필드를 직접 언급해야 할 경우가 생기면, ReaderWriter struct의 Read 메서드처럼, 패키지를 무시한 필드의 타입명이 필드의 이름으로 사용된다. Job 타입의 변수인 job의 `*log.Logger`에 접근할 필요가 있다면, job.Logger라고 쓰면 되고, Logger의 메서드를 개선하길 원할 때 유용하다.
+만약 임베드된 필드를 직접 언급해야 할 경우가 생기면, ReadWriter struct의 Read 메서드처럼, 패키지를 무시한 필드의 타입명이 필드의 이름으로 사용된다. Job 타입의 변수인 job의 `*log.Logger`에 접근할 필요가 있다면, job.Logger라고 쓰면 되고, Logger의 메서드를 개선하길 원할 때 유용하다.
 
 ```go
 func (job *Job) Logf(format string, args ...interface{}) {
