@@ -137,7 +137,6 @@ func safelyDo(work *Work) {
 위에서의 복구 패턴을 보면, `do`함수 (그리고 호출을 하는 그 어느것도)는 `panic`을 호출함으로써 안좋은 상황을 피해갈 수 있다. 이 아이디어를 활용하면 복잡한 소프트웨어에서의 에러 핸들링을 단순화 할 수 있다. `regexp`패키지의 가장 이상적인 버전을 보자. 이는 자체 에러 타입과 함께 `panic`을 호출함으로써 파싱 에러를 알린다. 아래에 `Error`와 에러 메서드, 그리고 `Compile`함수의 정의가 있다.
 
 ```go
-// Error is the type of a parse error; it satisfies the error interface.
 // Error는  parse error 타입이며 error 인터페이스를 만족한다.
 type Error string
 func (e Error) Error() string {
