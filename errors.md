@@ -131,42 +131,41 @@ func safelyDo(work *Work) {
 이 예시에서, 만약 `do(work)`에서 패닉이 발생하면, 그 결과가 로그로 남겨질 것이고 고루틴은 다른 고루틴들을 방해하지 않으면서 깔끔하게 종료될 것이다. 호출된 `recover`가 이 상황을 완전히 처리할 것이기 때문에 지연된 클로져에서는 그 어떤 것도 할 필요가 없다.
 
 
-`recover`는 지연된 함수로부터 직접 호출되는 경우를 제외하면 항상 `nil`을 리턴하기 때문에, 지연된 코드는 `panic`과 `recover`를 사용하는 라이브러리 루틴을 실패없이 호출할 수 있다. 한 가지 예를 들어보면, `safelyDo`내의 지연된 함수는 `recover`를 호출하기 전에 logging 함수를 호출할 것이다. 그리고 logging 코드는 패닉 상태에 영향을 받지 않으면서 잘 실행될 것이다. 
+`recover`는 지연된 함수로부터 직접 호출되는 경우를 제외하면 항상 `nil`을 리턴하기 때문에, 지연된 코드는 `panic`과 `recover`를 사용하는 라이브러리 루틴을 실패없이 호출할 수 있다. 한 가지 예를 들어보면, `safelyDo`내의 지연된 함수는 `recover`를 호출하기 전에 logging 함수를 호출할 수 있고, logging 코드는 패닉 상태에 영향을 받지 않으면서 잘 실행될 것이다.
 
 
 위에서의 복구 패턴을 보면, `do`함수 (그리고 호출을 하는 그 어느것도)는 `panic`을 호출함으로써 안좋은 상황을 피해갈 수 있다. 이 아이디어를 활용하면 복잡한 소프트웨어에서의 에러 핸들링을 단순화 할 수 있다. `regexp`패키지의 가장 이상적인 버전을 보자. 이는 자체 에러 타입과 함께 `panic`을 호출함으로써 파싱 에러를 알린다. 아래에 `Error`와 에러 메서드, 그리고 `Compile`함수의 정의가 있다.
 
 ```go
-// Error is the type of a parse error; it satisfies the error interface.
+// Error는 파싱 에러 타입이며 error 인터페이스를 만족한다.
 type Error string
 func (e Error) Error() string {
     return string(e)
 }
 
-// error is a method of *Regexp that reports parsing errors by
-// panicking with an Error.
+// error는 Error를 가진 패닉으로 파싱 오류를 알리는 *Regexp 메서드이다.
 func (regexp *Regexp) error(err string) {
     panic(Error(err))
 }
 
-// Compile returns a parsed representation of the regular expression.
+// Compile은 정규 표현식의 파싱된 표현을 리턴한다.
 func Compile(str string) (regexp *Regexp, err error) {
     regexp = new(Regexp)
-    // doParse will panic if there is a parse error.
+    // doParse는 파싱중 에러가 발생하면 패닉을 일으킨다.
     defer func() {
         if e := recover(); e != nil {
-            regexp = nil    // Clear return value.
-            err = e.(Error) // Will re-panic if not a parse error.
+            regexp = nil    // 리턴 값 클리어
+            err = e.(Error) // 파싱 에러가 아니면 다시 패닉 발생
         }
     }()
     return regexp.doParse(str), nil
 }
 ```
 
-만약 `doParse`가 패닉을 발생시키면, 복구 블록은 리턴 값을 nil로 설정할 것이다. 지연된 함수는 이름있는 리턴 값들을 변경할 수 있다. `err`에 값을 할당하는 과정에서  에러를 자체 에러 타입으로 단언함으로써 그 문제가 파싱 에러인지 아닌지를 검사를 할 것이다. 만약 파싱 에러가 아니라면, 타입 단언은 실패할 것이고, 마치 아무런 중단이 없었던 것처럼 스택 풀기작업을 진행하며 런타임 에러를 일으킬 것이다. 이 검사는 인덱스가 범위를 벗어나는 등의 의도치않은 일이 생길 때 파싱 에러를 처리하기위해 `panic`과 `recover`를 사용했음에도 불구하고 코드가 실패함을 의미한다. 
+만약 `doParse`가 패닉을 발생시키면, 복구 블록은 리턴 값을 nil로 설정할 것이다. 지연된 함수는 명명된 리턴 값들을 변경할 수 있다. `err`에 값을 할당하는 과정에서 에러를 자체 에러 타입으로 단언함으로써 그 문제가 파싱 에러인지 아닌지를 검사를 할 것이다. 만약 파싱 에러가 아니라면, 타입 단언은 실패할 것이고, 마치 아무런 중단이 없었던 것처럼 스택 풀기작업을 진행하며 런타임 에러를 일으킬 것이다. 이 검사는 인덱스가 범위를 벗어나는 등의 의도치않은 일이 생길 때 파싱 에러를 처리하기위해 `panic`과 `recover`를 사용했음에도 불구하고 코드가 실패함을 의미한다.
 
 
-아래에서의 에러 처리를 보면, 에러 메서드는 (타입에 바인딩하는 메서드이기 때문에 내장 에러 타입과 동일한 이름을 사용하는것은 자연스러우며 괜찮다.) 직접 파싱 스택을 푸는것에 대한 걱정없이 파싱 에러를 알리기 쉽게 한다:
+아래 에러 처리를 보면, 에러 메서드는 (타입에 바인딩하는 메서드이기 때문에 내장 에러 타입과 동일한 이름을 사용하는것은 자연스러우며 괜찮다.) 직접 파싱 스택을 푸는것에 대한 걱정없이 파싱 에러를 알리기 쉽게 한다:
 
 ```go
 if pos == 0 {
