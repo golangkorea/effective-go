@@ -139,8 +139,6 @@ for _, value := range array {
 
 string의 경우, range 는 UTF-8 파싱에 의한 개별적인 유니코드 문자를 처리하는데 유용할 것이다. 잘못된 인코딩은 하나의 바이트를 제거하고 U+FFFD 룬 문자로 대체할 것이다. ( 룬(내장된 타입으로 지정된)의 이름은 Go 언어의 단일 유니코드 코드에 대한 용어이다. 보다 자세한 사항은 [언어 스펙](https://golang.org/ref/spec#Rune_literals)을 참고하자) 
 
-The loop
-
 다음 반복문은 
 
 ```go
@@ -148,8 +146,6 @@ for pos, char := range "日本\x80語" { // \x80 은 합법적인 UTF-8 인코�
     fmt.Printf("character %#U starts at byte position %d\n", char, pos)
 }
 ```
-
-prints
 
 다음과 같이 출력된다
 
@@ -159,8 +155,6 @@ character U+672C '本' starts at byte position 3
 character U+FFFD '�' starts at byte position 6
 character U+8A9E '語' starts at byte position 7
 ```
-
-Finally, Go has no comma operator and ++ and -- are statements not expressions. Thus if you want to run multiple variables in a `for` you should use parallel assignment (although that precludes ++ and --).
 
 마지막으로 Go언어는 콤마(,) 연산자가 없으며 ++, --는 표현식이 아니라 명령문이다. 따라서 만약 for문 안에서 여러개의 변수를 사용하려면 병렬 할당(parallel assignment)을 사용해야만 한다(++과 --을 배제하더라도).
 
