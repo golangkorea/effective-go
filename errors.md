@@ -60,7 +60,7 @@ for try := 0; try < 2; try++ {
 ```
 
 
-두 번째 if 문은 또 다른 타입 단언이다. 만약 `os.Create`가 실패할 경우, `ok`는 `false`가 되고, `e`는 `nil`이 된다. 그리고 성공할 경우, `ok`는 `true`가 되며 error(e) 타입은 `*os.PathError` 일 것이다. 이를 이용해 에러에 대한 더 많은 정보를 확인할 수 있다.
+두 번째 if 문에서 `err` 인터페이스를 `os.PathError` 타입으로 변환한다(type assertion). 실패하면 `ok`는 `false`가 되고, `e`는 `nil`이 된다. 성공하면 `ok`는 `true`가 되고, 이는 에러가 `*os.PathError` 타입임을 의미한다. 이에 `e` 에서 에러에 대한 더 많은 정보를 확인할 수 있다.
 
 ## 패닉 (Panic)
 
