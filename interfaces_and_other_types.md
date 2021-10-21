@@ -164,7 +164,7 @@ func NewCTR(block Block, iv []byte) Stream
 ```
 
 
-NewCTR은 특정한 암호화 알고리즘과 데이터 소스에만 적용되는 것이 아니라 [Block](https://godoc.org/crypto/cipher#Block)와 [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스를 구현하는 어떤 알고리즘이나 데이터 소스에도 적용이 가능하다. 왜냐하면 인터페시스 값들을 반환하고, CTR 암호화를 다른 암호화 모드로 교체하는 것이 국부적인 변화이기 때문이다. constructor 콜은 반드시 편집되어야 합니다. 하지만 둘러싸고 있는 코드는 반환 결과를 [Stream](https://godoc.org/crypto/cipher#Stream)으로 처리해야 하기 때문에, 차이를 알지 못 한다.
+NewCTR은 특정한 암호화 알고리즘과 데이터 소스에만 적용되는 것이 아니라 [Block](https://godoc.org/crypto/cipher#Block)와 [Stream](https://godoc.org/crypto/cipher#Stream) 인터페이스를 구현하는 어떤 알고리즘이나 데이터 소스에도 적용이 가능하다. 왜냐하면 인터페이스 값들을 반환하고, CTR 암호화를 다른 암호화 모드로 교체하는 것이 국부적인 변화이기 때문이다. constructor 콜은 반드시 편집되어야 합니다. 하지만 둘러싸고 있는 코드는 반환 결과를 [Stream](https://godoc.org/crypto/cipher#Stream)으로 처리해야 하기 때문에, 차이를 알지 못 한다.
 
 ## 인터페이스와 메서드
 
