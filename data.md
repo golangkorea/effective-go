@@ -178,7 +178,7 @@ func Append(slice, data []byte) []byte {
         slice = newSlice
     }
     slice = slice[0:l+len(data)]
-    copy(slice[1:], data)
+    copy(slice[l:], data)
     return slice
 }
 ```
