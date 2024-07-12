@@ -305,7 +305,6 @@ delete(timeZone, "PDT")  // Now on Standard Time
 
 Go에서 포맷된 출력은 C의 `printf`와 유사하지만 더 기능이 풍부하고 일반적이다. 함수들은 [fmt](https://godoc.org/fmt) 패키지에 있고 대문자화된 이름을 가진다: `[fmt.Printf](https://godoc.org/fmt#Printf)`, `[fmt.Fprintf](https://godoc.org/fmt#Fprintf)`, `[fmt.Sprintf](https://godoc.org/fmt#Sprintf)`, 기타 등등. 문자열 함수(`Sprintf`, 기타등등)은 제공된 버퍼를 채우기 보다는 문자열을 반환한다.
 
-You don't need to provide a format string. For each of Printf, `Fprintf` and `Sprintf` there is another pair of functions, for instance `Print` and `Println`. These functions do not take a format string but instead generate a default format for each argument. The `Println` versions also insert a blank between arguments and append a newline to the output while the `Print` versions add blanks only if the operand on neither side is a string. In this example each line produces the same output.
 
 반드시 포맷 문자열을 제공할 필요는 없다. `Printf`, `Fprintf` 그리고 `Sprintf`에 대해 짝을 이루는 함수들이 있는데, 예를 들면 `Print`와 `Println`이다. 이 함수들은 포맷 문자열을 취하지 않는 대신 입력된 인수에 대해 이미 정해진 포맷을 발생시킨다. `Println` 버전들은 인수들 사이에 공백을 삽입하고 출력에 줄바꿈을 추가한다. 그런 반면 `Print` 버전들은 인수 양쪽이 다 문자열이 아닌 경우에만 공백을 삽입한다. 아래 예제에서 각 줄이 같은 출력을 만든다.
 
@@ -343,8 +342,6 @@ fmt.Printf("%v\n", timeZone)  // or just fmt.Println(timeZone)
 ```go
 map[CST:-21600 PST:-28800 EST:-18000 UTC:0 MST:-25200]
 ```
-
-For maps the keys may be output in any order, of course. When printing a struct, the modified format %+v annotates the fields of the structure with their names, and for any value the alternate format %#v prints the value in full Go syntax.
 
 물론, map의 경우 key들은 무작위로 출력될 수 있다. struct를 출력할 때는, 수정된 포맷인 %+v를 통해 구조체의 필드에 주석으로 이름을 달며, 대안 포맷인 %#v를 사용하면 어떤 값이든 완전한 Go 문법을 출력한다.
 
